@@ -147,7 +147,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EPQ testing.cpp" />
+    <ClCompile Include="coreModules\stateManager.cpp" />
+    <ClCompile Include="coreModules\toggleItem.cpp" />
+    <ClCompile Include="coreModules\utility.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="pluginModules\octaveCoupler.cpp" />
+    <ClCompile Include="pluginModules\testInterface.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="coreModules\stateManager.h" />
+    <ClInclude Include="coreModules\toggleItem.h" />
+    <ClInclude Include="coreModules\utility.h" />
+    <ClInclude Include="modules.h" />
+    <ClInclude Include="pluginModules\octaveCoupler.h" />
+    <ClInclude Include="pluginModules\testInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

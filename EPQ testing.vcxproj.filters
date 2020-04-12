@@ -13,10 +13,63 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="plugins">
+      <UniqueIdentifier>{8bc84228-d94b-4966-9f7a-93f9ffdea9aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugins\source">
+      <UniqueIdentifier>{8d842685-7af5-4024-844d-5422d7a4059e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugins\headers">
+      <UniqueIdentifier>{e460607e-8c78-4fd2-9f4a-ece34afdb11d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core modules">
+      <UniqueIdentifier>{8e274b82-ffe8-4b42-859d-40271adcb914}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core modules\headers">
+      <UniqueIdentifier>{bad340d9-d4fb-47f3-9ce3-a797b61b853e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core modules\source">
+      <UniqueIdentifier>{ad7b3cc2-ecc7-4ec7-a510-c9e47461ae17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EPQ testing.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="coreModules\stateManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="coreModules\toggleItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="coreModules\utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pluginModules\octaveCoupler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pluginModules\testInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="modules.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="coreModules\stateManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="coreModules\toggleItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="coreModules\utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pluginModules\octaveCoupler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pluginModules\testInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
