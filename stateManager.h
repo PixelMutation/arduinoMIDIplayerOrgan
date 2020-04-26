@@ -21,10 +21,10 @@ class stateManager {
 	void agentManager(int index, string agent = "user");
 public:
 	// using deque instead of vector as it can be modified from both ends http://www.cplusplus.com/reference/deque/deque/
-	//deque<deque<unsigned long>> schedule; // a deque containing the schedule for when keys should be pressed if a delay is wanted
-	deque<deque<double>> schedule;
-	std::chrono::time_point<std::chrono::high_resolution_clock> progStartTime; // datatype found at https://en.cppreference.com/w/cpp/chrono/high_resolution_clock/now
-	//unsigned long progStartTime;
+	deque<deque<unsigned long>> schedule; // a deque containing the schedule for when keys should be pressed if a delay is wanted
+	//deque<deque<double>> schedule;
+	//std::chrono::time_point<std::chrono::high_resolution_clock> progStartTime; // datatype found at https://en.cppreference.com/w/cpp/chrono/high_resolution_clock/now
+	unsigned long progStartTime;
 
 	stateManager(string type, int size, int polyphony_);
 	void requestSystemState(int itemNumber, int state);

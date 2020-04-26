@@ -1,8 +1,9 @@
-// stateManager.cpp contains the stateManager class definition. This class is used to store data about the positions of keys/stops and handle requests to move them.
+
 
 
 #include "stateManager.h"
 
+// stateManager.cpp contains the stateManager class definition. This class is used to store data about the positions of keys/stops and handle requests to move them.
 
 // constructor: initialises the object, taking the type ("keys" or "stops") and size (number of keys/stops) wanted then filling out the vectors with 0s
 stateManager::stateManager(string type, int size, int polyphony_) { // 
@@ -13,13 +14,13 @@ stateManager::stateManager(string type, int size, int polyphony_) { //
     systemActivatedItems.assign(numberOfItems, 0);  //
     userActivatedItems.assign(numberOfItems, 0);    //
     polyphony = polyphony_;
-    progStartTime = std::chrono::high_resolution_clock::now();
-    //progStartTime = millis();
+    //progStartTime = std::chrono::high_resolution_clock::now();
+    progStartTime = millis();
 }
 
 // request system state function - when something wants a key or stop on or off, it calls this
 void stateManager::requestSystemState(int itemNumber, int state) {
-    if (itemNumber > numberOfItems or itemNumber < 1) { cout << "FAILED: item no. out of range!\n"; return; }
+    if (itemNumber > numberOfItems or itemNumber < 1) { /*cout << "FAILED: item no. out of range!\n";*/ return; }
     int index = itemNumber - 1;
     if (state == 0) {                                   // if request is to turn key off
         if (itemBuffer[index] > 0) {                    // if it isn't already off
@@ -48,18 +49,18 @@ void stateManager::requestSystemState(int itemNumber, int state) {
 // request system state function - when something wants a key or stop on or off after a specific delay, it calls this
 void stateManager::requestDelayedSystemState(int delay, int itemNumber, int state) {
     
-    if (itemNumber > numberOfItems or itemNumber < 1) { cout << "FAILED: item no. out of range!\n"; return; }
+    if (itemNumber > numberOfItems or itemNumber < 1) { /*cout << "FAILED: item no. out of range!\n";*/ return; }
     int index = itemNumber - 1;
 
-    //unsigned long currentTime = millis();
-    auto currentTime = chrono::high_resolution_clock::now(); // using std::chrono answer from https://stackoverflow.com/questions/1735307/c-keeping-track-of-how-many-seconds-has-passed-since-start-of-program
+    unsigned long currentTime = millis();
+    //auto currentTime = chrono::high_resolution_clock::now(); // using std::chrono answer from https://stackoverflow.com/questions/1735307/c-keeping-track-of-how-many-seconds-has-passed-since-start-of-program
     //using the code finding real time difference in double form at https://en.cppreference.com/w/cpp/chrono/c/clock 
     //and using Jonathan Wakely's answer to convert int to millisecond duration data type https://stackoverflow.com/questions/31401560/c11-chrono-how-to-cast-unsigned-int-to-a-time-pointsystem-clock
-    double delayDurationFromStart = std::chrono::duration<double, std::milli>(currentTime - progStartTime + chrono::milliseconds(delay)) .count();
-    //unsigned long durationFromStart = currentTime - progStartTime;
+    //double delayDurationFromStart = std::chrono::duration<double, std::milli>(currentTime - progStartTime + chrono::milliseconds(delay)) .count();
+    unsigned long durationFromStart = currentTime - progStartTime;
 
-    schedule.push_back({delayDurationFromStart, (double)itemNumber, (double)state });
-    //schedule.push_back([delayDurationFromStart, (unsigned long)itemNumber, (unsigned long(state)])
+    //schedule.push_back({delayDurationFromStart, (double)itemNumber, (double)state });
+    schedule.push_back([delayDurationFromStart, (unsigned long)itemNumber, (unsigned long(state)])
     
 }
 
@@ -67,7 +68,7 @@ void stateManager::requestDelayedSystemState(int delay, int itemNumber, int stat
 void stateManager::setSensorState(int itemNumber, int state) {
     int index = itemNumber - 1;
     //cout << "setting sensor state\n";
-    if (itemNumber > numberOfItems or itemNumber < 1) { cout << "FAILED: item no. out of range!\n"; return; }
+    if (itemNumber > numberOfItems or itemNumber < 1) {/*cout << "FAILED: item no. out of range!\n";*/ return; }
     activatedItems[index] = state;
     agentManager(index);
     if (itemsType == "stops") {
@@ -136,7 +137,7 @@ void stateManager::agentManager(int index, string agent) {
     
 // retrieves state of an item (key/stop) of state type: "system" (the 'age' of an active item in keypresses since the system pressed it), "buffer" (how many processes currently want that item activated), "user" (if the user pressed it) or "all" (overall state of item)
 int stateManager::getState(int itemNumber, string type) { // returns if the key is toggled on or off, either overall, by the user, or by the system
-    if (itemNumber > numberOfItems or itemNumber < 1) { cout << "FAILED: item no. out of range!\n"; return NULL; }
+    if (itemNumber > numberOfItems or itemNumber < 1) {/*cout << "FAILED: item no. out of range!\n";*/ return 0; }
     int index = itemNumber - 1;
     if (type == "user") {
         return userActivatedItems[index];   // 0 if off, 1 if on
