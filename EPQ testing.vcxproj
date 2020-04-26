@@ -24,6 +24,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>EPQtesting</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>playerReedOrgan</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -147,20 +148,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="coreModules\midiManager.cpp" />
+    <ClCompile Include="coreModules\pluginManager.cpp" />
     <ClCompile Include="coreModules\stateManager.cpp" />
     <ClCompile Include="coreModules\toggleItem.cpp" />
     <ClCompile Include="coreModules\utility.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pluginModules\octaveCoupler.cpp" />
+    <ClCompile Include="pluginModules\scales.cpp" />
     <ClCompile Include="pluginModules\testInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="coreModules\midiManager.h" />
+    <ClInclude Include="coreModules\pluginManager.h" />
     <ClInclude Include="coreModules\stateManager.h" />
     <ClInclude Include="coreModules\toggleItem.h" />
+    <ClInclude Include="coreModules\userInterface.h" />
     <ClInclude Include="coreModules\utility.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="modules.h" />
     <ClInclude Include="pluginModules\octaveCoupler.h" />
+    <ClInclude Include="pluginModules\scales.h" />
     <ClInclude Include="pluginModules\testInterface.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="playerReedOrgan.ino" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -36,6 +36,21 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pluginModules\octaveCoupler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pluginModules\scales.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pluginModules\testInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="coreModules\midiManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="coreModules\pluginManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="coreModules\stateManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,15 +60,27 @@
     <ClCompile Include="coreModules\utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pluginModules\octaveCoupler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pluginModules\testInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="modules.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pluginModules\octaveCoupler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pluginModules\scales.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pluginModules\testInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="coreModules\midiManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="coreModules\pluginManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="coreModules\stateManager.h">
@@ -62,14 +89,14 @@
     <ClInclude Include="coreModules\toggleItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="coreModules\userInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="coreModules\utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pluginModules\octaveCoupler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pluginModules\testInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="playerReedOrgan.ino" />
   </ItemGroup>
 </Project>

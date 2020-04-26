@@ -4,5 +4,5 @@
 
 void toggleItem(string type, int itemNumber, int state) { // UNFINISHED. This will take commands to move a stop or key and communicate with hardware.
     int index = itemNumber - 1;
-    cout << "set " << type << " item number " << itemNumber << " to " << state << "\n";
+    //cout << "set " << type << " item number " << itemNumber << " to " << state << "\n";
 }
