@@ -6,7 +6,8 @@
                 "D:\\docs\\Arduino\\libraries\\ArduinoSTL-master\\src",
                 "C:\\Program Files (x86)\\Arduino\\tools\\**",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**",
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "C:\\Users\\charl\\source\\repos\\playerReedOrgan"
             ],
             "defines": [
                 "_DEBUG",

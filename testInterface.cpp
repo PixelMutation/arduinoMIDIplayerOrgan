@@ -1,5 +1,5 @@
 #include "testInterface.h"
-#include <thread>
+//#include <thread>
 
 void testInterface() {
     int number, state, choice;
@@ -34,9 +34,10 @@ void testInterface() {
                         cout << "\nkeys pressed by user  : ";    Keys.getStatesVector("user", true, false);
                         cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
 
-                        while (not Keys.schedule.empty()) {
+                        while (! Keys.schedule.empty()) {
                             checkSchedule();
-                            this_thread::sleep_for(chrono::milliseconds(200));
+                            delay(200);
+                            //this_thread::sleep_for(chrono::milliseconds(200));
                         }
 
                         cout << "\n\nChoose item number (1-61) or -1 to stop.";
@@ -83,9 +84,10 @@ void testInterface() {
                 cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
                 cout << "\n";
 
-                while (not Keys.schedule.empty()) {
+                while (! Keys.schedule.empty()) {
                     checkSchedule();
-                    this_thread::sleep_for(chrono::milliseconds(200));
+                    //this_thread::sleep_for(chrono::milliseconds(200));
+                    delay(200);
                 }
 
             }

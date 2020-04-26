@@ -1,6 +1,6 @@
 #ifndef SCALES_H
 #define SCALES_H
-#include "../modules.h"
+#include "modules.h"
 
 // stores the patterns used to construct scales, chords and arpeggios
 class scaleManager {

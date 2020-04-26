@@ -4,7 +4,8 @@
 midiManager::midiManager() {
 	midi_to_key_offset = MIDImiddleCpos - keysMiddleCpos; //this offset is used when converting between MIDI key numbers and real key numbers
 	// initializes the stops presets, taking the user friendly table and converting it to be read quickly by putting the row at the correct position.
-	vector<vector<int>> stopPresetsTable{
+	
+	const vector<vector<int>> stopPresetsTable{
 		//No.  |		        Stops state			     |      General MIDI instrument   
 		// all off													SFX
 		{127,  0, 0, 0,  -1,-1,-1,-1,-1,  0, 0, 0},		//      Gunshot 
@@ -57,7 +58,12 @@ midiManager::midiManager() {
 
 
 	};
-	stopPresets.assign(128,{}); // fills with empty vectors
+
+	//stopPresets.assign(128,{}); // fills with empty vectors
+	for (int i = 0; i < 128; i++) {
+		stopPresets.push_back({});
+	}
+
 	for (int i = 0; i < (int)stopPresetsTable.size(); i++) { // for each row of the presets table
 
 		for (int j = 1; j < (int)stopPresetsTable[i].size(); j++) { // for each item in the row (except the first)
@@ -65,6 +71,8 @@ midiManager::midiManager() {
 			stopPresets[instrumentNumber].push_back(stopPresetsTable[i][j]); // add it to the row ( which is at the index of the first item in the old row) in the new vector
 		}
 	}
+
+
 }
 
 // checks for and handles incoming MIDI messages (use parameters ONLY for SIMULATING midi, otherwise ignores real midi input)

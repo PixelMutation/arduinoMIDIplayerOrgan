@@ -57,10 +57,10 @@ void stateManager::requestDelayedSystemState(int delay, int itemNumber, int stat
     //using the code finding real time difference in double form at https://en.cppreference.com/w/cpp/chrono/c/clock 
     //and using Jonathan Wakely's answer to convert int to millisecond duration data type https://stackoverflow.com/questions/31401560/c11-chrono-how-to-cast-unsigned-int-to-a-time-pointsystem-clock
     //double delayDurationFromStart = std::chrono::duration<double, std::milli>(currentTime - progStartTime + chrono::milliseconds(delay)) .count();
-    unsigned long durationFromStart = currentTime - progStartTime;
+    unsigned long delayDurationFromStart = currentTime - progStartTime;
 
     //schedule.push_back({delayDurationFromStart, (double)itemNumber, (double)state });
-    schedule.push_back([delayDurationFromStart, (unsigned long)itemNumber, (unsigned long(state)])
+    schedule.push_back({delayDurationFromStart, (unsigned long)itemNumber, (unsigned long)state});
     
 }
 
@@ -185,10 +185,3 @@ int polyphony = 3;
 
 stateManager Keys("keys", 61, polyphony);
 stateManager Stops("stops", 11, 11);
-
-
-
-
-
-
-

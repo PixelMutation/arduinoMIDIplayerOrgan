@@ -1,7 +1,7 @@
 #ifndef MIDI_MANAGER_H
 #define MIDI_MANAGER_H
 
-#include "../modules.h"
+#include "modules.h"
 
 class midiManager { // handles MIDI I/O
 	int MIDImiddleCpos = 48;		// leave this alone
@@ -14,7 +14,7 @@ class midiManager { // handles MIDI I/O
 	int minModulationLevel = 64;	// level at which vox humana activated
 
 	
-
+	
 	vector<vector<int>> stopPresets;// a 2D vector table containing all the possible reed stop configurations indexed by their MIDI instrument assignment
 public:
 	vector<int> channels{ 0,1,2,3,4 };// the MIDI channels the system responds to

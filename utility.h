@@ -3,7 +3,7 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-#include "../modules.h"
+#include "modules.h"
 
 void printVector(vector<int> vector, bool displayZero = true);
 void printVector(deque<double> vector, bool displayZero = true);

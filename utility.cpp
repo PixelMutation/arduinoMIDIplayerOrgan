@@ -1,8 +1,5 @@
 ﻿#include "utility.h"
 
-
-
-
 void printVector(vector<int> vector, bool displayZero) {
 	for (int element : vector) {
 

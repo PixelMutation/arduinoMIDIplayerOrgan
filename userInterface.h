@@ -1,7 +1,7 @@
 #ifndef USER_INTERFACE_H
 #define USER_INTERFACE_H
 
-#include "../modules.h";
+#include "modules.h";
 
 class UImoduleSettings {
 	int numberOfSettings;
