@@ -4,20 +4,20 @@ void printVector(vector<int> vector, bool displayZero) {
 	for (int element : vector) {
 
 		if (element != 0) {
-			//cout << " " << element;
+			cout << " " << element;
 		}
 		else {
 			if (displayZero) {
-				//cout << " " << element;
+				cout << " " << element;
 			}
 			else {
-				//cout << "  ";
+				cout << "  ";
 			}
 		}
 		
 
 
-		//cout << " ";
+		cout << " ";
 	}
 
 }
@@ -26,20 +26,20 @@ void printVector(deque<double> vector, bool displayZero) {
 	for (double element : vector) {
 
 		if (element != 0) {
-			//cout << " " << element;
+			cout << " " << element;
 		}
 		else {
 			if (displayZero) {
-				//cout << " " << element;
+				cout << " " << element;
 			}
 			else {
-				//cout << "  ";
+				cout << "  ";
 			}
 		}
 
 
 
-		//cout << " ";
+		cout << " ";
 	}
 
 }

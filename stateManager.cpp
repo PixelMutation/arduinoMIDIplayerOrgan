@@ -20,7 +20,7 @@ stateManager::stateManager(string type, int size, int polyphony_) { //
 
 // request system state function - when something wants a key or stop on or off, it calls this
 void stateManager::requestSystemState(int itemNumber, int state) {
-    if (itemNumber > numberOfItems or itemNumber < 1) { /*cout << "FAILED: item no. out of range!\n";*/ return; }
+    if (itemNumber > numberOfItems or itemNumber < 1) { cout << "FAILED: item no. out of range!\n"; return; }
     int index = itemNumber - 1;
     if (state == 0) {                                   // if request is to turn key off
         if (itemBuffer[index] > 0) {                    // if it isn't already off
@@ -49,7 +49,7 @@ void stateManager::requestSystemState(int itemNumber, int state) {
 // request system state function - when something wants a key or stop on or off after a specific delay, it calls this
 void stateManager::requestDelayedSystemState(int delay, int itemNumber, int state) {
     
-    if (itemNumber > numberOfItems or itemNumber < 1) { /*cout << "FAILED: item no. out of range!\n";*/ return; }
+    if (itemNumber > numberOfItems or itemNumber < 1) { cout << "FAILED: item no. out of range!\n"; return; }
     int index = itemNumber - 1;
 
     unsigned long currentTime = millis();
@@ -68,7 +68,7 @@ void stateManager::requestDelayedSystemState(int delay, int itemNumber, int stat
 void stateManager::setSensorState(int itemNumber, int state) {
     int index = itemNumber - 1;
     //cout << "setting sensor state\n";
-    if (itemNumber > numberOfItems or itemNumber < 1) {/*cout << "FAILED: item no. out of range!\n";*/ return; }
+    if (itemNumber > numberOfItems or itemNumber < 1) {cout << "FAILED: item no. out of range!\n"; return; }
     activatedItems[index] = state;
     agentManager(index);
     if (itemsType == "stops") {

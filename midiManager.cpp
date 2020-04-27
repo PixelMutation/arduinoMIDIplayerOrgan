@@ -4,73 +4,24 @@
 midiManager::midiManager() {
 	midi_to_key_offset = MIDImiddleCpos - keysMiddleCpos; //this offset is used when converting between MIDI key numbers and real key numbers
 	// initializes the stops presets, taking the user friendly table and converting it to be read quickly by putting the row at the correct position.
-	
-	const vector<vector<int>> stopPresetsTable{
-		//No.  |		        Stops state			     |      General MIDI instrument   
-		// all off													SFX
-		{127,  0, 0, 0,  -1,-1,-1,-1,-1,  0, 0, 0},		//      Gunshot 
-		// bass only												Bass
-		{32,  0, 0, 1,  -1,-1,-1,-1,-1,  0, 0, 0},		//		Accoustic Bass
-		{33,  0, 1, 0,  -1,-1,-1,-1,-1,  0, 0, 0},		//		Electric Bass (finger)
-		{34,  1,-1, 0,  -1,-1,-1,-1,-1,  0, 0, 0},		//		Electric Bass (pick)
-		{35,  0, 1, 1,  -1,-1,-1,-1,-1,  0, 0, 0},		//		Fretless Bass
-		{36,  1,-1, 1,  -1,-1,-1,-1,-1,  0, 0, 0},      //		Slap Bass 1
-		// treble only												Ensemble
-		{48,  0, 0, 0,  -1,-1,-1,-1,-1,  0, 1, 0},		//		String Ensemble 1		
-		{49,  0, 0, 0,  -1,-1,-1,-1,-1,  0,-1, 1},		//		String Ensemble 2
-		{50,  0, 0, 0,  -1,-1,-1,-1,-1,  1, 0, 0},		//		Synth Strings 1
-		{51,  0, 0, 0,  -1,-1,-1,-1,-1,  1, 1, 0},		//		Synth Strings 2
-		{52,  0, 0, 0,  -1,-1,-1,-1,-1,  1,-1, 1},		//		Choir Aahs
-		// bass: sub bass only										Brass
-		{56,  0, 0, 1,  -1,-1,-1,-1,-1,  0, 1, 0},		//		Trumpet
-		{57,  0, 0, 1,  -1,-1,-1,-1,-1,  0,-1, 1},		//		Trombone
-		{58,  0, 0, 1,  -1,-1,-1,-1,-1,  1,-1, 1},		//		Tuba
-		{59,  0, 0, 1,  -1,-1,-1,-1,-1,  1, 1, 0},		//		Muted Trumpet
-		{60,  0, 0, 1,  -1,-1,-1,-1,-1,  1, 0, 0},		//		French Horn
-		// bass: bassoon/diapason only								Reed
-		{64,  0, 1, 0,  -1,-1,-1,-1,-1,  1, 1, 0},		//		Soprano Sax
-		{65,  1,-1, 0,  -1,-1,-1,-1,-1,  1, 1, 0},		//		Alto Sax
-		{66,  0, 1, 0,  -1,-1,-1,-1,-1,  1,-1, 1},		//		Tenor Sax
-		{67,  1,-1, 0,  -1,-1,-1,-1,-1,  1,-1, 1},		//		Baritone Sax
-		// treble: vox angelica only								Piano
-		{0,   1,-1, 1,  -1,-1,-1,-1,-1,  1, 0, 0},      //		Accoustic Grand
-		{1,   0, 1, 0,  -1,-1,-1,-1,-1,  1, 0, 0},		//		Bright Accoustic Grand
-		{2,   1,-1, 0,  -1,-1,-1,-1,-1,  1, 0, 0},		//		Electric Grand
-		{3,   0, 1, 1,  -1,-1,-1,-1,-1,  1, 0, 0},		//		Honky Tonk
-		// treble: echo/melodia only
-		// bass:  bassoon/diapason only								Organ
-		{17,  0, 1, 0,  -1,-1,-1,-1,-1,   0, 1, 0},		//		Percussive Organ
-		{21,  1,-1, 0,  -1,-1,-1,-1,-1,   0, 1, 0},		//		Accordion
-		{22,  0, 1, 0,  -1,-1,-1,-1,-1,   0,-1, 1},		//		Harmonica
-		{23,  1,-1, 0,  -1,-1,-1,-1,-1,   0,-1, 1},		//		Tango Accordion
-		// treble: echo/melodia only								Strings
-		{40,  0, 1, 1,  -1,-1,-1,-1,-1,   0, 1, 0},		//		Violin
-		{41,  1,-1, 1,  -1,-1,-1,-1,-1,   0, 1, 0},		//		Viola
-		{42,  0, 1, 1,  -1,-1,-1,-1,-1,   0,-1, 1},		//		Cello
-		{44,  1,-1, 1,  -1,-1,-1,-1,-1,   0,-1, 1},		//		Tremolo Strings
-		// remaining combos											Organ
-		{16,  1,-1, 1,  -1,-1,-1,-1,-1,   1, 1, 0},		//		Drawbar Organ
-		{18,  0, 1, 1,  -1,-1,-1,-1,-1,   1, 1, 0},		//		Rock Organ
-		{20,  0, 1, 1,  -1,-1,-1,-1,-1,   1,-1, 1},		//		Reed Organ
-		// all on													
-		{19,  1,-1, 1,  -1,-1,-1,-1,-1,   1,-1, 1},		//		Church Organ
-		
 
 
-	};
 
 	//stopPresets.assign(128,{}); // fills with empty vectors
-	for (int i = 0; i < 128; i++) {
-		stopPresets.push_back({});
-	}
+  /*
+	stopPresets = vector<vector<int> >(128, vector<int>(Stops.size()));
+  int noOfPresets = (int)stopPresetsTable.size();
+	for (int i = 0; i < noOfPresets; i++) { // for each row of the presets table
+		int instrumentNumber = stopPresetsTable[i][0];
+		for (int j = 1; j <= Stops.size(); j++) { // for each item in the row (except the first)
+      Serial.println(i);
 
-	for (int i = 0; i < (int)stopPresetsTable.size(); i++) { // for each row of the presets table
-
-		for (int j = 1; j < (int)stopPresetsTable[i].size(); j++) { // for each item in the row (except the first)
-			int instrumentNumber = stopPresetsTable[i][0];
 			stopPresets[instrumentNumber].push_back(stopPresetsTable[i][j]); // add it to the row ( which is at the index of the first item in the old row) in the new vector
 		}
 	}
+  */
+ 
+ 
 
 
 }
@@ -80,16 +31,19 @@ void midiManager::MIDIrecieve(int status, int data1, int data2) { // parameters 
 	//int status, data1, data2; // midi messages comprise a status byte and 2 data bytes https://www.songstuff.com/recording/article/midi_message_format/
 	bool recieved = false;
 	if (status == -1 && data1 == -1 && data2 == -1) { // if being called with no parameters (ie. to recieve actual MIDI)
+		cout << "checking serial\n";
 		
 		do {
 			if (Serial3.available() > 2) { // https://www.instructables.com/id/Send-and-Receive-MIDI-with-Arduino/
 				status = Serial3.read();
 				data1 = Serial3.read();
 				data2 = Serial3.read();
-				Serial3.write(status);
-				Serial3.write(data1);
-				Serial3.write(data2);
+				cout << "recieved\n";
 				recieved = true;
+				digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
+  				delay(100);                       // wait for a second
+  				digitalWrite(LED_BUILTIN, HIGH);    // turn the LED off by making the voltage LOW
+
 			}
 		} while (! Serial3.available() > 2);
 		
@@ -185,6 +139,10 @@ void midiManager::MIDIrecieve(int status, int data1, int data2) { // parameters 
 
 
 		}
+  cout << "\nkey requests  buffer  : ";    Keys.getStatesVector("buffer", true, false);
+  cout << "\nkeys pressed by system: ";    Keys.getStatesVector("system", true, false);
+  cout << "\nkeys pressed by user  : ";    Keys.getStatesVector("user", true, false);
+  cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
 	}
 }
 
@@ -215,9 +173,9 @@ void midiManager::stops_to_MIDI() {
 	// linear search through presets to find the preset matching current stop config
 	for (int i = 0; i < 127; i++) { 
 		bool foundPreset = true;			// defaults to true
-		if (! stopPresets[i].empty()) {	// check preset isn't empty
+		if (stopPresets.empty()) {	// check preset isn't empty
 			for (int j = 0; j < (int)stopPresets[i].size(); j++) { // iterate through preset
-				if (stopPresets[i][j] != -1 && stopPresets[i][j] != currentStops[j]) { // if preset stop pos doesn't match real stop pos
+				if (stopPresets[i][j] != -1 && stopPresets[i][j] != currentStops[j-1]) { // if preset stop pos doesn't match real stop pos
 					bool foundPreset = false; 
 					break; // break loop to try next preset
 				}
@@ -244,24 +202,30 @@ void midiManager::stops_to_MIDI() {
 
 // converts MIDI instrument program change messages to stop positions and moves the stops to those positions
 void midiManager::MIDI_to_stop(int instrumentNumber) {
-	if (! stopPresets[instrumentNumber].empty()) {							// checks if that preset has anything in it
-		for (int i = 0; i < (int)stopPresets[instrumentNumber].size(); i++) {	// for each item in the preset
-			if (stopPresets[instrumentNumber][i] != -1) {						// if it isn't -1 (ie. ignore it) then set each stop state to the preset value
-				Stops.requestSystemState(i + 1, stopPresets[instrumentNumber][i]);
-			}
-				
-		}
-	
-	} 
-	else { // if not found as one of the presets, set stops to default instrument preset 
+  bool found = false;
+  for (int i = 0; i < (int)stopPresetsTable.size(); i++) {
+  	if (stopPresetsTable[i][0] == instrumentNumber) {							// checks if that preset is available (has anything in it)
+      found = true;
+  		for (int i = 1; i < (int)stopPresetsTable[instrumentNumber].size(); i++) {	// for each item in the preset (excluding first item)
+  			if (stopPresetsTable[instrumentNumber][i] != -1) {						// if it isn't -1 (ie. ignore it) then set each stop state to the preset value
+  				Stops.requestSystemState(i , stopPresetsTable[instrumentNumber][i]);
+  			}
+  				
+  		}
+      break;
+  	
+  	}
+  } 
+	if (! found) { // if not found as one of the presets, set stops to default instrument preset 
 		int defaultInstrument = 0; 
-		for (int i = 0; i < (int)stopPresets[defaultInstrument].size(); i++) {
-			if (stopPresets[defaultInstrument][i] != -1) {
-				Stops.requestSystemState(i + 1, stopPresets[defaultInstrument][i]);
+		for (int i = 1; i < (int)stopPresetsTable[defaultInstrument].size(); i++) {
+			if (stopPresetsTable[defaultInstrument][i] != -1) {
+				Stops.requestSystemState(i, stopPresetsTable[defaultInstrument][i]);
 			}
 
 		}
 	}
+  
 }
 
 

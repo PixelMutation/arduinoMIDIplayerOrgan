@@ -5,4 +5,4 @@
 
 
 
-scaleManager scales;
+//scaleManager scales;

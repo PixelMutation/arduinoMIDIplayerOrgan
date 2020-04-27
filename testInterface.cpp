@@ -4,7 +4,7 @@
 void testInterface() {
     int number, state, choice;
     choice = 0;
-    cout << "Welcome to the Player Organ Test Interface! \nComment out (with //) #include \". /pluginModules/testInterface.h\" in \"modules.h\" to disable\n";
+    cout << "Welcome to the Player Organ Test Interface!";
     while (choice != -1) {
         
         cout << "Choose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input or -1. to end: ";

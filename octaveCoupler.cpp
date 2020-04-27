@@ -32,7 +32,7 @@ void octave_coupler::run(int keyNumber, int state) { // main function which runs
 				}
 				else {
 					Keys.requestSystemState(newKeyNumber, state);
-					//cout << "octave coupled\n";
+					cout << "octave coupled\n";
 				}
 
 			}
