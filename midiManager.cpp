@@ -52,24 +52,27 @@ void midiManager::MIDIrecieve(int status, int data1, int data2) { // parameters 
 	if (recieved) {
 		// the Status byte is split into 2 nibbles: the command type and the channel number
 		int type = status / 16; // divides the status message by 16 to find the type of command, discarding the channel number
-		//cout << type << " " << status << "\n";
 		int channel = status % 16; // finds the channel number
 		if (find(channels.begin(), channels.end(), channel) != channels.end()) {// checks if the channel is active using vector search method at https://www.techiedelight.com/check-vector-contains-given-element-cpp/
-			//cout << "channel active\n";
+			cout << "\nchannel " << channel << " active";
+			cout << "\ntype " << type << " data1 " << data1 << " data2 " << data2;
 			int midiNumber, velocity, keyNumber;
 
 			switch (type) { // using table of HEX midi commands at https://www.songstuff.com/recording/article/midi_message_format/
-			case 0x8: // if it is a key on command
-
+			case 0x9: // if it is a key on command
+				
 				midiNumber = data1;
 				velocity = data2;
 				keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
-				Keys.requestSystemState(keyNumber, 1); //toggles the key on
-
+				if (velocity !=0) { // sometimes note off is sent as on with velocity 0
+					Keys.requestSystemState(keyNumber, 1); //toggles the key on
+				} else {
+					Keys.requestSystemState(keyNumber, 0); //toggles the key off
+				}
 				break;
-			case 0x9: // if it is a key off command
+			case 0x8: // if it is a key off command
 
-				midiNumber = data1;
+				midiNumber = data1;1	
 				keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
 				Keys.requestSystemState(keyNumber, 0); //toggles the key off
 

@@ -15,13 +15,14 @@ octave_coupler::octave_coupler() {
 	max = 61;
 	delay = 100;
 	pitch = 12;
-	active = false;
+	active = true;
 }
 
 
 void octave_coupler::run(int keyNumber, int state) { // main function which runs the coupler
-	//cout << "octaveCouplerActive\n";
+	
 	if (active) {
+		cout << "octaveCouplerActive\n";
 		for (int i = 1; i <= number; i++) {						// repeats for the number of times specified
 			int newKeyNumber = keyNumber + (i * dir * pitch);	// new key to be toggled  is one octave (12 semitones) above or below
 			

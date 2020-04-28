@@ -4,10 +4,10 @@
 void testInterface() {
     int number, state, choice;
     choice = 0;
-    cout << "Welcome to the Player Organ Test Interface!";
+    cout << "\nWelcome to the Player Organ Test Interface!";
     while (choice != -1) {
         
-        cout << "Choose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input or -1. to end: ";
+        cout << "\nChoose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input or -1. to end: ";
         cin >> choice;
         switch (choice) {
         case 1:
@@ -39,6 +39,7 @@ void testInterface() {
                             delay(200);
                             //this_thread::sleep_for(chrono::milliseconds(200));
                         }
+                        cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, true);
 
                         cout << "\n\nChoose item number (1-61) or -1 to stop.";
                         cin >> number;
@@ -70,7 +71,7 @@ void testInterface() {
                 }
 
             }
-            cout << "Choose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input or -1. to end: ";
+            cout << "\nChoose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input or -1. to end: ";
             cin >> choice;
             break;
         case 2:
@@ -78,7 +79,7 @@ void testInterface() {
             int key;
             while (choice != -1) {
                 
-                cout << "type key number: ";
+                cout << "\ntype key number: ";
                 cin >> key;
                 keypressHandler(key, 1);
                 cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
@@ -89,14 +90,16 @@ void testInterface() {
                     //this_thread::sleep_for(chrono::milliseconds(200));
                     delay(200);
                 }
+                cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, true);
 
             }
-            cout << "Choose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input or -1. to end: ";
+            cout << "\nChoose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input or -1. to end: ";
             cin >> choice;
             break;
 
         case 3:
             choice = 0;
+            
             int status, data1, data2;
 
             while (choice != -1) {
@@ -104,12 +107,17 @@ void testInterface() {
                 
                 switch (choice) {
                 case 1:
-                    cout << "\nStatus byte (1st nibble = command type, 2nd nibble = channel no.) e.g. 0x81, 127: "; 
+
+                    cout << "\nStatus byte (1st nibble = command type, 2nd nibble = channel no.) e.g. 0x81: "; 
                     cin >> hex >> status;
+                    cout << status;
                     cout << "\nData1 byte (e.g. instrument number, note number) e.g. 48: "; 
-                    cin >> hex >> data1;
+                    cin  >> dec >> data1;
+                    cout << data1;
                     cout << "\nData2 byte (e.g. velocity, other data) e.g. 100: "; 
-                    cin >> hex >> data2;
+                    cin >> dec >> data2;
+                    cout << data2 << "\n\n";
+
 
                     MIDI.MIDIrecieve(status, data1, data2);
                     cout << "\n Current stops state: "; Stops.getStatesVector("all", true, true);
