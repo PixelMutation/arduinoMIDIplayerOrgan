@@ -29,6 +29,7 @@ using namespace std; //removes need for std:: prefix for standard library functi
 //#include "main.h"
 
 #include "scheduler.h"
+#include "controls.h"
 #include "toggleItem.h" // sends signal to move keys or stops
 //include "recieveSignal.h" // recieves signals from the sensors / switches
 #include "stateManager.h" // class storing keys or stops

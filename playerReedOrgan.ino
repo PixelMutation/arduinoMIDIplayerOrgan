@@ -6,9 +6,9 @@
 
 void setup() {
   // put your setup code here, to run once:
-  Serial3.begin(9600);
+  Serial1.begin(9600);
   Serial.begin(9600);
-  
+  cout << "setup complete\n";
 
 
   #ifdef TEST_INTERFACE_H
@@ -18,6 +18,10 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  MIDI.MIDIrecieve();
   checkSchedule();
+  Controls.checkPins();
+}
+
+void serialEvent() {
+  MIDI.MIDIrecieve();
 }

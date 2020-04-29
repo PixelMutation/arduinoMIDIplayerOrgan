@@ -10,7 +10,9 @@ void checkSchedule() {
     //double durationFromStart = std::chrono::duration<double, std::milli>(currentTime - Keys.progStartTime).count();
 
     if (! Keys.schedule.empty()) {
+        //cout << "\nitem in schedule";
         for (int i = 0; i < (int)Keys.schedule.size(); i++) { // checks each element in the schedule
+            //cout << "\nchecking item in schedule";
             if (Keys.schedule[0][0] <= durationFromStart) {// if the time since the start is equal to or greater than the scheduled time since start, press the scheduled key 
                 //cout << "scheduled item activated\nscheduleFirstItem: ";
                 //printVector(Keys.schedule[0]);

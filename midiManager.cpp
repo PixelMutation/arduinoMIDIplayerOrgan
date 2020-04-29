@@ -31,22 +31,22 @@ void midiManager::MIDIrecieve(int status, int data1, int data2) { // parameters 
 	//int status, data1, data2; // midi messages comprise a status byte and 2 data bytes https://www.songstuff.com/recording/article/midi_message_format/
 	bool recieved = false;
 	if (status == -1 && data1 == -1 && data2 == -1) { // if being called with no parameters (ie. to recieve actual MIDI)
-		cout << "checking serial\n";
+		//cout << "checking serial\n";
 		
-		do {
-			if (Serial3.available() > 2) { // https://www.instructables.com/id/Send-and-Receive-MIDI-with-Arduino/
-				status = Serial3.read();
-				data1 = Serial3.read();
-				data2 = Serial3.read();
-				cout << "recieved\n";
-				recieved = true;
-				digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
-  				delay(100);                       // wait for a second
-  				digitalWrite(LED_BUILTIN, HIGH);    // turn the LED off by making the voltage LOW
 
-			}
-		} while (! Serial3.available() > 2);
-		
+		if (Serial1.available() > 2) { // https://www.instructables.com/id/Send-and-Receive-MIDI-with-Arduino/
+			status = Serial1.read();
+			data1 = Serial1.read();
+			data2 = Serial1.read();
+			
+			
+			cout << "\nrecieved " << status << " " << data1 << " " << data2 <<"\n";
+			recieved = true;
+			digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)              
+			digitalWrite(LED_BUILTIN, HIGH);    // turn the LED off by making the voltage LOW
+
+		}
+
 	} else { recieved = true;}
 
 	if (recieved) {
@@ -55,7 +55,7 @@ void midiManager::MIDIrecieve(int status, int data1, int data2) { // parameters 
 		int channel = status % 16; // finds the channel number
 		if (find(channels.begin(), channels.end(), channel) != channels.end()) {// checks if the channel is active using vector search method at https://www.techiedelight.com/check-vector-contains-given-element-cpp/
 			cout << "\nchannel " << channel << " active";
-			cout << "\ntype " << type << " data1 " << data1 << " data2 " << data2;
+			cout << "\ntype " << type << " data1 " << data1 << " data2 " << data2 << "\n";
 			int midiNumber, velocity, keyNumber;
 
 			switch (type) { // using table of HEX midi commands at https://www.songstuff.com/recording/article/midi_message_format/
@@ -69,13 +69,22 @@ void midiManager::MIDIrecieve(int status, int data1, int data2) { // parameters 
 				} else {
 					Keys.requestSystemState(keyNumber, 0); //toggles the key off
 				}
+				cout << "\n                        01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 ";
+				cout << "\nkey requests  buffer  : ";    Keys.getStatesVector("buffer", true, false);
+				cout << "\nkeys pressed by system: ";    Keys.getStatesVector("system", true, false);
+				cout << "\nkeys pressed by user  : ";    Keys.getStatesVector("user", true, false);
+				cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
 				break;
 			case 0x8: // if it is a key off command
 
-				midiNumber = data1;1	
+				midiNumber = data1;	
 				keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
 				Keys.requestSystemState(keyNumber, 0); //toggles the key off
-
+				cout << "\n                        01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 ";
+				cout << "\nkey requests  buffer  : ";    Keys.getStatesVector("buffer", true, false);
+				cout << "\nkeys pressed by system: ";    Keys.getStatesVector("system", true, false);
+				cout << "\nkeys pressed by user  : ";    Keys.getStatesVector("user", true, false);
+				cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
 				break;
 			case 0xC: // if it is a program change (instrument change) command
 				MIDI_to_stop(data1);
@@ -142,10 +151,7 @@ void midiManager::MIDIrecieve(int status, int data1, int data2) { // parameters 
 
 
 		}
-  cout << "\nkey requests  buffer  : ";    Keys.getStatesVector("buffer", true, false);
-  cout << "\nkeys pressed by system: ";    Keys.getStatesVector("system", true, false);
-  cout << "\nkeys pressed by user  : ";    Keys.getStatesVector("user", true, false);
-  cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
+	
 	}
 }
 
@@ -215,7 +221,8 @@ void midiManager::MIDI_to_stop(int instrumentNumber) {
   			}
   				
   		}
-      break;
+		cout << "\n Current stops state: "; Stops.getStatesVector("all", true, true);
+      	break;
   	
   	}
   } 
@@ -227,6 +234,7 @@ void midiManager::MIDI_to_stop(int instrumentNumber) {
 			}
 
 		}
+		cout << "\n Current stops state: "; Stops.getStatesVector("all", true, true);
 	}
   
 }
