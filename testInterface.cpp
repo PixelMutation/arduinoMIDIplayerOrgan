@@ -29,10 +29,7 @@ void testInterface() {
                         cout << "this key's system age  : " << Keys.getState(number, "system") << "\n";
                         cout << "this key's user state  : " << Keys.getState(number, "user") << "\n";
                         cout << "\n                        01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 ";
-                        cout << "\nkey requests  buffer  : ";    Keys.getStatesVector("buffer", true, false);
-                        cout << "\nkeys pressed by system: ";    Keys.getStatesVector("system", true, false);
-                        cout << "\nkeys pressed by user  : ";    Keys.getStatesVector("user", true, false);
-                        cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
+                        printKeyStates();
 
                         while (! Keys.schedule.empty()) {
                             checkSchedule();
@@ -58,10 +55,7 @@ void testInterface() {
                         cout << "this stop's system age   : " << Stops.getState(number, "system") << "\n";
                         cout << "this stop's user state   : " << Stops.getState(number, "user") << "\n";
                         cout << "\n                       01 02 03 04 05 06 07 08 09 10 11";
-                        cout << "\nstop requests buffer : ";       Stops.getStatesVector("buffer", true, false);
-                        cout << "\nstops system vector  : ";       Stops.getStatesVector("system", true, false);
-                        cout << "\nstops user   vector  : ";       Stops.getStatesVector("user", true, false);
-                        cout << "\nstops pressed overall: ";    Stops.getStatesVector("all", true, true);
+                        printKeyStates();
 
                         cout << "\n\nChoose item number (1-11) or -1 to stop: ";
                         cin >> number;
@@ -139,5 +133,5 @@ void testInterface() {
             break;
         }
     }
-    //cout << "\n                        01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 ";
+    printKeyStates("header");
 }

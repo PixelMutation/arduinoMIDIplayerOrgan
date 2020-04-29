@@ -3,27 +3,6 @@
 // constructor (int middleCpos, vector<int> channels_) 
 midiManager::midiManager() {
 	midi_to_key_offset = MIDImiddleCpos - keysMiddleCpos; //this offset is used when converting between MIDI key numbers and real key numbers
-	// initializes the stops presets, taking the user friendly table and converting it to be read quickly by putting the row at the correct position.
-
-
-
-	//stopPresets.assign(128,{}); // fills with empty vectors
-  /*
-	stopPresets = vector<vector<int> >(128, vector<int>(Stops.size()));
-  int noOfPresets = (int)stopPresetsTable.size();
-	for (int i = 0; i < noOfPresets; i++) { // for each row of the presets table
-		int instrumentNumber = stopPresetsTable[i][0];
-		for (int j = 1; j <= Stops.size(); j++) { // for each item in the row (except the first)
-      Serial.println(i);
-
-			stopPresets[instrumentNumber].push_back(stopPresetsTable[i][j]); // add it to the row ( which is at the index of the first item in the old row) in the new vector
-		}
-	}
-  */
- 
- 
-
-
 }
 
 // checks for and handles incoming MIDI messages (use parameters ONLY for SIMULATING midi, otherwise ignores real midi input)
@@ -69,22 +48,16 @@ void midiManager::MIDIrecieve(int status, int data1, int data2) { // parameters 
 				} else {
 					Keys.requestSystemState(keyNumber, 0); //toggles the key off
 				}
-				cout << "\n                        01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 ";
-				cout << "\nkey requests  buffer  : ";    Keys.getStatesVector("buffer", true, false);
-				cout << "\nkeys pressed by system: ";    Keys.getStatesVector("system", true, false);
-				cout << "\nkeys pressed by user  : ";    Keys.getStatesVector("user", true, false);
-				cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
+				printKeyStates("header");
+				printKeyStates("full");
 				break;
 			case 0x8: // if it is a key off command
 
 				midiNumber = data1;	
 				keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
 				Keys.requestSystemState(keyNumber, 0); //toggles the key off
-				cout << "\n                        01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 ";
-				cout << "\nkey requests  buffer  : ";    Keys.getStatesVector("buffer", true, false);
-				cout << "\nkeys pressed by system: ";    Keys.getStatesVector("system", true, false);
-				cout << "\nkeys pressed by user  : ";    Keys.getStatesVector("user", true, false);
-				cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
+				printKeyStates("header");
+				printKeyStates("full");
 				break;
 			case 0xC: // if it is a program change (instrument change) command
 				MIDI_to_stop(data1);

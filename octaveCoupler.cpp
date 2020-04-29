@@ -22,7 +22,7 @@ octave_coupler::octave_coupler() {
 void octave_coupler::run(int keyNumber, int state) { // main function which runs the coupler
 	
 	if (active) {
-		cout << "octaveCouplerActive\n";
+		cout << "\noctaveCouplerActive";
 		for (int i = 1; i <= number; i++) {						// repeats for the number of times specified
 			int newKeyNumber = keyNumber + (i * dir * pitch);	// new key to be toggled  is one octave (12 semitones) above or below
 			

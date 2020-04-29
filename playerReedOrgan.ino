@@ -8,7 +8,7 @@ void setup() {
   // put your setup code here, to run once:
   Serial1.begin(9600);
   Serial.begin(9600);
-  cout << "setup complete\n";
+
 
 
   #ifdef TEST_INTERFACE_H

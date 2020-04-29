@@ -9,6 +9,7 @@ controls::controls() {
     }
     */
    pinMode(3, INPUT_PULLUP);
+
 }
 
 void controls::checkPins() { //  guide on detecting pin states https://www.arduino.cc/en/Tutorial/DigitalInputPullup
@@ -29,15 +30,16 @@ void controls::checkPins() { //  guide on detecting pin states https://www.ardui
     */
    if (reedSwitch != digitalRead(3)) {
         reedSwitch = digitalRead(3);
-        if (reedSwitch == LOW) {
-            keypressHandler(50,1);
-            cout << "\nreed switch activated";
-            //cout << "\n                        01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 ";
-            cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
-        } else {
-            keypressHandler(50,0);
-            //cout << "\n                        01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 ";
-            cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
+        int note = analogRead(0) / 17; // pot gives values from 0-1023, integer division by 17 moves this within 1-60 //reading a potentionmeter https://www.arduino.cc/en/tutorial/potentiometer
+        if (note > 0 && note < 62) {
+            if (reedSwitch == LOW) {
+                keypressHandler(note,1);
+                cout << "\nreed switch activated";
+                printKeyStates("overall");
+            } else {
+                keypressHandler(note,0);
+                printKeyStates("overall");
+            }
         }
    }
    
