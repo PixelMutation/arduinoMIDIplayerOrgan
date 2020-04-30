@@ -7,7 +7,7 @@ void testInterface() {
     cout << "\nWelcome to the Player Organ Test Interface!";
     while (choice != -1) {
         
-        cout << "\nChoose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input or -1. to end: ";
+        cout << "\nChoose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input 4. Test hall sensors or -1. to end: ";
         cin >> choice;
         switch (choice) {
         case 1:
@@ -25,10 +25,7 @@ void testInterface() {
                         cin >> state;
                         cout << "\n";
                         keypressHandler(number, state);
-                        cout << "\nthis key's buffer state: " << Keys.getState(number, "buffer") << "\n";
-                        cout << "this key's system age  : " << Keys.getState(number, "system") << "\n";
-                        cout << "this key's user state  : " << Keys.getState(number, "user") << "\n";
-                        cout << "\n                        01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 ";
+                        printKeyStates("header");
                         printKeyStates();
 
                         while (! Keys.schedule.empty()) {
@@ -51,10 +48,8 @@ void testInterface() {
                         cin >> state;
                         cout << "\n";
                         Stops.setSensorState(number, state);
-                        cout << "\nthis stop's buffer state: " << Stops.getState(number, "buffer") << "\n";
-                        cout << "this stop's system age   : " << Stops.getState(number, "system") << "\n";
-                        cout << "this stop's user state   : " << Stops.getState(number, "user") << "\n";
-                        cout << "\n                       01 02 03 04 05 06 07 08 09 10 11";
+
+                        printStopStates("header");
                         printKeyStates();
 
                         cout << "\n\nChoose item number (1-11) or -1 to stop: ";
@@ -76,7 +71,7 @@ void testInterface() {
                 cout << "\ntype key number: ";
                 cin >> key;
                 keypressHandler(key, 1);
-                cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, false);
+                printKeyStates("overall");
                 cout << "\n";
 
                 while (! Keys.schedule.empty()) {
@@ -84,7 +79,7 @@ void testInterface() {
                     //this_thread::sleep_for(chrono::milliseconds(200));
                     delay(200);
                 }
-                cout << "\nkeys pressed overall  : ";    Keys.getStatesVector("all", true, true);
+                printKeyStates("overall");
 
             }
             cout << "\nChoose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input or -1. to end: ";
@@ -114,20 +109,25 @@ void testInterface() {
 
 
                     MIDI.MIDIrecieve(status, data1, data2);
-                    cout << "\n Current stops state: "; Stops.getStatesVector("all", true, true);
-                    cout << "\n Current keys state : "; Keys.getStatesVector("all", true, true);
+                    printStopStates("overall");
+                    printKeyStates("system");
                     break;
                 case 2:
                     cout << "Type instrument number (0-127): ";
                     cin >> choice;
                     MIDI.MIDIrecieve(0xC1, choice, 0);
-                    cout << "\n Current stops state: "; Stops.getStatesVector("all", true, true);
+                    printStopStates("overall");
                     break;
                 }
                 
             }
             cout << "Choose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input or -1. to end: ";
             cin >> choice;
+            break;
+        case 4:
+            while (true) {
+                cout << analogRead(1) << "\n ";
+            }
             break;
         case -1:
             break;

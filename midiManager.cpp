@@ -194,7 +194,7 @@ void midiManager::MIDI_to_stop(int instrumentNumber) {
   			}
   				
   		}
-		cout << "\n Current stops state: "; Stops.getStatesVector("all", true, true);
+		printStopStates("overall");
       	break;
   	
   	}
@@ -207,7 +207,7 @@ void midiManager::MIDI_to_stop(int instrumentNumber) {
 			}
 
 		}
-		cout << "\n Current stops state: "; Stops.getStatesVector("all", true, true);
+		printStopStates("overall");
 	}
   
 }
