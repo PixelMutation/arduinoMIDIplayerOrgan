@@ -36,6 +36,7 @@ void controls::checkPins() { //  guide on detecting pin states https://www.ardui
                 keypressHandler(note,1);
                 cout << "\nreed switch activated";
                 printKeyStates("overall");
+                cout << "hall sensor: " << analogRead(1);
             } else {
                 keypressHandler(note,0);
                 printKeyStates("overall");
