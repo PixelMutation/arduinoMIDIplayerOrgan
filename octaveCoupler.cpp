@@ -9,11 +9,11 @@ each time with a "delay" within the given range of notes ("min" and "max")
 */
 
 octave_coupler::octave_coupler() {
-	number = 1;
+	number = 2;
 	dir = 1;
 	min = 1;
 	max = 61;
-	delay = 100;
+	delay = 0;
 	pitch = 12;
 	active = true;
 }
