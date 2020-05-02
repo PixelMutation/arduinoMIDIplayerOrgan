@@ -8,7 +8,7 @@ controls::controls() {
         reedSwitches.push_back({i,digitalRead(i)});
     }
     */
-   pinMode(3, INPUT_PULLUP);
+
 
 }
 
@@ -28,15 +28,18 @@ void controls::checkPins() { //  guide on detecting pin states https://www.ardui
         
     }
     */
-   if (reedSwitch != digitalRead(3)) {
-        reedSwitch = digitalRead(3);
-        int note = analogRead(0) / 17; // pot gives values from 0-1023, integer division by 17 moves this within 1-60 //reading a potentionmeter https://www.arduino.cc/en/tutorial/potentiometer
+   
+   int newReedSwitchState = testMux.muxRead(9,false,false);
+   if (reedSwitch != newReedSwitchState) {
+        reedSwitch = newReedSwitchState;
+        
+        int note = testMux.muxRead(10,true,true) / 17; // pot gives values from 0-1023, integer division by 17 moves this within 1-60 //reading a potentionmeter https://www.arduino.cc/en/tutorial/potentiometer
         if (note > 0 && note < 62) {
             if (reedSwitch == LOW) {
                 keypressHandler(note,1);
                 cout << "\nreed switch activated";
                 printKeyStates("overall");
-                cout << "hall sensor: " << analogRead(1);
+                cout << "hall sensor: " << testMux.muxRead(8,true,true);
             } else {
                 keypressHandler(note,0);
                 printKeyStates("overall");

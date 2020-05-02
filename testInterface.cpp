@@ -126,7 +126,7 @@ void testInterface() {
             break;
         case 4:
             while (true) {
-                cout << analogRead(1) << "\n ";
+                cout << testMux.muxRead(8,true,false) << "\n ";
             }
             break;
         case -1:

@@ -25,11 +25,12 @@
 
 using namespace std; //removes need for std:: prefix for standard library functions and classes
 
-// HEADER FILES FOR CORE MODULES:
+// HEADER FILES FOR CORE MODULES (probably don't deactivate):
 //#include "main.h"
 
-#include "scheduler.h"
-#include "controls.h"
+#include "multiplexer.h" // 
+#include "scheduler.h" // tracks time and activates any scheduled events when the time is right
+#include "controls.h" // just for testing various analog and digital input devices
 #include "toggleItem.h" // sends signal to move keys or stops
 //include "recieveSignal.h" // recieves signals from the sensors / switches
 #include "stateManager.h" // class storing keys or stops
@@ -39,7 +40,7 @@ using namespace std; //removes need for std:: prefix for standard library functi
 #include "pluginManager.h" // Movement commands are sent through here so plugin effects can be applied
 
 // HEADER FILES FOR PLUGINS: (comment out to deactivate plugins)
-#include "testInterface.h" // a console interface for debugging
+//#include "testInterface.h" // a console interface for debugging
 #include "octaveCoupler.h" // replicates a keypress x octaves above or below
 //#include "arpeggiator.h" // plays a configurable arpeggio from the key pressed
 //#include "autoChord.h" // plays a configurable chord from the key pressed
