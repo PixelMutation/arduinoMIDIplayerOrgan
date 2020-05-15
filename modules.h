@@ -42,8 +42,7 @@ using namespace std; //removes need for std:: prefix for standard library functi
 // HEADER FILES FOR PLUGINS: (comment out to deactivate plugins)
 //#include "testInterface.h" // a console interface for debugging
 #include "octaveCoupler.h" // replicates a keypress x octaves above or below
-//#include "arpeggiator.h" // plays a configurable arpeggio from the key pressed
-//#include "autoChord.h" // plays a configurable chord from the key pressed
+#include "scales.h" // plays patterns such as chords and arpeggios within scales
 //#include "looper.h" // sets up a configurable loop
 //#include "sustain.h" // sustains notes configurably, controlled by a pedal or button
 //#include "legato.h" // holds each note you press until the next note is pressed, controlled by pedal or button

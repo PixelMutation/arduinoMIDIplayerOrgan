@@ -5,9 +5,13 @@
 
 class octave_coupler {
 public:
-	octave_coupler();
-	bool active;
-	int number, dir, min, max, delay, pitch;
+	int number = 3;
+	int dir = 1;
+	int min = 1;
+	int max = 61;
+	int delay = 10;
+	int pitch = 12;
+	bool active = false;
 	void run(int keyNumber, int state);
 };
 

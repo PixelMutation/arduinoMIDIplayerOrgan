@@ -8,15 +8,7 @@ toggles the next note up/down (direction "dir") by an octave for "number" octave
 each time with a "delay" within the given range of notes ("min" and "max")
 */
 
-octave_coupler::octave_coupler() {
-	number = 2;
-	dir = 1;
-	min = 1;
-	max = 61;
-	delay = 0;
-	pitch = 12;
-	active = true;
-}
+
 
 
 void octave_coupler::run(int keyNumber, int state) { // main function which runs the coupler

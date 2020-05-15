@@ -5,7 +5,7 @@
 
 class midiManager { // handles MIDI I/O
 	int MIDImiddleCpos = 48;		// leave this alone
-	int midi_to_key_offset;			// offset between MIDI key number and real key number
+	
 
 	int outputChannel = 0;	// channel on which notes are sent
 
@@ -23,8 +23,8 @@ class midiManager { // handles MIDI I/O
     {34,  1,-1, 0,  -1,-1,-1,-1,-1,  0, 0, 0},    //    Electric Bass (pick)
     {35,  0, 1, 1,  -1,-1,-1,-1,-1,  0, 0, 0},    //    Fretless Bass
     {36,  1,-1, 1,  -1,-1,-1,-1,-1,  0, 0, 0},      //    Slap Bass 1
-    // treble only                        Ensemble
-    {48,  0, 0, 0,  -1,-1,-1,-1,-1,  0, 1, 0},    //    String Ensemble 1   
+    // treble only                        Ensemble 
+    /*{48,  0, 0, 0,  -1,-1,-1,-1,-1,  0, 1, 0},    //    String Ensemble 1   
     {49,  0, 0, 0,  -1,-1,-1,-1,-1,  0,-1, 1},    //    String Ensemble 2
     {50,  0, 0, 0,  -1,-1,-1,-1,-1,  1, 0, 0},    //    Synth Strings 1
     {51,  0, 0, 0,  -1,-1,-1,-1,-1,  1, 1, 0},    //    Synth Strings 2
@@ -62,7 +62,7 @@ class midiManager { // handles MIDI I/O
     {20,  0, 1, 1,  -1,-1,-1,-1,-1,   1,-1, 1},   //    Reed Organ
     // all on                         
     {19,  1,-1, 1,  -1,-1,-1,-1,-1,   1,-1, 1}    //    Church Organ
-    
+    */
 
 
   };
@@ -71,6 +71,7 @@ class midiManager { // handles MIDI I/O
 	vector<vector<int>> stopPresets;// a 2D vector table containing all the possible reed stop configurations indexed by their MIDI instrument assignment
 public:
 	vector<int> channels{ 0,1,2,3,4 };// the MIDI channels the system responds to
+  int midi_to_key_offset;			// offset between MIDI key number and real key number
 	int keysMiddleCpos = 32;		// the key number (index starting at 0) of middle C on your organ
 
 	// Special stops positions
