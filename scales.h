@@ -5,9 +5,8 @@
 // stores the patterns used to construct scales, chords and arpeggios
 class scale_manager {
 	
-	vector<vector<string>> chordPatterns { // stores the patterns (in terms of notes within a scale) of various supported scales
-		{"triad","024"},
-		{"seventh","0246"}
+	const string chordPatternNames[2] { // stores the patterns (in terms of notes within a scale) of various supported scales
+		"triad", "seventh"
 	};
 	
 	vector<vector<string>> scalePatterns { // stores the patterns of various supported scales (in terms of a list of half and whole steps) https://www.musictheory.net/lessons https://en.wikipedia.org/wiki/List_of_musical_scales_and_modes https://gumroad.com/l/tldrmusic
@@ -32,6 +31,23 @@ class scale_manager {
 		//{"diminished 7th",			"3333",	"4"},		//
 		//{"dominant 7th",			"3333",	"4"}		//
 	
+	};
+	const string scalePatternNames {
+		"chromatic",
+		"diminished",
+		"major",
+		"harmonic minor",
+		"melodic minor ascending",
+		"natural minor",
+		"blues",
+		"whole tone",
+		"augmented",
+		"pentatonic",
+		"diminished 7th",
+		"dominant 7th"
+	};
+	const vector<vector<int>> scalePatterns {
+		{12,1,1,1,1,1,1,1,1,1,1,1}
 	};
 	
 	vector<string> modes { // stores the names of the different major scale modes, indexed by their note offset from the first note of the scale

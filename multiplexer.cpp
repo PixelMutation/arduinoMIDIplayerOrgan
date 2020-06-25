@@ -69,4 +69,4 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
     //delay(10);
 }
 
-Multiplexer testMux(true,1,{50,51,52,53},{A0});
+Multiplexer testMux(true,1,{6,7,8,9},{A8});
