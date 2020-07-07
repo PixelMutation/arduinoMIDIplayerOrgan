@@ -4,7 +4,7 @@
 void testInterface() {
     int number, state, choice;
     choice = 0;
-    cout << "\nWelcome to the Player Organ Test Interface!";
+    Serial.println("\nWelcome to the Player Organ Test Interface!");
     while (choice != -1) {
         
         cout << "\nChoose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input 4. Test hall sensors or -1. to end: ";

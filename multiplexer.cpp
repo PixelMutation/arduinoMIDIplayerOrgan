@@ -25,7 +25,7 @@ Multiplexer::Multiplexer(bool _input, int _numberOfMultiplexers, vector<int> _se
 // returns the value of the input (input number, if you want analog result, if a pullup sensor)
 int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsecondDelay) {
     if (input) { // sanity check: output mux cannot act as input
-    
+        //Serial.println("a");
         int multiplexer = inputNumber/16; // each has 16 outputs so this finds which multiplexer is needed
         byte selectNumber = inputNumber - 16 * multiplexer; // the number (0-15) of the output on the corresponding multiplexer
         int IOpin = IOpins[multiplexer]; // the pin of the multiplexer being used
@@ -33,27 +33,38 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
         //printVector(IOpins, true);
         //cout << "\nmultiplexer " << multiplexer << " selectNumber " << selectNumber << " iopin " << IOpin << " ";
         if (multiplexer < numberOfMultiplexers) { // sanity check!
-            //char binarySelect[] = "0000";
+            int binarySelect[4] = {0,0,0,0};
+            //Serial.println("b");
             for (int i = 0; i < 4; i++) { // for each select pin, set the binary state to select the mux output https://learn.sparkfun.com/tutorials/multiplexer-breakout-hookup-guide/all
+                //Serial.println("c");
                 if (selectNumber & (1<<i)) {
                     digitalWrite(selectPins[i], HIGH);
+                    binarySelect[i] = 1;
                 } else {
                     digitalWrite(selectPins[i], LOW);
+                    binarySelect[i] = 0;
                 }
-                /*
-                binarySelect[i] = bitRead(selectNumber,3- i)  + 48;
-                digitalWrite(selectPins[i], bitRead(selectNumber, i)); // write the bit value to select the right output
-                */
+                
+                //binarySelect[i] = bitRead(selectNumber,3- i)  + 48;
+                //digitalWrite(selectPins[i], bitRead(selectNumber, i)); // write the bit value to select the right output
+                
             }
-            //cout << "\nbinary output: " << binarySelect << "\n";
+            /*
+            Serial.println("binary output ");
+            for (auto i: binarySelect) {
+              Serial.println(i);
+            }
+            Serial.println("\n");
+            */
             if (pullup) { // if it is a pullup sensor
                 pinMode(IOpin, INPUT_PULLUP);
             } else {
                 pinMode(IOpin, INPUT);
             }
             if (analog) { // whether an analog response is wanted
-                delayMicroseconds(10);
-                firstReading = analogRead(IOpin); // first reading is typically bad
+                //Serial.println("d");
+                //delayMicroseconds(10);
+                //firstReading = analogRead(IOpin); // first reading is typically bad
                 delayMicroseconds(microsecondDelay); // delay so analog has time to stabilise
                 return (analogRead(IOpin) + firstReading)/2; 
             } else {
@@ -69,4 +80,4 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
     //delay(10);
 }
 
-Multiplexer testMux(true,1,{6,7,8,9},{A8});
+Multiplexer testMux(true,1,{2,3,4,5},{A8});

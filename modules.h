@@ -12,7 +12,7 @@
 // core libraries
 
 
-#include <ArduinoSTL.h>
+//#include <ArduinoSTL.h>
 #include <Arduino.h>
 
 #include <vector>
@@ -40,7 +40,7 @@ using namespace std; //removes need for std:: prefix for standard library functi
 #include "pluginManager.h" // Movement commands are sent through here so plugin effects can be applied
 
 // HEADER FILES FOR PLUGINS: (comment out to deactivate plugins)
-//#include "testInterface.h" // a console interface for debugging
+#include "testInterface.h" // a console interface for debugging
 #include "octaveCoupler.h" // replicates a keypress x octaves above or below
 #include "scales.h" // plays patterns such as chords and arpeggios within scales
 //#include "looper.h" // sets up a configurable loop

@@ -3,6 +3,10 @@
 
 #include "stateManager.h"
 
+extern "C"{
+  __attribute__((weak)) int __exidx_start(){ return -1;}
+  __attribute__((weak)) int __exidx_end(){ return -1; }
+}
 // stateManager.cpp contains the stateManager class definition. This class is used to store data about the positions of keys/stops and handle requests to move them.
 
 // constructor: initialises the object, taking the type ("keys" or "stops") and size (number of keys/stops) wanted then filling out the vectors with 0s
