@@ -29,7 +29,7 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
         int multiplexer = inputNumber/16; // each has 16 outputs so this finds which multiplexer is needed
         byte selectNumber = inputNumber - 16 * multiplexer; // the number (0-15) of the output on the corresponding multiplexer
         int IOpin = IOpins[multiplexer]; // the pin of the multiplexer being used
-        int firstReading; //used to bin first (usually dodgey) reading. Analog interference: https://forum.arduino.cc/index.php?topic=70013.0
+        int reading1, reading2, reading3, reading4; //used to bin first (usually dodgey) reading. Analog interference: https://forum.arduino.cc/index.php?topic=70013.0
         //printVector(IOpins, true);
         //cout << "\nmultiplexer " << multiplexer << " selectNumber " << selectNumber << " iopin " << IOpin << " ";
         if (multiplexer < numberOfMultiplexers) { // sanity check!
@@ -64,9 +64,8 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
             if (analog) { // whether an analog response is wanted
                 //Serial.println("d");
                 //delayMicroseconds(10);
-                //firstReading = analogRead(IOpin); // first reading is typically bad
                 delayMicroseconds(microsecondDelay); // delay so analog has time to stabilise
-                return (analogRead(IOpin) + firstReading)/2; 
+                return (analogRead(IOpin)); 
             } else {
                 return digitalRead(IOpin);
             }

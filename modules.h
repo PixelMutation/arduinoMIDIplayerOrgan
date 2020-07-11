@@ -25,7 +25,7 @@
 
 using namespace std; //removes need for std:: prefix for standard library functions and classes
 
-// HEADER FILES FOR CORE MODULES (probably don't deactivate):
+// HEADER FILES FOR CORE MODULES (probably don't deactivate any!):
 //#include "main.h"
 
 #include "multiplexer.h" // 
@@ -38,6 +38,7 @@ using namespace std; //removes need for std:: prefix for standard library functi
 #include "midiManager.h" // manages MIDI I/O and MIDI instruments
 //#include "userInterface.h" allows user to configure settings for core modules and plugins
 #include "pluginManager.h" // Movement commands are sent through here so plugin effects can be applied
+#include "EEPROM.h" // Stores a live version of EEPROM in memory, handles writing, loading etc.
 
 // HEADER FILES FOR PLUGINS: (comment out to deactivate plugins)
 #include "testInterface.h" // a console interface for debugging
