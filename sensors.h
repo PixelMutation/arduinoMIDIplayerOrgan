@@ -26,7 +26,7 @@ public:
         int oldPositions[][]; // the position of each key at the last measurement, indexed as [manual][key]. used to compare to see if the key has moved.
     
         manuals();
-        int loadCalibratedPositions();
+        int fetchCalibratedPosition();
 
     }
 

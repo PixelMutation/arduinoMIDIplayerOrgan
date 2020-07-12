@@ -39,6 +39,7 @@ using namespace std; //removes need for std:: prefix for standard library functi
 //#include "userInterface.h" allows user to configure settings for core modules and plugins
 #include "pluginManager.h" // Movement commands are sent through here so plugin effects can be applied
 #include "EEPROM.h" // Stores a live version of EEPROM in memory, handles writing, loading etc.
+#include "sensors.h"
 
 // HEADER FILES FOR PLUGINS: (comment out to deactivate plugins)
 #include "testInterface.h" // a console interface for debugging

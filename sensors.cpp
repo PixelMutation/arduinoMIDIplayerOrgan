@@ -23,6 +23,6 @@ sensors::controlPanels::controlPanels() {
 
 
 
-int sensors::manuals::loadCalibratedPositions() {
+int sensors::manuals::fetchCalibratedPosition() {
     
 }
