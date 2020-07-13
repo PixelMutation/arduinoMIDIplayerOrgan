@@ -7,6 +7,10 @@ sensors::sensors() {
 
 sensors::manuals::manuals() {
     multiplexers = keysPerManual / 16;
+    for (int i = 0; i < noOfManuals; i++) {
+
+    }
+    auto calibratedPositions.fetchSpan()
 
 }
 sensors::stops::stops() {
@@ -23,6 +27,6 @@ sensors::controlPanels::controlPanels() {
 
 
 
-int sensors::manuals::fetchCalibratedPosition() {
+int sensors::manuals::fetchCalibratedPosition(int key, int manual, int posType) {
     
 }

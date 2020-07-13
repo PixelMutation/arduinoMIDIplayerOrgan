@@ -11,6 +11,7 @@
         "list": "cpp",
         "string": "cpp",
         "valarray": "cpp",
-        "xmemory": "cpp"
+        "xmemory": "cpp",
+        "vector": "cpp"
     }
 }

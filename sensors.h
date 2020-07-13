@@ -20,13 +20,16 @@ public:
         int multiplexers; // the number of multiplexers required
     public:
         int defaultPositions[4] = {
-            
+            220, // pos when sound produced
+            200, // pos when held by system
+            170  // pos at bottom
         }
-        int calibratedPositions[][][4]; // positions (0-255) for each key (top, pos. when sound produced, pos. where held by actuators, bottom) at which certain actions are taken, indexed as [manual][key][position]
+        eeprom.block calibratedPositions;
+        //int calibratedPositions[][][4]; // positions (0-255) for each key (top, pos. when sound produced, pos. where held by actuators, bottom) at which certain actions are taken, indexed as [manual][key][position]
         int oldPositions[][]; // the position of each key at the last measurement, indexed as [manual][key]. used to compare to see if the key has moved.
     
         manuals();
-        int fetchCalibratedPosition();
+        int fetchCalibratedPosition(int key, int manual, int posType);
 
     }
 
