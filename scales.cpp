@@ -6,6 +6,7 @@
 void scale_manager::updatePatterns() {
     
     vector<int> chordPattern {0,2,4,6}; // default is a seventh
+    /*
     // The following loop converts the string containing the chosen chord pattern into a vector
     for (auto element : chordPatterns) { // linear search to find chosen chord pattern
         if (element[0] == chordType) {
@@ -57,6 +58,7 @@ void scale_manager::updatePatterns() {
         }
         halfStepPattern.push_back(steps); // sets the number of half steps above the root to get to that note
     }
+    */
     
 
 }
@@ -80,4 +82,3 @@ void scale_manager::autoChord(int startNote, int state) {
 
 
 scale_manager scaleManager;
-

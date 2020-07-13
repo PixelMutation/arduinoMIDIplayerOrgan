@@ -13,7 +13,7 @@ class midiManager { // handles MIDI I/O
 	int minChorusLevel = 64;		// chorus level at which all stops activated
 	int minModulationLevel = 64;	// level at which vox humana activated
 
-  vector<vector<int>> stopPresetsTable{
+  vector<vector<int>> stopPresetsTable{ // This is just some preset stop positions assigned to MIDI instruments, change these to some presets for your own instrument. Use -1 to indicate that that stop should be ignored (e.g. if it can't be moved, or won't affect anything.)
     //No.  |            Stops state          |      General MIDI instrument   
     // all off                          SFX
     {127,  0, 0, 0,  -1,-1,-1,-1,-1,  0, 0, 0},   //      Gunshot 
