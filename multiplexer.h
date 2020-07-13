@@ -14,7 +14,7 @@ public:
     Multiplexer(bool input, int number, vector<int> _selectInputPins, vector<int> _IOpins);
     
     
-    int muxRead(int number, bool analog, bool pullup, int microsecondDelay=0);
+    int muxRead(int number, bool analog, bool pullup, int microsecondDelay=10);
 
 };
 

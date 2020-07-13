@@ -32,14 +32,7 @@ void midiManager::MIDIrecieve(int status, int data1, int data2) { // parameters 
 		// the Status byte is split into 2 nibbles: the command type and the channel number
 		int type = status / 16; // divides the status message by 16 to find the type of command, discarding the channel number
 		int channel = status % 16; // finds the channel number
-    bool found = false;
-    for (auto i : channels) {
-      if (i == channel) {
-        found = true;
-        break;
-      }
-    }
-		if (found) {
+		if (find(channels.begin(), channels.end(), channel) != channels.end()) {// checks if the channel is active using vector search method at https://www.techiedelight.com/check-vector-contains-given-element-cpp/
 			cout << "\nchannel " << channel << " active";
 			cout << "\ntype " << type << " data1 " << data1 << " data2 " << data2 << "\n";
 			int midiNumber, velocity, keyNumber;

@@ -12,7 +12,7 @@
 // core libraries
 
 
-//#include <ArduinoSTL.h>
+#include <ArduinoSTL.h>
 #include <Arduino.h>
 
 #include <vector>
@@ -25,7 +25,7 @@
 
 using namespace std; //removes need for std:: prefix for standard library functions and classes
 
-// HEADER FILES FOR CORE MODULES (probably don't deactivate any!):
+// HEADER FILES FOR CORE MODULES (probably don't deactivate):
 //#include "main.h"
 
 #include "multiplexer.h" // 
@@ -38,11 +38,9 @@ using namespace std; //removes need for std:: prefix for standard library functi
 #include "midiManager.h" // manages MIDI I/O and MIDI instruments
 //#include "userInterface.h" allows user to configure settings for core modules and plugins
 #include "pluginManager.h" // Movement commands are sent through here so plugin effects can be applied
-#include "EEPROM.h" // Stores a live version of EEPROM in memory, handles writing, loading etc.
-#include "sensors.h"
 
 // HEADER FILES FOR PLUGINS: (comment out to deactivate plugins)
-#include "testInterface.h" // a console interface for debugging
+//#include "testInterface.h" // a console interface for debugging
 #include "octaveCoupler.h" // replicates a keypress x octaves above or below
 #include "scales.h" // plays patterns such as chords and arpeggios within scales
 //#include "looper.h" // sets up a configurable loop
