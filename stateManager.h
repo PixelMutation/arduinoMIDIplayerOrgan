@@ -7,9 +7,9 @@
 
 
 class stateManager {
-	string itemsType; // whether the object is the keys or the stops
-	int polyphony; // stores the max number of notes that can be held at once
-	int numberOfItems; // the number of keys / stops in the object
+	const string itemsType; // whether the object is the keys or the stops
+	const int polyphony; // stores the max number of notes that can be held at once
+	const int numberOfItems; // the number of keys / stops in the object
 
 	vector<int> itemBuffer; // a vector (list) of all keys or stops, with each item storing how many modules have requested that key or stop be active
 	vector<int> activatedItems; // a vector (list) of all keys or stops that the system detects (via the sensors) have been activated

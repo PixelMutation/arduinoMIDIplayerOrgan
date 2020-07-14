@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 #ifndef MODULES_H
 #define MODULES_H
 // This header file ties together all the modules automatically so any function or class is available anywhere.
@@ -28,7 +22,9 @@ using namespace std; //removes need for std:: prefix for standard library functi
 // HEADER FILES FOR CORE MODULES (probably don't deactivate any!):
 //#include "main.h"
 
-#include "multiplexer.h" // 
+#include "configuration.h" // GO HERE FOR GENERAL SETUP
+
+#include "multiplexer.h" // controls the multiplexers used by sensors
 #include "scheduler.h" // tracks time and activates any scheduled events when the time is right
 #include "controls.h" // just for testing various analog and digital input devices
 #include "toggleItem.h" // sends signal to move keys or stops
@@ -38,8 +34,9 @@ using namespace std; //removes need for std:: prefix for standard library functi
 #include "midiManager.h" // manages MIDI I/O and MIDI instruments
 //#include "userInterface.h" allows user to configure settings for core modules and plugins
 #include "pluginManager.h" // Movement commands are sent through here so plugin effects can be applied
-#include "EEPROM.h" // Stores a live version of EEPROM in memory, handles writing, loading etc.
-#include "sensors.h"
+#include "EEPROM_manager.h" // Stores a live version of EEPROM in memory in the form of 'blocks' which are objects with the appropriate data structure for what is needed.
+#include "sensors.h" // manages the sensors in the program
+
 
 // HEADER FILES FOR PLUGINS: (comment out to deactivate plugins)
 #include "testInterface.h" // a console interface for debugging

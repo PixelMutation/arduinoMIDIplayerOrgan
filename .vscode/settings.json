@@ -12,6 +12,7 @@
         "string": "cpp",
         "valarray": "cpp",
         "xmemory": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "iostream": "cpp"
     }
 }
