@@ -1,7 +1,7 @@
 // A class which stores and manages EEPROM data. Mainly used for calibrated sensor positions (e.g. the position at which keys activate)
 
 
-#include "EEPROM.h"
+#include "EEPROM_manager.h"
 
 // Constructors
 EEPROM_manager::EEPROM_manager() {
@@ -22,7 +22,7 @@ EEPROM_manager::block::block(vector<int> _dimensions) { // creates a memory bloc
         start = 0;
     }
     end = start + size - 1;
-    if (end >= EEPROMsize) {
+    if (end >= EEPROM_SIZE) {
         Serial.println("ERROR: Block exceeds EEPROM size")
         break;
     }
@@ -44,52 +44,42 @@ EEPROM_manager::block::block(vector<int> _dimensions) { // creates a memory bloc
     */
 }
 
-EEPROM_manager::block::blockIndex(vector<int> index[]) { // returns the index within block given the array dimensions
+
+
+// Method definitions:
+
+int EEPROM_manager::block::blockIndex(vector<int> index) { // returns the index within block given the array dimensions
     switch (noOfDimensions) {
         case 1: 
             return index[0];
         case 2:
-            return index[0]*dimensions[1] + index[1] - 1
+            return index[0]*dimensions[1] + index[1] - 1;
         case 3:
-            return index[0]*dimensions[1]*dimensions[2] + index[1]*dimensions[2] + index[0] - 1
+            return index[0]*dimensions[1]*dimensions[2] + index[1]*dimensions[2] + index[0] - 1;
     }
 }
 
-// Method definitions:
+EEPROM_manager::block& EEPROM_manager::createBlock(vector<int> dims) {
+    blocks.push_back(block(dims)); // Creates a block and adds it to the block vector using Cameron's answer to adding an object to a vector inline from https://stackoverflow.com/questions/15802006/how-can-i-create-objects-while-adding-them-into-a-vector
+}
 
 void EEPROM_manager::load() {  // loads EEPROM into memory
-    for (int i = 0; i < size; i++) {
-        table[i] = EEPROM.read(i);
-    }
+    
 }
 void EEPROM_manager::save() {  // saves all changed values from memory into EEPROM
-    for (int i = 0; i < size; i++) {
-        /* DEPRECATED
-        if (EEPROM.read(i) != table[i]) { // Only writes values that have not changed to save time and increase longevity. reading is faster and doesnt add to wear.
-            EEPROM.write(i,table[i]);
-        }
-        */
-       EEPROM.update(i,table[i]); // update only writes when the value is different
-        
-    }
+    
 }
 
 int& EEPROM_manager::fetch(int address) { // fetches a reference (allowing direct modification) to the value from the version stored in memory
-    if (address < size && address >= 0) { // these are the range of values possible
-        return(table[address]);
-    }
-	else {
-		Serial.println("ERROR: Invalid EEPROM address");
-		return 0;
-	}
+    
 }
 
 void EEPROM_manager::write(int address, int data, bool save) { // saves to the version stored in memory. 'save' controls whether it should save directly to EEPROM too (VERY SLOW, I reccomend only saving before shutting down, or as a button on a control panel)
     if (address >= 0 && address < size) {
         if (data < 256 && data >= 0) { // ensures within valid data range
-            table[address] = data;
+            
             if (save) { // if you want to write directly to EEPROM
-            EEPROM.write(address, data);
+            
             }
         }
         else {
@@ -112,16 +102,5 @@ void EEPROM_manager::block::blockWrite(vector<int> index, int data, bool save) {
     write(blockIndex(index) + start, data, save);
 }
 
-gsl::span<int> EEPROM_manager::block::fetchSpan(int startAddress, int endAddress) { // returns a span (similar to vector) for the given range which acts as a reference to the relevant part of the EEPROM. Set endAddress to -1 to fetch the entire block
-    if (endAddress == -1) { // if the whole block is wanted
-        return tableSpan.subspan(0, size - 1);
-    } else {  // if a section of the block is wanted
-        return tableSpan.subspan(startAddress, endAddress);
-    }
-}
-
-
-
-
-EEPROM_manager eeprom;
+EEPROM_manager eepromManager;
 
