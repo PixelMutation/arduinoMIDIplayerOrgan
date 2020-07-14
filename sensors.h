@@ -5,12 +5,12 @@
 
 
 class sensors {
-    int noOfManuals = 1; // supports up to 4 manuals (though I'm sure you can do more if you are insane enough)
-    int keysPerManual = 61; // normally 61, especially when there are multiple manuals
-    int noOfBassPedals = 0; // I have none sadly.
-    int noOfStops = 11; 
-    int controlPanels = 1; // typically each control panel will have up to 16 controls (one mux), though it can be more. Each control panel has pins starting from 0.
-    int controlPanelPins
+    const int noOfManuals = 1; // supports up to 4 manuals (though I'm sure you can do more if you are insane enough)
+    const int keysPerManual = 61; // normally 61, especially when there are multiple manuals
+    const int noOfBassPedals = 0; // I have none sadly.
+    const int noOfStops = 11; 
+    const int controlPanels = 1; // typically each control panel will have up to 16 controls (one mux), though it can be more. Each control panel has pins starting from 0.
+    const int controlPanelPins;
 
 public:
     void sensors();
