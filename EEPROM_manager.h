@@ -4,45 +4,50 @@
 #define EEPROM_MANAGER_H
 
 #include "modules.h"
-#include <cassert>
-//#include <boost\multi_array.hpp> // multi array library for variable dimension numbers
-
-
-//#include <gsl/span.h> // span type used as reference to vector, using Galik's solution from https://stackoverflow.com/questions/44216283/is-it-possible-to-send-part-of-vector-as-a-vector-to-a-function
 
 
 class EEPROM_manager {
     vector<vector<int>> blockAddresses; // stores the start and end of the addresses of EEPROM 'blocks'
-    class block {
-        vector<int> dimensions;
-        int noOfDimensions;
-        int size, start, end; // size of block, indices within EEPROM
-        
-        int data1d[];       // The blocks can be either 1d, 2d or 3d
-        int data2d[][];
-        int data3d[][][];
-        
+    vector<vector<int>> blockDimensions;
+    int nullVal = 0; // used as a reference to return (e.g. if address out of bounds))
 
-        //typedef boost::multi_array<int, nofOfDimensions> array_type 
-        //boost::
-        int blockIndex(vector<int> index); // returns the index within block given the array dimensions
-
-    public:
-        block(vector<int> _dimensions); // creates an EEPROM 'block'. It is reccommended to set 'size' larger than needed for future proofing.
-        int blockFetch(int address); // returns single value from 'local' address within block
-        //int& blockRefFetch(int address); // returns a reference to an item in the block
-        void blockWrite(int address, int data, bool save=false);
-        
-    };
     
-    vector<block> blocks; // stores the memory block objects
+
+    int index(int x, int blockNumber);
+    int index(int x, int y, int blockNumber);
+    int index(int x, int y, int z, int blockNumber);
+
+    void constructBlock(vector<int> dimensions);
+    int& fetch(int address); // fetches the value from the version stored in EEPROM
+    void write(int address, int data); // saves to the version stored in EEPROM
 public:
     EEPROM_manager();
-    void load(); // loads EEPROM into memory
+
+    struct block1d {
+        int blockNumber;
+        vector<int> data;
+    };
+
+    struct block2d {
+        int blockNumber;
+        vector<vector<int>> data;
+    };
+    struct block3d {
+        int blockNumber;
+        vector<vector<vector<int>>> data;
+    };
+
+    block1d& newBlock(int x);
+    block2d& newBlock(int x, int y);
+    block3d& newBlock(int x, int y, int z);
+
+    void load(); // loads the EEPROM block into memory
     void save(); // saves values from memory into EEPROM
-    int fetch(int address); // fetches the value from the version stored in memory
-    void write(int address, int data, bool save=false); // saves to the version stored in memory
-    block& createBlock(vector<int> dims);
+    void clear(); // clears of values from EEPROM
+
+    vector<block1d> blocks1d; // stores the memory block objects
+    vector<block2d> blocks2d; // stores the memory block objects
+    vector<block3d> blocks3d; // stores the memory block objects
     
 };
 

@@ -3,15 +3,22 @@
 
 #include "EEPROM_manager.h"
 
-// Constructors
-EEPROM_manager::EEPROM_manager() {
-    //tableRef = table;
-    //tableSpan = gsl::make_span(table); // Creates the span referencing the EEPROM table
+
+// The following return the index within the actual EEPROM given the coordinates and block number
+int EEPROM_manager::index(int x, int blockNumber) {
+    return blockDimensions[blockNumber][0] + x;
+}
+int EEPROM_manager::index(int x, int y, int blockNumber) {
+    return blockDimensions[blockNumber][0] + x*blockDimensions[blockNumber][1] + y - 1;
+}
+int EEPROM_manager::index(int x, int y, int z, int blockNumber) {
+    return blockDimensions[blockNumber][0] + x*blockDimensions[blockNumber][1]*blockDimensions[blockNumber][2] + y*blockDimensions[blockNumber][2] + z - 1;
 }
 
-EEPROM_manager::block::block(vector<int> _dimensions) { // creates a memory block of dimensions {x,y,z} (max 3D) e.g a 1D array of 10: {10}
-    auto dimensions = _dimensions;
-    noOfDimensions = dimensions.size();
+// Updates class data regarding the new block, such as its shape and its start and end within the EEPROM
+void EEPROM_manager::constructBlock(vector<int> dimensions) { // creates a memory block of dimensions {x,y,z} (max 3D) e.g a 1D array of 10: {10}
+    int noOfDimensions = dimensions.size();
+    int size, start, end;
     size = 1;
     for (auto i : dimensions) {
         size = size * i; // finds the total size of the block as the product of its dimensions
@@ -23,66 +30,110 @@ EEPROM_manager::block::block(vector<int> _dimensions) { // creates a memory bloc
     }
     end = start + size - 1;
     if (end >= EEPROM_SIZE) {
-        Serial.println("ERROR: Block exceeds EEPROM size")
-        break;
-    }
-    blockAddresses[blockAddresses.size()][0] = start; // adds the new block to the address list
-    blockAddresses[blockAddresses.size()][1] = end;
-    /*
-    switch (noOfDimensions) {
-        case 1:
+        Serial.println("ERROR: Block exceeds EEPROM size");
+    } else {
+        blockDimensions[blockAddresses.size()] = dimensions;
+        blockAddresses[blockAddresses.size()][0] = start; // adds the new block to the address list
+        blockAddresses[blockAddresses.size()][1] = end;
 
-        case 2:
-
-        case 3:
-            for (int i = 0; i <= dimensions[0]; i++) {
-                for (int j=0; j <= dimensions[1]; j++) {
-                    data3D[i][j]= tableSpan.subspan()
-                }   
-            }
+        
     }
-    */
+
 }
 
-
-
-// Method definitions:
-
-int EEPROM_manager::block::blockIndex(vector<int> index) { // returns the index within block given the array dimensions
-    switch (noOfDimensions) {
-        case 1: 
-            return index[0];
-        case 2:
-            return index[0]*dimensions[1] + index[1] - 1;
-        case 3:
-            return index[0]*dimensions[1]*dimensions[2] + index[1]*dimensions[2] + index[0] - 1;
-    }
+// Creates a new block according to the shape given, and returns a reference to it
+EEPROM_manager::block1d& EEPROM_manager::newBlock(int x) { // Creates a new block according to the shape given, and returns a reference to it
+    int blockNum =  blocks1d.size() - 1;
+    blocks1d.push_back(block1d()); // Creates a block and adds it to the block vector using Cameron's answer to adding an object to a vector inline from https://stackoverflow.com/questions/15802006/how-can-i-create-objects-while-adding-them-into-a-vector
+    constructBlock({x});
+    blocks1d[blockNum].blockNumber = blockNum;
+    return blocks1d[blockNum];
+}
+EEPROM_manager::block2d& EEPROM_manager::newBlock(int x, int y) { // Creates a new block according to the shape given, and returns a reference to it
+    int blockNum =  blocks2d.size() - 1;
+    blocks2d.push_back(block2d()); // Creates a block and adds it to the block vector using Cameron's answer to adding an object to a vector inline from https://stackoverflow.com/questions/15802006/how-can-i-create-objects-while-adding-them-into-a-vector
+    constructBlock({x,y});
+    blocks2d[blockNum].blockNumber = blockNum;
+    return blocks2d[blockNum];
+}
+EEPROM_manager::block3d& EEPROM_manager::newBlock(int x, int y, int z) { // Creates a new block according to the shape given, and returns a reference to it
+    int blockNum =  blocks3d.size() - 1;
+    blocks3d.push_back(block3d()); // Creates a block and adds it to the block vector using Cameron's answer to adding an object to a vector inline from https://stackoverflow.com/questions/15802006/how-can-i-create-objects-while-adding-them-into-a-vector
+    constructBlock({x,y,z});
+    blocks3d[blockNum].blockNumber = blockNum;
+    return blocks3d[blockNum];
 }
 
-EEPROM_manager::block& EEPROM_manager::createBlock(vector<int> dims) {
-    blocks.push_back(block(dims)); // Creates a block and adds it to the block vector using Cameron's answer to adding an object to a vector inline from https://stackoverflow.com/questions/15802006/how-can-i-create-objects-while-adding-them-into-a-vector
+void EEPROM_manager::clear() { // clears all from EEPROM
+    for (int i = 0; i < EEPROM_SIZE; i++) {
+        EEPROM.update(i, 0); // sets all non 0 values to 0
+    }
 }
 
 void EEPROM_manager::load() {  // loads EEPROM into memory
-    
+    // Loads every 1d, 2d and 3d block in turn
+    for (int blockNum = 0; blockNum < blocks1d.size(); blockNum++) {
+        for (int x=0; x <= blockDimensions[blockNum][0]; x++) {
+            blocks1d[blockNum].data[x] = fetch(index(x,blockNum));
+        }
+    }
+    for (int blockNum = 0; blockNum < blocks2d.size(); blockNum++) {
+        for (int x=0; x <= blockDimensions[0]; x++) {
+            for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
+                blocks2d[blockNum].data[x][y] = fetch(index(x,y,blockNum));
+            }
+        } 
+    }
+    for (int blockNum = 0; blockNum < blocks2d.size(); blockNum++) {
+        for (int x = 0; x <= blockDimensions[blockNum][0]; x++) {
+            for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
+                for (int z=0; z <= blockDimensions[blockNum][2]; z++) {
+                    blocks3d[blockNum].data[x][y][z] = fetch(index(x,y,z,blockNum));
+                }
+            }   
+        }
+    }
 }
+
 void EEPROM_manager::save() {  // saves all changed values from memory into EEPROM
-    
+    for (int blockNum = 0; blockNum < blocks1d.size(); blockNum++) { // for each 1d block
+        for (int x=0; x <= blockDimensions[blockNum][0]; x++) {
+            EEPROM.update(index(x,blockNum),blocks1d[blockNum].data[x]);
+        }
+    }
+    for (int blockNum = 0; blockNum < blocks2d.size(); blockNum++) { // for each 2d block
+        for (int x=0; x <= blockDimensions[0]; x++) {
+            for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
+                EEPROM.update(index(x,y,blockNum),blocks2d[blockNum].data[x][y]);
+            }
+        } 
+    }
+    for (int blockNum = 0; blockNum < blocks2d.size(); blockNum++) { // for each 3d block
+        for (int x = 0; x <= blockDimensions[blockNum][0]; x++) {
+            for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
+                for (int z=0; z <= blockDimensions[blockNum][2]; z++) {
+                    EEPROM.update(index(x,y,z,blockNum),blocks3d[blockNum].data[x][y][z]);
+                }
+            }   
+        }
+    }
 }
 
 int& EEPROM_manager::fetch(int address) { // fetches a reference (allowing direct modification) to the value from the version stored in memory
-    
+    if (address < EEPROM_SIZE && address >= 0) { // these are the range of values possible
+        return(EEPROM.read(address));
+    }
+	else {
+		Serial.println("ERROR: Invalid EEPROM address");
+        return nullVal;
+	}
 }
 
-void EEPROM_manager::write(int address, int data, bool save) { // saves to the version stored in memory. 'save' controls whether it should save directly to EEPROM too (VERY SLOW, I reccomend only saving before shutting down, or as a button on a control panel)
-    if (address >= 0 && address < size) {
+void EEPROM_manager::write(int address, int data) { // writes to the EEPROM
+    if (address < EEPROM_SIZE && address >= 0) {
         if (data < 256 && data >= 0) { // ensures within valid data range
-            
-            if (save) { // if you want to write directly to EEPROM
-            
-            }
-        }
-        else {
+            EEPROM.update(address, data);
+        } else {
             Serial.println("ERROR: Data out of bounds");
         }
         
@@ -91,16 +142,7 @@ void EEPROM_manager::write(int address, int data, bool save) { // saves to the v
     }
 }
 
-int& EEPROM_manager::block::blockFetch(vector<int> index) { // fetches a reference to the value in the EEPROM table (thus can be modified directly), indexed within the memory block of the block class instance. E.g. for a 1D block: {5} or 5; or for a 2D block: {3,5}
-    return fetch(blockIndex(index) + start);
-}
-int& EEPROM_manager::block::blockFetch(int index) { // fetches a reference to the value in the EEPROM table (thus can be modified directly), indexed within the memory block of the block class instance. E.g. for a 1D block: {5} or 5; for a 2D block: {3,5}
-    return fetch(index + start);
-}
-    
-void EEPROM_manager::block::blockWrite(vector<int> index, int data, bool save) { // writes the to address within the block
-    write(blockIndex(index) + start, data, save);
-}
 
 EEPROM_manager eepromManager;
+
 
