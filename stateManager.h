@@ -3,7 +3,10 @@
 #ifndef STATEMANAGER_H
 #define STATEMANAGER_H
 
-#include "modules.h"
+#include "global_includes.h"
+#include "utility.h"
+#include "midiManager.h"
+#include "toggleItem.h"
 
 
 class stateManager {

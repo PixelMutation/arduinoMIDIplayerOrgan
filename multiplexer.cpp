@@ -1,5 +1,6 @@
 #include "multiplexer.h"
 
+
 // constructor: (if an input mux,no. of muxes used in this I/O array, mux select pins (vector, ordered, 4 items), I/O pin for each mux (vector, ordered) )
 Multiplexer::Multiplexer(bool _input, int _numberOfMultiplexers, vector<int> _selectPins, vector<int> _IOpins) {
 
@@ -93,4 +94,7 @@ bool Multiplexer::muxActive() {
     return true; // TEMP
 }
 
+
 Multiplexer testMux(true,1,{2,3,4,5},{A8});
+
+

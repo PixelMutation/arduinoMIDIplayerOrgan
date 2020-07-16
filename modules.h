@@ -7,20 +7,17 @@
 
 
 //#include <ArduinoSTL.h>
-#include <Arduino.h>
+//#include <Arduino.h>
 //#include <boost_1_51_0.h>
 
-#include <vector>
+//#include <vector>
 //#include <chrono>
-#include <deque>
-#include <iomanip>
-#include <iostream>
-#include <ADC.h>
-#include <EEPROM.h>
+//#include <deque>
+//#include <iomanip>
+//#include <iostream>
 
-ADC *adc = new ADC();
 
-using namespace std; //removes need for std:: prefix for standard library functions and classes
+
 
 // HEADER FILES FOR CORE MODULES (probably don't deactivate any!):
 //#include "main.h"
@@ -39,7 +36,7 @@ using namespace std; //removes need for std:: prefix for standard library functi
 #include "pluginManager.h" // Movement commands are sent through here so plugin effects can be applied
 #include "EEPROM_manager.h" // Stores a live version of EEPROM in memory in the form of 'blocks' which are objects with the appropriate data structure for what is needed.
 #include "sensors.h" // manages the sensors in the program
-
+#include "global_includes.h" // stores includes for the globally required libraries
 
 // HEADER FILES FOR PLUGINS: (comment out to deactivate plugins)
 #include "testInterface.h" // a console interface for debugging

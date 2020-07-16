@@ -1,7 +1,10 @@
 #ifndef MIDI_MANAGER_H
 #define MIDI_MANAGER_H
 
-#include "modules.h"
+#include "global_includes.h"
+#include "stateManager.h"
+#include "utility.h"
+#include "octaveCoupler.h"
 
 class midiManager { // handles MIDI I/O
 	int MIDImiddleCpos = 48;		// leave this alone

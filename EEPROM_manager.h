@@ -3,7 +3,8 @@
 #ifndef EEPROM_MANAGER_H
 #define EEPROM_MANAGER_H
 
-#include "modules.h"
+#include "global_includes.h"
+#include <EEPROM.h>
 
 
 class EEPROM_manager {
@@ -23,17 +24,22 @@ class EEPROM_manager {
 public:
     //EEPROM_manager();
 
-    struct block1d {
+    class block1d {
+        public:
         int blockNumber;
         vector<int> data;
     };
 
-    struct block2d {
+    class block2d {
+        public:
         int blockNumber;
+        
         vector<vector<int>> data;
     };
-    struct block3d {
+    class block3d {
+        public:
         int blockNumber;
+        
         vector<vector<vector<int>>> data;
     };
 

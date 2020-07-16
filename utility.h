@@ -3,7 +3,8 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-#include "modules.h"
+#include "global_includes.h"
+#include "stateManager.h"
 
 
 void printVector(vector<int> vector, bool displayZero = true);

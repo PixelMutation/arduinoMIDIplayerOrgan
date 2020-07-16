@@ -1,7 +1,7 @@
 #ifndef SENSORS_H
 #define SENSORS_H
 
-#include "modules.h"
+#include "global_includes.h"
 #include "EEPROM_manager.h"
 
 class sensors {
@@ -21,6 +21,7 @@ public:
         int noOfPins;
         int multiplexers; // the number of multiplexers required
     public:
+        
         EEPROM_manager::block3d& calibratedPositions = eepromManager.newBlock(NUM_MANUALS,3,KEYS_PER_MANUAL);
         int oldPositions[NUM_MANUALS][KEYS_PER_MANUAL]; // the position of each key at the last measurement, indexed as [manual][key]. used to compare to see if the key has moved
         int topPositions[NUM_MANUALS][KEYS_PER_MANUAL]; // the position when key is at the top, measued upon system start

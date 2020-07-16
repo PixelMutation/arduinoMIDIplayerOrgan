@@ -1,7 +1,10 @@
 #ifndef SCHEDULE_H
 #define SCHEDULE_H
 
-#include "modules.h"
+#include "global_includes.h"
+#include "stateManager.h"
+#include "multiplexer.h"
+#include "utility.h"
 
 void checkSchedule();
 

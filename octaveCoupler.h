@@ -1,7 +1,8 @@
 #ifndef OCTAVE_COUPLER_H
 #define OCTAVE_COUPLER_H
 
-#include "modules.h"
+#include "global_includes.h"
+#include "stateManager.h"
 
 class octave_coupler {
 public:

@@ -9,12 +9,8 @@ int led = 13;
 void setup() {
   // put your setup code here, to run once:
   
-  Serial1.begin(9600);
-  Serial.begin(9600);
+  pinMode(A8, INPUT); 
   
-  // ADC setup:
-
-  pinMode(A8, INPUT);
 
   
   adc->adc0->setAveraging(16);
@@ -28,6 +24,11 @@ void setup() {
   adc->adc1->setResolution(16);
   adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED);
   adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED);
+
+
+  Serial1.begin(9600);
+  Serial.begin(9600);
+  
 
   pinMode(led, OUTPUT);
   Serial.println("1 2 3 4 5 6 7 8 Hall Reed Pot Hall2\n");

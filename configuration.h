@@ -1,7 +1,5 @@
 // The main config for the code - replace these values to match your setup.
 
-#include "modules.h"
-
 // BASICS
 
 // Microcontroller Settings:
