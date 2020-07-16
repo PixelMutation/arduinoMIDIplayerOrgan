@@ -42,6 +42,7 @@ void EEPROM_manager::constructBlock(vector<int> dimensions) { // creates a memor
 }
 
 // Creates a new block according to the shape given, and returns a reference to it
+
 EEPROM_manager::block1d& EEPROM_manager::newBlock(int x) { // Creates a new block according to the shape given, and returns a reference to it
     int blockNum =  blocks1d.size() - 1;
     blocks1d.push_back(block1d()); // Creates a block and adds it to the block vector using Cameron's answer to adding an object to a vector inline from https://stackoverflow.com/questions/15802006/how-can-i-create-objects-while-adding-them-into-a-vector
@@ -97,24 +98,38 @@ void EEPROM_manager::load() {  // loads EEPROM into memory
 
 void EEPROM_manager::save() {  // saves all changed values from memory into EEPROM
     for (int blockNum = 0; blockNum < blocks1d.size(); blockNum++) { // for each 1d block
-        for (int x=0; x <= blockDimensions[blockNum][0]; x++) {
-            EEPROM.update(index(x,blockNum),blocks1d[blockNum].data[x]);
+        if (blocks1d[blockNum].data.size() == blockDimensions[blockNum][0]) { // checks if vector's dimensions match those stored
+            for (int x=0; x <= blockDimensions[blockNum][0]; x++) { 
+                EEPROM.update(index(x,blockNum),blocks1d[blockNum].data[x]);
+            }
+        } else {
+            Serial.println("ERROR: EEPROM block changed size");
         }
+        
     }
     for (int blockNum = 0; blockNum < blocks2d.size(); blockNum++) { // for each 2d block
-        for (int x=0; x <= blockDimensions[0]; x++) {
-            for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
-                EEPROM.update(index(x,y,blockNum),blocks2d[blockNum].data[x][y]);
-            }
-        } 
+        if (blocks2d[blockNum].data.size() == blockDimensions[blockNum][0] && blocks2d[blockNum].data.size() == blockDimensions[blockNum][1]) {// checks if vector's dimensions match those stored
+            for (int x=0; x <= blockDimensions[0]; x++) {
+                for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
+                    EEPROM.update(index(x,y,blockNum),blocks2d[blockNum].data[x][y]);
+                }
+            } 
+        } else {
+            Serial.println("ERROR: EEPROM block changed size");
+        }
+        
     }
     for (int blockNum = 0; blockNum < blocks2d.size(); blockNum++) { // for each 3d block
-        for (int x = 0; x <= blockDimensions[blockNum][0]; x++) {
-            for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
-                for (int z=0; z <= blockDimensions[blockNum][2]; z++) {
-                    EEPROM.update(index(x,y,z,blockNum),blocks3d[blockNum].data[x][y][z]);
-                }
-            }   
+        if (blocks3d[blockNum].data.size() == blockDimensions[blockNum][0] && blocks3d[blockNum].data.size() == blockDimensions[blockNum][1] && blocks3d[blockNum].data.size() == blockDimensions[blockNum][2] ) { // checks if vector's dimensions match those stored
+            for (int x = 0; x <= blockDimensions[blockNum][0]; x++) {
+                for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
+                    for (int z=0; z <= blockDimensions[blockNum][2]; z++) {
+                        EEPROM.update(index(x,y,z,blockNum),blocks3d[blockNum].data[x][y][z]);
+                    }
+                }   
+            }
+        } else {
+            Serial.println("ERROR: EEPROM block changed size");
         }
     }
 }

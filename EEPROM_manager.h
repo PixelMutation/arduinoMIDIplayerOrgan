@@ -44,7 +44,7 @@ public:
     void load(); // loads the EEPROM block into memory
     void save(); // saves values from memory into EEPROM
     void clear(); // clears of values from EEPROM
-
+protected:
     vector<block1d> blocks1d; // stores the memory block objects
     vector<block2d> blocks2d; // stores the memory block objects
     vector<block3d> blocks3d; // stores the memory block objects
