@@ -2,6 +2,8 @@
 
 #include "modules.h"
 
+
+
 int led = 13;
 
 void setup() {
@@ -9,9 +11,24 @@ void setup() {
   
   Serial1.begin(9600);
   Serial.begin(9600);
-  analogReadResolution(8); // the lower the resolution the faster
-  analogReadAveraging(8); // the higher the number of measurements, the more consistent the signal but the slower it is
   
+  // ADC setup:
+
+  pinMode(A8, INPUT);
+
+  
+  adc->adc0->setAveraging(16);
+  adc->adc0->setResolution(16);
+  adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED);
+  adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED);
+
+  adc->adc0->startContinuous(A8);
+
+  adc->adc1->setAveraging(16);
+  adc->adc1->setResolution(16);
+  adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED);
+  adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED);
+
   pinMode(led, OUTPUT);
   Serial.println("1 2 3 4 5 6 7 8 Hall Reed Pot Hall2\n");
   int Delay = 0;

@@ -1,6 +1,7 @@
 // A class which stores and manages EEPROM data. Mainly used for calibrated sensor positions (e.g. the position at which keys activate)
 
 
+
 #include "EEPROM_manager.h"
 
 
@@ -17,7 +18,7 @@ int EEPROM_manager::index(int x, int y, int z, int blockNumber) {
 
 // Updates class data regarding the new block, such as its shape and its start and end within the EEPROM
 void EEPROM_manager::constructBlock(vector<int> dimensions) { // creates a memory block of dimensions {x,y,z} (max 3D) e.g a 1D array of 10: {10}
-    int noOfDimensions = dimensions.size();
+    //int noOfDimensions = dimensions.size();
     int size, start, end;
     size = 1;
     for (auto i : dimensions) {
@@ -73,19 +74,19 @@ void EEPROM_manager::clear() { // clears all from EEPROM
 
 void EEPROM_manager::load() {  // loads EEPROM into memory
     // Loads every 1d, 2d and 3d block in turn
-    for (int blockNum = 0; blockNum < blocks1d.size(); blockNum++) {
+    for (unsigned int blockNum = 0; blockNum < blocks1d.size(); blockNum++) {
         for (int x=0; x <= blockDimensions[blockNum][0]; x++) {
             blocks1d[blockNum].data[x] = fetch(index(x,blockNum));
         }
     }
-    for (int blockNum = 0; blockNum < blocks2d.size(); blockNum++) {
-        for (int x=0; x <= blockDimensions[0]; x++) {
+    for (unsigned int blockNum = 0; blockNum < blocks2d.size(); blockNum++) {
+        for (int x = 0; x <= blockDimensions[blockNum][0]; x++) {
             for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
                 blocks2d[blockNum].data[x][y] = fetch(index(x,y,blockNum));
             }
         } 
     }
-    for (int blockNum = 0; blockNum < blocks2d.size(); blockNum++) {
+    for (unsigned int blockNum = 0; blockNum < blocks2d.size(); blockNum++) {
         for (int x = 0; x <= blockDimensions[blockNum][0]; x++) {
             for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
                 for (int z=0; z <= blockDimensions[blockNum][2]; z++) {
@@ -97,8 +98,8 @@ void EEPROM_manager::load() {  // loads EEPROM into memory
 }
 
 void EEPROM_manager::save() {  // saves all changed values from memory into EEPROM
-    for (int blockNum = 0; blockNum < blocks1d.size(); blockNum++) { // for each 1d block
-        if (blocks1d[blockNum].data.size() == blockDimensions[blockNum][0]) { // checks if vector's dimensions match those stored
+    for (unsigned int blockNum = 0; blockNum < blocks1d.size(); blockNum++) { // for each 1d block
+        if (blocks1d[blockNum].data.size() == (unsigned)blockDimensions[blockNum][0]) { // checks if vector's dimensions match those stored
             for (int x=0; x <= blockDimensions[blockNum][0]; x++) { 
                 EEPROM.update(index(x,blockNum),blocks1d[blockNum].data[x]);
             }
@@ -107,9 +108,9 @@ void EEPROM_manager::save() {  // saves all changed values from memory into EEPR
         }
         
     }
-    for (int blockNum = 0; blockNum < blocks2d.size(); blockNum++) { // for each 2d block
-        if (blocks2d[blockNum].data.size() == blockDimensions[blockNum][0] && blocks2d[blockNum].data.size() == blockDimensions[blockNum][1]) {// checks if vector's dimensions match those stored
-            for (int x=0; x <= blockDimensions[0]; x++) {
+    for (unsigned int blockNum = 0; blockNum < blocks2d.size(); blockNum++) { // for each 2d block
+        if (blocks2d[blockNum].data.size() == (unsigned)blockDimensions[blockNum][0] && blocks2d[blockNum].data.size() == (unsigned)blockDimensions[blockNum][1]) {// checks if vector's dimensions match those stored
+            for (int x=0; x <= blockDimensions[blockNum][0]; x++) {
                 for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
                     EEPROM.update(index(x,y,blockNum),blocks2d[blockNum].data[x][y]);
                 }
@@ -119,8 +120,8 @@ void EEPROM_manager::save() {  // saves all changed values from memory into EEPR
         }
         
     }
-    for (int blockNum = 0; blockNum < blocks2d.size(); blockNum++) { // for each 3d block
-        if (blocks3d[blockNum].data.size() == blockDimensions[blockNum][0] && blocks3d[blockNum].data.size() == blockDimensions[blockNum][1] && blocks3d[blockNum].data.size() == blockDimensions[blockNum][2] ) { // checks if vector's dimensions match those stored
+    for (unsigned int blockNum = 0; blockNum < blocks2d.size(); blockNum++) { // for each 3d block
+        if (blocks3d[blockNum].data.size() == (unsigned)blockDimensions[blockNum][0] && blocks3d[blockNum].data.size() == (unsigned)blockDimensions[blockNum][1] && blocks3d[blockNum].data.size() == (unsigned)blockDimensions[blockNum][2] ) { // checks if vector's dimensions match those stored
             for (int x = 0; x <= blockDimensions[blockNum][0]; x++) {
                 for (int y=0; y <= blockDimensions[blockNum][1]; y++) {
                     for (int z=0; z <= blockDimensions[blockNum][2]; z++) {
@@ -134,7 +135,7 @@ void EEPROM_manager::save() {  // saves all changed values from memory into EEPR
     }
 }
 
-int& EEPROM_manager::fetch(int address) { // fetches a reference (allowing direct modification) to the value from the version stored in memory
+int EEPROM_manager::fetch(int address) { // returns the EEPROM value at that location
     if (address < EEPROM_SIZE && address >= 0) { // these are the range of values possible
         return(EEPROM.read(address));
     }
@@ -159,5 +160,3 @@ void EEPROM_manager::write(int address, int data) { // writes to the EEPROM
 
 
 EEPROM_manager eepromManager;
-
-

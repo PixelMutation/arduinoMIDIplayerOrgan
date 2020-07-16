@@ -8,14 +8,17 @@
 
 //#include <ArduinoSTL.h>
 #include <Arduino.h>
+//#include <boost_1_51_0.h>
 
 #include <vector>
 //#include <chrono>
 #include <deque>
 #include <iomanip>
 #include <iostream>
+#include <ADC.h>
+#include <EEPROM.h>
 
-
+ADC *adc = new ADC();
 
 using namespace std; //removes need for std:: prefix for standard library functions and classes
 

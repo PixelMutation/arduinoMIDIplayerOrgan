@@ -18,7 +18,7 @@
 #define NUM_STOPS  11
 
 // Bass pedals settings:
-#define NUM_PEDALS 0
+#define NUM_BASS_PEDALS 0
 #define FIRST_BASS_NOTE "A" // the first key of the bass pedals
 
 

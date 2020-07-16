@@ -50,6 +50,7 @@ void stateManager::requestSystemState(int itemNumber, int state) {
 }
 
 
+
 // request system state function - when something wants a key or stop on or off after a specific delay, it calls this
 void stateManager::requestDelayedSystemState(int delay, int itemNumber, int state) {
     
@@ -93,11 +94,11 @@ void stateManager::polyphonyManager(int index, int dir) {
                 string direction;
                 if (dir > 0) {direction = "increased"; }
                 else {direction = "decreased"; }
-                cout << direction << " item " << i + 1<< " age by 1\n";
+                //cout << direction << " item " << i + 1<< " age by 1\n";
                 agentManager(i, "system");
             }
             if (systemActivatedItems[i] > polyphony) { // if the tally exceeds the polyphony, that note gets deactivated
-                cout << "Polyphony exceeded, deactivated item " << i + 1 << "\n";
+                //cout << "Polyphony exceeded, deactivated item " << i + 1 << "\n";
                 systemActivatedItems[i] = 0;
                 toggleItem(itemsType, i, 0);    // deactivates the note
                 itemBuffer[i] = 0;              // clears the buffer for that item as it is forced off
@@ -171,7 +172,7 @@ vector<int> stateManager::getStatesVector(string type, bool print, bool displayZ
     }
     else if (type == "buffer") {
         if (print) { printVector(itemBuffer, displayZero); }
-        return itemBuffer;;
+        return itemBuffer;
     }
     else {
         if (print) { printVector(activatedItems, displayZero); }
@@ -185,7 +186,9 @@ int stateManager::size() {
 }
 
 // create instance of class for keys and stops
-int polyphony = 3;
 
-stateManager Keys("keys", 61, polyphony);
-stateManager Stops("stops", 11, 11);
+stateManager Keys("keys", KEYS_PER_MANUAL, POLYPHONY);
+
+
+
+stateManager Stops("stops", NUM_STOPS, NUM_STOPS);

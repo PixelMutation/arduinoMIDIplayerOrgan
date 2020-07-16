@@ -18,10 +18,10 @@ class EEPROM_manager {
     int index(int x, int y, int z, int blockNumber);
 
     void constructBlock(vector<int> dimensions);
-    int& fetch(int address); // fetches the value from the version stored in EEPROM
+    int fetch(int address); // fetches the value from the version stored in EEPROM
     void write(int address, int data); // saves to the version stored in EEPROM
 public:
-    EEPROM_manager();
+    //EEPROM_manager();
 
     struct block1d {
         int blockNumber;
@@ -53,6 +53,6 @@ protected:
 
 
 
-
+extern EEPROM_manager eepromManager;
 
 #endif

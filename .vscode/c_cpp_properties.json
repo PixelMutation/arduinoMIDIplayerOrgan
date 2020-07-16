@@ -7,8 +7,11 @@
                 "C:\\Program Files (x86)\\Arduino\\tools\\**",
                 "${workspaceFolder}/**",
                 "D:\\docs\\Arduino\\libraries\\**",
+                "D:\\docs\\Arduino\\libraries\\",
                 "C:\\Users\\charl\\source\\repos\\playerReedOrgan\\**",
-                "C:\\Program Files (x86)\\Arduino\\hardware\\teensy\\avr\\cores\\teensy4\\**"
+                "D:\\docs\\Arduino\\libraries\\",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\teensy\\avr\\cores\\teensy4\\**",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**"
             ],
             "defines": [
                 "_DEBUG",

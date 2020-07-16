@@ -1,6 +1,7 @@
 ﻿#include "utility.h"
 
 
+
 void printVector(vector<int> vector, bool displayZero) {
 	for (int element : vector) {
 
@@ -45,7 +46,7 @@ void printVector(deque<double> vector, bool displayZero) {
 
 
 
-		Serial.print(" ")
+		Serial.print(" ");
 	}
 
 }
