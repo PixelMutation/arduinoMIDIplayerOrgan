@@ -3,28 +3,12 @@
 #include "modules.h"
 
 
-
 int led = 13;
 
 void setup() {
   // put your setup code here, to run once:
   
-  pinMode(A8, INPUT); 
   
-
-  
-  adc->adc0->setAveraging(16);
-  adc->adc0->setResolution(16);
-  adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED);
-  adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED);
-
-  adc->adc0->startContinuous(A8);
-
-  adc->adc1->setAveraging(16);
-  adc->adc1->setResolution(16);
-  adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED);
-  adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED);
-
 
   Serial1.begin(9600);
   Serial.begin(9600);
