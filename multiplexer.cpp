@@ -1,9 +1,14 @@
 #include "multiplexer.h"
 
-
-
 // constructor: (if an input mux,no. of muxes used in this I/O array, mux select pins (vector, ordered, 4 items), I/O pin for each mux (vector, ordered) )
 Multiplexer::Multiplexer(bool _input, int _numberOfMultiplexers, vector<int> _selectPins, vector<int> _IOpins) {
+
+    
+    //analogReadResolution(8); // the lower the resolution the faster
+    //analogReadAveraging(8); // the higher the number of measurements, the more consistent the signal but the slower it is
+    
+    
+
     numberOfMultiplexers = _numberOfMultiplexers;
     selectPins = _selectPins;
     IOpins = _IOpins;
@@ -29,7 +34,7 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
         int multiplexer = inputNumber/16; // each has 16 outputs so this finds which multiplexer is needed
         byte selectNumber = inputNumber - 16 * multiplexer; // the number (0-15) of the output on the corresponding multiplexer
         int IOpin = IOpins[multiplexer]; // the pin of the multiplexer being used
-        int reading1, reading2, reading3, reading4; //used to bin first (usually dodgey) reading. Analog interference: https://forum.arduino.cc/index.php?topic=70013.0
+        //int reading1, reading2, reading3, reading4; //used to bin first (usually dodgey) reading. Analog interference: https://forum.arduino.cc/index.php?topic=70013.0
         //printVector(IOpins, true);
         //cout << "\nmultiplexer " << multiplexer << " selectNumber " << selectNumber << " iopin " << IOpin << " ";
         if (multiplexer < numberOfMultiplexers) { // sanity check!
@@ -65,7 +70,8 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
                 //Serial.println("d");
                 //delayMicroseconds(10);
                 delayMicroseconds(microsecondDelay); // delay so analog has time to stabilise
-                return (analogRead(IOpin)); 
+                //return (analogRead(IOpin)); 
+                return(adc->adc0->analogReadContinuous());
             } else {
                 return digitalRead(IOpin);
             }
@@ -77,6 +83,14 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
         return 0;
     }
     //delay(10);
+}
+
+void Multiplexer::muxActive(bool active) {
+    //if (active)
+
+}
+bool Multiplexer::muxActive() {
+    return true; // TEMP
 }
 
 Multiplexer testMux(true,1,{2,3,4,5},{A8});
