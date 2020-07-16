@@ -4,18 +4,19 @@
 analogManager::analogManager() {
     pinMode(A8, INPUT); 
 
-  
+    adc->adc0->setResolution(8);
     adc->adc0->setAveraging(16);
     adc->adc0->setResolution(16);
-    adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED);
-    adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED);
+    adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
+    adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
 
     adc->adc0->startContinuous(A8);
 
+    adc->adc0->setResolution(8);
     adc->adc1->setAveraging(16);
     adc->adc1->setResolution(16);
-    adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED);
-    adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED);
+    adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
+    adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
 
 }
 
