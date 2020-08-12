@@ -6,7 +6,7 @@
 #include "utility.h"
 #include "octaveCoupler.h"
 
-class midiManager { // handles MIDI I/O
+class midiManager : public moduleTemplate { // handles MIDI I/O
 	int MIDImiddleCpos = 48;		// leave this alone
 	
 
@@ -27,7 +27,7 @@ class midiManager { // handles MIDI I/O
     {35,  0, 1, 1,  -1,-1,-1,-1,-1,  0, 0, 0},    //    Fretless Bass
     {36,  1,-1, 1,  -1,-1,-1,-1,-1,  0, 0, 0},      //    Slap Bass 1
     // treble only                        Ensemble 
-    /*{48,  0, 0, 0,  -1,-1,-1,-1,-1,  0, 1, 0},    //    String Ensemble 1   
+    {48,  0, 0, 0,  -1,-1,-1,-1,-1,  0, 1, 0},    //    String Ensemble 1   
     {49,  0, 0, 0,  -1,-1,-1,-1,-1,  0,-1, 1},    //    String Ensemble 2
     {50,  0, 0, 0,  -1,-1,-1,-1,-1,  1, 0, 0},    //    Synth Strings 1
     {51,  0, 0, 0,  -1,-1,-1,-1,-1,  1, 1, 0},    //    Synth Strings 2
@@ -65,9 +65,6 @@ class midiManager { // handles MIDI I/O
     {20,  0, 1, 1,  -1,-1,-1,-1,-1,   1,-1, 1},   //    Reed Organ
     // all on                         
     {19,  1,-1, 1,  -1,-1,-1,-1,-1,   1,-1, 1}    //    Church Organ
-    */
-
-
   };
 	
 	
@@ -84,7 +81,9 @@ public:
 	// function declarations
 	midiManager(); // constructor
 
-	void MIDIrecieve(int status = -1, int data1 = -1, int data2 = -1);	// checks for and handles MIDI input
+  void onLoop() override; // this part is called each time the program loops
+
+	void MIDIreceive(int status , int data1 , int data2 );	// checks for and handles MIDI input
 
 	void MIDIsendKey(int keyNumber, int state, int velocity = 63, int channel = -1);				// sends the required key state over MIDI
 

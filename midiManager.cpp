@@ -5,134 +5,123 @@ midiManager::midiManager() {
 	midi_to_key_offset = MIDImiddleCpos - keysMiddleCpos; //this offset is used when converting between MIDI key numbers and real key numbers
 }
 
-// checks for and handles incoming MIDI messages (use parameters ONLY for SIMULATING midi, otherwise ignores real midi input)
-void midiManager::MIDIrecieve(int status, int data1, int data2) { // parameters only for simulation purposes
-	//int status, data1, data2; // midi messages comprise a status byte and 2 data bytes https://www.songstuff.com/recording/article/midi_message_format/
-	bool recieved = false;
-	if (status == -1 && data1 == -1 && data2 == -1) { // if being called with no parameters (ie. to recieve actual MIDI)
-		//cout << "checking serial\n";
-		
-
-		if (Serial1.available() > 2) { // https://www.instructables.com/id/Send-and-Receive-MIDI-with-Arduino/
-			status = Serial1.read();
-			data1 = Serial1.read();
-			data2 = Serial1.read();
-			
-			
-			cout << "\nrecieved " << status << " " << data1 << " " << data2 <<"\n";
-			recieved = true;
-			digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)              
-			digitalWrite(LED_BUILTIN, HIGH);    // turn the LED off by making the voltage LOW
-
-		}
-
-	} else { recieved = true;}
-
-	if (recieved) {
-		// the Status byte is split into 2 nibbles: the command type and the channel number
-		int type = status / 16; // divides the status message by 16 to find the type of command, discarding the channel number
-		int channel = status % 16; // finds the channel number
-    bool found = false;
-    for (auto i : channels) {
-      if (i == channel) {
-        found = true;
-        break;
-      }
-    }
-		if (found) {
-			cout << "\nchannel " << channel << " active";
-			cout << "\ntype " << type << " data1 " << data1 << " data2 " << data2 << "\n";
-			int midiNumber, velocity, keyNumber;
-
-			switch (type) { // using table of HEX midi commands at https://www.songstuff.com/recording/article/midi_message_format/
-			case 0x9: // if it is a key on command
-				
-				midiNumber = data1;
-				velocity = data2;
-				keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
-				if (velocity !=0) { // sometimes note off is sent as on with velocity 0
-					Keys.requestSystemState(keyNumber, 1); //toggles the key on
-				} else {
-					Keys.requestSystemState(keyNumber, 0); //toggles the key off
-				}
-				printKeyStates("header");
-				printKeyStates("full");
-				break;
-			case 0x8: // if it is a key off command
-
-				midiNumber = data1;	
-				keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
-				Keys.requestSystemState(keyNumber, 0); //toggles the key off
-				printKeyStates("header");
-				printKeyStates("full");
-				break;
-			case 0xC: // if it is a program change (instrument change) command
-				MIDI_to_stop(data1);
-
-				break;
-			case 0xB: // if it is a control change
-				switch (data1) {
-
-				case 1: // modulation wheel (vibrato)
-					if (voxHumanaPos != -1) {
-						if (data2 >= minModulationLevel) {
-							Stops.requestSystemState(voxHumanaPos, 1);
-						}
-						else {
-							Stops.requestSystemState(voxHumanaPos, 0);
-						}
-					}
-					break;
-				case 64: // sustain pedal
-					if (data2 >= 64) {
-						//sustain.active = true;
-					}
-					else {
-						//sustain.active = false;
-					}
-					break;
-				case 93: // chorus level (if high enough, pulls out all the stops and activates coupler)
-					if (data2 >= minChorusLevel) {
-						for (int i = 0; i < (int)Stops.size(); i++) {
-							Stops.requestSystemState(i, 1);
-						}
-						octaveCoupler.active = true;
-					}
-					else {
-						octaveCoupler.active = false;
-					}
-					break;
-				case 68: // legato pedal (when pedal active, hold each note until the next is pressed)
-					if (data2 >= 64) {
-						//legato.active = true;
-					}
-					else {
-						//legato.active = false;
-					}
-
-					break;
-				case 7: // volume (whether to activate forte stops)
-					if (! fortePos.empty()) {
-						int state;
-						if (data2 >= minForteLevel) {
-							state = 1;
-						}
-						else {
-							state = 0;
-						}
-						for (auto element : fortePos) {
-							Stops.requestSystemState(element, state);
-						}
-					}
-					break;
-				}
-			
-			}
-
-
-		}
-	
+// runs each loop
+void midiManager::onLoop(){
+	if (Serial1.available() > 2) {  // https://www.instructables.com/id/Send-and-Receive-MIDI-with-Arduino/
+		MIDIreceive(Serial1.read(), Serial1.read(),Serial1.read());
 	}
+	if (Serial2.available() > 2) {
+		MIDIreceive(Serial2.read(), Serial2.read(),Serial2.read());
+	}
+}
+
+// checks for and handles incoming MIDI messages (use parameters ONLY for SIMULATING midi, otherwise ignores real midi input)
+void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters only for simulation purposes
+
+	// the Status byte is split into 2 nibbles: the command type and the channel number
+	int type = status / 16; // divides the status message by 16 to find the type of command, discarding the channel number
+	int channel = status % 16; // finds the channel number
+	bool found = false;
+	for (auto i : channels) {
+		if (i == channel) {
+			found = true;
+			break;
+		}
+	}
+	if (found) {
+		cout << "\nchannel " << channel << " active";
+		cout << "\ntype " << type << " data1 " << data1 << " data2 " << data2 << "\n";
+		int midiNumber, velocity, keyNumber;
+
+		switch (type) { // using table of HEX midi commands at https://www.songstuff.com/recording/article/midi_message_format/
+		case 0x9: // if it is a key on command
+			
+			midiNumber = data1;
+			velocity = data2;
+			keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
+			if (velocity !=0) { // sometimes note off is sent as on with velocity 0
+				Keys.requestSystemState(keyNumber, 1); //toggles the key on
+			} else {
+				Keys.requestSystemState(keyNumber, 0); //toggles the key off
+			}
+			printKeyStates("header");
+			printKeyStates("full");
+			break;
+		case 0x8: // if it is a key off command
+
+			midiNumber = data1;	
+			keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
+			Keys.requestSystemState(keyNumber, 0); //toggles the key off
+			printKeyStates("header");
+			printKeyStates("full");
+			break;
+		case 0xC: // if it is a program change (instrument change) command
+			MIDI_to_stop(data1);
+
+			break;
+		case 0xB: // if it is a control change
+			switch (data1) {
+
+			case 1: // modulation wheel (vibrato)
+				if (voxHumanaPos != -1) {
+					if (data2 >= minModulationLevel) {
+						Stops.requestSystemState(voxHumanaPos, 1);
+					}
+					else {
+						Stops.requestSystemState(voxHumanaPos, 0);
+					}
+				}
+				break;
+			case 64: // sustain pedal
+				if (data2 >= 64) {
+					//sustain.active = true;
+				}
+				else {
+					//sustain.active = false;
+				}
+				break;
+			case 93: // chorus level (if high enough, pulls out all the stops and activates coupler)
+				if (data2 >= minChorusLevel) {
+					for (int i = 0; i < (int)Stops.size(); i++) {
+						Stops.requestSystemState(i, 1);
+					}
+					octaveCoupler.active = true;
+				}
+				else {
+					octaveCoupler.active = false;
+				}
+				break;
+			case 68: // legato pedal (when pedal active, hold each note until the next is pressed)
+				if (data2 >= 64) {
+					//legato.active = true;
+				}
+				else {
+					//legato.active = false;
+				}
+
+				break;
+			case 7: // volume (whether to activate forte stops)
+				if (! fortePos.empty()) {
+					int state;
+					if (data2 >= minForteLevel) {
+						state = 1;
+					}
+					else {
+						state = 0;
+					}
+					for (auto element : fortePos) {
+						Stops.requestSystemState(element, state);
+					}
+				}
+				break;
+			}
+		
+		}
+
+
+	}
+
+
 }
 
 // sends the required key state over MIDI (velocity and channel parameters are OPTIONAL)
