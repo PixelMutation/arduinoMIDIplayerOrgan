@@ -6,7 +6,6 @@ analogManager::analogManager() {
 
     adc->adc0->setResolution(8);
     adc->adc0->setAveraging(16);
-    adc->adc0->setResolution(16);
     adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
     adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
 
@@ -14,9 +13,9 @@ analogManager::analogManager() {
 
     adc->adc0->setResolution(8);
     adc->adc1->setAveraging(16);
-    adc->adc1->setResolution(16);
     adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
     adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
+    //Serial.print("val "); Serial.println(adc->adc0->analogReadContinuous());
 
 }
 
@@ -77,11 +76,14 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
                 
             }
             /*
-            Serial.println("binary output ");
+            Serial.print("selectNumber "); Serial.println(selectNumber);
+            Serial.print("mux "); Serial.println(multiplexer);
+            Serial.print("pin "); Serial.println(IOpin);
+            Serial.print("binary output ");
             for (auto i: binarySelect) {
-              Serial.println(i);
+              Serial.print(i);
             }
-            Serial.println("\n");
+            Serial.println("");
             */
             if (pullup) { // if it is a pullup sensor
                 pinMode(IOpin, INPUT_PULLUP);
@@ -93,6 +95,7 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
                 //delayMicroseconds(10);
                 delayMicroseconds(microsecondDelay); // delay so analog has time to stabilise
                 //return (analogRead(IOpin)); 
+                //Serial.println((analog_manager.adc->adc0->analogReadContinuous()));
                 return(analog_manager.adc->adc0->analogReadContinuous());
             } else {
                 return digitalRead(IOpin);

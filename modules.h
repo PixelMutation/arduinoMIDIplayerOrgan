@@ -33,12 +33,13 @@
 #include "utility.h" // utility functions, such as printing vectors to console
 #include "midiManager.h" // manages MIDI I/O and MIDI instruments
 //#include "userInterface.h" allows user to configure settings for core modules and plugins
-#include "pluginManager.h" // Movement commands are sent through here so plugin effects can be applied
+#include "moduleManager.h" // Movement commands are sent through here so plugin effects can be applied
 #include "EEPROM_manager.h" // Stores a live version of EEPROM in memory in the form of 'blocks' which are objects with the appropriate data structure for what is needed.
 #include "sensors.h" // manages the sensors in the program
 #include "global_includes.h" // stores includes for the globally required libraries
 
 // HEADER FILES FOR PLUGINS: (comment out to deactivate plugins)
+#include "EXAMPLE_MODULE.h" // If developing a plugin, look at this. 
 #include "testInterface.h" // a console interface for debugging
 #include "octaveCoupler.h" // replicates a keypress x octaves above or below
 #include "scales.h" // plays patterns such as chords and arpeggios within scales
