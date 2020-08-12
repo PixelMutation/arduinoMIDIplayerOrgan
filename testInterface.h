@@ -6,7 +6,7 @@
 #include "midiManager.h"
 #include "scheduler.h"
 #include "stateManager.h"
-#include "pluginManager.h"
+
 
 void testInterface();
 

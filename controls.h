@@ -4,7 +4,7 @@
 #include "stateManager.h"
 #include "utility.h"
 #include "multiplexer.h"
-#include "pluginManager.h"
+
 
 class controls {
 
