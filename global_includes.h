@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "configuration.h"
+#include "moduleManager.h"
 
 using namespace std; //removes need for std:: prefix for standard library functions and classes
 
