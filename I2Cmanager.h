@@ -30,7 +30,8 @@ class portExpander { // set up for the MCP23017
 public:
     portExpander(int _port, int _numDevices);
     void write(int data, int device );
-    void writeToPin(int pin, int state);
+    void writeToPin(int pin, int state, int expander);
+    void writeToPinCombined(int pin, int state);
     
 
 };

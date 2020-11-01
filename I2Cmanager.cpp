@@ -51,19 +51,24 @@ portExpander::portExpander(int _port, int _numDevices) {
 void portExpander::write(int data, int device) {
     expanders.write({data},device);
 }
-
-void portExpander::writeToPin(int pin, int state) {
-    int device = pin/16; // finds device number
-    int devicePin = (pin-device*16); // finds the pin on the specific expander
+//writes to a pin on a specific expander
+void portExpander::writeToPin(int pin, int state, int expander) {
     int reg;
-    if (devicePin < 8) { // if in register A
+    if (pin < 8) { // if in register A
         reg = 0x12;        //set register address
-        regA[device]  ^= (-state ^ regA[device]) & (1UL << devicePin); // updates byte containing states using individual bit changing method from https://stackoverflow.com/questions/47981/how-do-you-set-clear-and-toggle-a-single-bit
-        expanders.write({reg},regA[device]) // writes byte to register
+        regA[expander]  ^= (-state ^ regA[expander]) & (1UL << pin); // updates byte containing states using individual bit changing method from https://stackoverflow.com/questions/47981/how-do-you-set-clear-and-toggle-a-single-bit
+        expanders.write({reg},regA[expander]); // writes byte to register
     } else {
         reg = 0x13;
-        regB[device] ^= (-state ^ regA[device]) & (1UL << devicePin-8);
-        expanders.write({reg},regA[device])
+        regB[expander] ^= (-state ^ regA[expander]) & (1UL << pin-8);
+        expanders.write({reg},regA[expander]);
     }
+}
+    
+// writes to expanders as if they are combined together
+void portExpander::writeToPinCombined(int pin, int state) {
+    int device = pin/16; // finds device number
+    int devicePin = (pin-device*16); // finds the pin on the specific expander
+    writeToPin(devicePin, state, device); // writes to the relevant pin
     
 }
