@@ -11,6 +11,7 @@
 
 #include "configuration.h"
 #include "moduleManager.h"
+#include "utility.h"
 
 using namespace std; //removes need for std:: prefix for standard library functions and classes
 
