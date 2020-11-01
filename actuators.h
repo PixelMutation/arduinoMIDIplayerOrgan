@@ -33,6 +33,6 @@ public:
 };
 
 
-
+extern keyActuators KeyActuators;
 
 #endif

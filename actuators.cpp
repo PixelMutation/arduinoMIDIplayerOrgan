@@ -48,7 +48,7 @@ void keyActuators::test(string mode="legato") {
             for (int j=1; j < keysPerManual; j++) {
                 setState(i,j-1,0); // turns previous key off
                 setState(i,j,1);    // turns next key on
-                delay(legatoDuration)
+                delay(legatoDuration);
             }
             setState(i,keysPerManual-1,0); // turns the last key off
         }
@@ -62,3 +62,5 @@ void keyActuators::test(string mode="legato") {
         }
     }
 }
+
+keyActuators KeyActuators;
