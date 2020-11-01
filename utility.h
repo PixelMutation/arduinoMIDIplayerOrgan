@@ -12,6 +12,7 @@ void printVector(deque<double> vector, bool displayZero = true);
 void printKeyStates(string option = "full");
 void printStopStates(string option = "full");
 
+void awaitConfirmation();
 
 
 #endif

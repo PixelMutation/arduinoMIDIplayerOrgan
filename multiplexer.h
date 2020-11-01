@@ -15,18 +15,19 @@ extern analogManager analog_manager;
 class Multiplexer : public moduleTemplate {
     
 
-    int numberOfMultiplexers;
-    vector<int> selectPins;
-    vector<int> IOpins;
+    int numOfMux; 
+
+    int IOpin;
     bool input;
     bool pullup;
-    
+    bool continuous;
+    void writeBinary(vector<int> pins, int value);
+    void setEnablePins(int mux);
+
 public:
-    Multiplexer(bool input, int number, vector<int> _selectInputPins, vector<int> _IOpins);
-    
-    void muxActive(bool active);
-    bool muxActive();
-    int muxRead(int number, bool analog, bool pullup, int microsecondDelay=0);
+    Multiplexer(bool _input, bool _continuous, int number, int _IOpin);
+
+    int muxRead(int index, bool analog, bool pullup, int microsecondDelay);
 
 };
 

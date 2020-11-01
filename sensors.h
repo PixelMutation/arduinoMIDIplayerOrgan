@@ -3,24 +3,28 @@
 
 #include "global_includes.h"
 #include "EEPROM_manager.h"
+#include "actuators.h"
+#include "multiplexer.h"
 
+// all sensors inherit from this
+class sensorsTemplate {
+public:
+    int pin;
+    int numMux;
+    Multiplexer* mux;
+    void scan();
+};
+
+// contains the various sensor objects
 class sensors : public moduleTemplate{
-    
-    /*
-    const int noOfManuals = NUM_MANUALS; // supports up to 4 manuals (though I'm sure you can do more if you are insane enough)
-    const int keysPerManual = KEYS_PER_MANUAL; // normally 61, especially when there are multiple manuals
-    const int noOfBassPedals = NUM_BASS_PEDALS; // I have none sadly.
-    const int noOfStops = NUM_STOPS; 
-    const int controlPanels = 1; // typically each control panel will have up to 16 controls (one mux), though it can be more. Each control panel has pins starting from 0.
-    const int controlPanelPins;
-    */
 public:
     sensors();
-    onLoop();
-
-    class manuals {
-        int noOfPins;
-        int multiplexers; // the number of multiplexers required
+    void onLoop();
+    class manuals : public sensorsTemplate {
+        int muxPerManual; // the number of multiplexers per manual
+        vector<int[2]> multiplexers; // the first and last multiplexer of each manual
+        int uncertainty; // read values are compared to stored value +- this 
+        int calibrationDelay = 500; // delay after keypress before measurement taken (ms)
     public:
         
         EEPROM_manager::block3d& calibratedPositions = eepromManager.newBlock(NUM_MANUALS,3,KEYS_PER_MANUAL);
@@ -31,46 +35,48 @@ public:
             200, // pos when held by system
             170  // pos at bottom
         };
-
-        
         manuals();
-        int readval(int manual, int key);
-
+        int read(int manual, int key);
+        void calibrate(string mode);
     };
 
-    class stops {
+    class stops : public sensorsTemplate{
 
-
-        int multiplexers; // the number of multiplexers required
         int onPosition;
         bool analog;
     public:
         stops();
+        int read(int division, int stop);
     };
 
-    class bassPedals {
+    class bassPedals : public sensorsTemplate{
 
-
-        int multiplexers; // the number of multiplexers required
         bool analog;
         int onPosition;
+        
     public:
         bassPedals();
+        int read(int pedal);
     };
 
-    class controlPanels {
-
-
-        int multiplexers; // the number of multiplexers required
-
+    class controlPanels : public sensorsTemplate{
+        vector<int> inputMode; // which sensors are pullups
     public:
         controlPanels();
+        int readAnalog(int sensor);
+        int readDigital(int sensor);
     };
 
+    sensors::manuals Manuals;
+    sensors::stops Stops;
+    sensors::bassPedals BassPedals;
+    sensors::controlPanels ControlPanels;
 
 };
 
 
 extern sensors Sensors;
+
+
 
 #endif

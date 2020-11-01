@@ -2,17 +2,17 @@
 
 
 analogManager::analogManager() {
-    pinMode(A8, INPUT); 
+    pinMode(KEY_SIG, INPUT); 
 
     adc->adc0->setResolution(8);
-    adc->adc0->setAveraging(16);
+    adc->adc0->setAveraging(ADC_AVERAGING);
     adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
     adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
 
-    adc->adc0->startContinuous(A8);
+    adc->adc0->startContinuous(KEY_SIG);
 
-    adc->adc0->setResolution(8);
-    adc->adc1->setAveraging(16);
+    adc->adc1->setResolution(8);
+    adc->adc1->setAveraging(ADC_AVERAGING);
     adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
     adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
     //Serial.print("val "); Serial.println(adc->adc0->analogReadContinuous());
@@ -22,81 +22,70 @@ analogManager::analogManager() {
 analogManager analog_manager;
 
 // constructor: (if an input mux,no. of muxes used in this I/O array, mux select pins (vector, ordered, 4 items), I/O pin for each mux (vector, ordered) )
-Multiplexer::Multiplexer(bool _input, int _numberOfMultiplexers, vector<int> _selectPins, vector<int> _IOpins) {
+Multiplexer::Multiplexer(bool _input, bool _continuous, int _numOfMux, int _IOpin) {
 
     
     //analogReadResolution(8); // the lower the resolution the faster
     //analogReadAveraging(8); // the higher the number of measurements, the more consistent the signal but the slower it is
-    
-    
-
-    numberOfMultiplexers = _numberOfMultiplexers;
-    selectPins = _selectPins;
-    IOpins = _IOpins;
+    continuous = _continuous;
+    numOfMux = _numOfMux;
+    IOpin = _IOpin;
     input = _input;
-
-
-    for (int i = 0; i < (int)selectPins.size(); i++) {
+    vector<int> selectPins = MUX_SELECT_PINS;
+    vector<int> enablePins = MUX_ENABLE_PINS;
+    for (int i = 0; i < selectPins.size(); i++) {
         pinMode(selectPins[i], OUTPUT);
     }
-
-
-    for (int i = 0; i < (int)IOpins.size(); i++) {      
-        pinMode(IOpins[i], INPUT);
+    for (int i = 0; i < enablePins.size(); i++) {
+        pinMode(enablePins[i], OUTPUT);
     }
+    if (input) {
+        pinMode(IOpin, INPUT);
+    }
+    
 
 
 }
+// sets 4 pins to represent a 4 bit binary value
+void Multiplexer::writeBinary(vector<int> pins, int value) {
+    vector<int> binarySelect;
+    for (int i = 0; i < pins.size(); i++) { // for each pin, set the binary state to select the mux output https://learn.sparkfun.com/tutorials/multiplexer-breakout-hookup-guide/all
+        if (value & (1<<i)) {
+            digitalWrite(pins[i], HIGH);
+            binarySelect[i] = 1;
+        } else {
+            digitalWrite(pins[i], LOW);
+            binarySelect[i] = 0;
+        }
+    }
+}
+// uses the demux to set all but the selected mux to be disabled
+void Multiplexer::setEnablePins(int mux) {
+    writeBinary(MUX_ENABLE_PINS,mux);
+}
+
 
 // returns the value of the input (input number, if you want analog result, if a pullup sensor)
-int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsecondDelay) {
+int Multiplexer::muxRead(int index, bool analog, bool pullup, int microsecondDelay) {
+    int multiplexer = index/16; // each has 16 outputs so this finds which multiplexer is needed
+    setEnablePins(multiplexer); // enables the chosen multiplexer
+    int selectNumber = index - 16 * multiplexer; // the number (0-15) of the output on the corresponding multiplexer
+    writeBinary(MUX_SELECT_PINS,selectNumber); // sets mux to point to selectNumber
     if (input) { // sanity check: output mux cannot act as input
-        //Serial.println("a");
-        int multiplexer = inputNumber/16; // each has 16 outputs so this finds which multiplexer is needed
-        byte selectNumber = inputNumber - 16 * multiplexer; // the number (0-15) of the output on the corresponding multiplexer
-        int IOpin = IOpins[multiplexer]; // the pin of the multiplexer being used
-        //int reading1, reading2, reading3, reading4; //used to bin first (usually dodgey) reading. Analog interference: https://forum.arduino.cc/index.php?topic=70013.0
-        //printVector(IOpins, true);
-        //cout << "\nmultiplexer " << multiplexer << " selectNumber " << selectNumber << " iopin " << IOpin << " ";
-        if (multiplexer < numberOfMultiplexers) { // sanity check!
-            int binarySelect[4] = {0,0,0,0};
-            //Serial.println("b");
-            for (int i = 0; i < 4; i++) { // for each select pin, set the binary state to select the mux output https://learn.sparkfun.com/tutorials/multiplexer-breakout-hookup-guide/all
-                //Serial.println("c");
-                if (selectNumber & (1<<i)) {
-                    digitalWrite(selectPins[i], HIGH);
-                    binarySelect[i] = 1;
-                } else {
-                    digitalWrite(selectPins[i], LOW);
-                    binarySelect[i] = 0;
-                }
-                
-                //binarySelect[i] = bitRead(selectNumber,3- i)  + 48;
-                //digitalWrite(selectPins[i], bitRead(selectNumber, i)); // write the bit value to select the right output
-                
-            }
-            /*
-            Serial.print("selectNumber "); Serial.println(selectNumber);
-            Serial.print("mux "); Serial.println(multiplexer);
-            Serial.print("pin "); Serial.println(IOpin);
-            Serial.print("binary output ");
-            for (auto i: binarySelect) {
-              Serial.print(i);
-            }
-            Serial.println("");
-            */
+        if (multiplexer < numOfMux) { // sanity check!
             if (pullup) { // if it is a pullup sensor
                 pinMode(IOpin, INPUT_PULLUP);
             } else {
                 pinMode(IOpin, INPUT);
             }
             if (analog) { // whether an analog response is wanted
-                //Serial.println("d");
-                //delayMicroseconds(10);
                 delayMicroseconds(microsecondDelay); // delay so analog has time to stabilise
-                //return (analogRead(IOpin)); 
-                //Serial.println((analog_manager.adc->adc0->analogReadContinuous()));
-                return(analog_manager.adc->adc0->analogReadContinuous());
+                if (continuous) {
+                    return(analog_manager.adc->adc0->analogReadContinuous());
+                } else {
+                    return analog_manager.adc->adc1->analogRead(IOpin);
+                }
+
             } else {
                 return digitalRead(IOpin);
             }
@@ -107,16 +96,7 @@ int Multiplexer::muxRead(int inputNumber, bool analog, bool pullup, int microsec
     } else {
         return 0;
     }
-    //delay(10);
-}
-
-void Multiplexer::muxActive(bool active) {
-    //if (active)
-
-}
-bool Multiplexer::muxActive() {
-    return true; // TEMP
 }
 
 
-Multiplexer testMux(true,1,{2,3,4,5},{A8});
+//Multiplexer testMux(true,1,{2,3,4,5},{A8});

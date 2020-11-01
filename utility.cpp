@@ -86,6 +86,11 @@ void printStopStates(string option) {
 	}
 }
 
-
+// pauses everything until the user confirms to proceed to next step
+void awaitConfirmation() {
+    {
+        delay(500);
+    } while (digitalRead(CONFIRM_PIN)==LOW); // will include other options for confirmation (e.g. via an app)
+}
 
 
