@@ -9,21 +9,22 @@ extern "C"{
 }
 // stateManager.cpp contains the stateManager class definition. This class is used to store data about the positions of keys/stops and handle requests to move them.
 
-// constructor: initialises the object, taking the type ("keys" or "stops") and size (number of keys/stops) wanted then filling out the vectors with 0s
-stateManager::stateManager(string type, int size, int polyphony_) { // 
+// constructor: initialises the object, taking the type ("keys" or "stops") and size (number of keys/stops) wanted and the set (which manual/stop division it is) then filling out the vectors with 0s
+stateManager::stateManager(string type, int size, int _polyphony, int _set) { // 
     itemsType = type;
     numberOfItems = size;
     itemBuffer.assign(numberOfItems, 0);            // sets the length of the vectors to the number of items, sets all to 0
     activatedItems.assign(numberOfItems, 0);        //
     systemActivatedItems.assign(numberOfItems, 0);  //
     userActivatedItems.assign(numberOfItems, 0);    //
-    polyphony = polyphony_;
+    polyphony = _polyphony;
+    set = _set;
     //progStartTime = std::chrono::high_resolution_clock::now();
     progStartTime = millis();
 }
 
 // request system state function - when something wants a key or stop on or off, it calls this
-void stateManager::requestSystemState(int itemNumber, int state) {
+void stateManager::requestActuatorState(int itemNumber, int state) {
     if (itemNumber > numberOfItems or itemNumber < 1) { cout << "FAILED: item no. out of range!\n"; return; }
     int index = itemNumber - 1;
     if (state == 0) {                                   // if request is to turn key off
@@ -52,7 +53,7 @@ void stateManager::requestSystemState(int itemNumber, int state) {
 
 
 // request system state function - when something wants a key or stop on or off after a specific delay, it calls this
-void stateManager::requestDelayedSystemState(int delay, int itemNumber, int state) {
+void stateManager::requestActuatorState(int itemNumber, int state, int delay) {
     
     if (itemNumber > numberOfItems or itemNumber < 1) { cout << "FAILED: item no. out of range!\n"; return; }
     int index = itemNumber - 1;
@@ -187,8 +188,8 @@ int stateManager::size() {
 
 // create instance of class for keys and stops
 
-stateManager Keys("keys", KEYS_PER_MANUAL, POLYPHONY);
+//stateManager Keys("keys", KEYS_PER_MANUAL, POLYPHONY);
 
 
 
-stateManager Stops("stops", NUM_STOPS, NUM_STOPS);
+//stateManager Stops("stops", NUM_STOPS, NUM_STOPS);

@@ -46,5 +46,9 @@ int sensors::manuals::readval(int manual, int key) {
     return 0; // PLACEHOLDER!!
 }
 
+int sensors::OnLoop() {
+    
+}
+
 
 sensors Sensors;

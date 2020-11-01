@@ -12,7 +12,7 @@ class analogManager {
 extern analogManager analog_manager;
 
 // Takes the I/O number and configures the mux to switch to the correct pin, then reads / outputs to it. constructor:(if an input mux,  no. of muxes used in this I/O array, mux select pins (vector, ordered, 4 items), I/O pin for each mux (vector, ordered) )
-class Multiplexer {
+class Multiplexer : public moduleTemplate {
     
 
     int numberOfMultiplexers;

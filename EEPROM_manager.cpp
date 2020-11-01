@@ -5,6 +5,11 @@
 #include "EEPROM_manager.h"
 
 
+EEPROM_manager::EEPROM_manager() {
+    hook.OnStart.push_back(this);
+}
+
+
 // The following return the index within the actual EEPROM given the coordinates and block number
 int EEPROM_manager::index(int x, int blockNumber) {
     return blockDimensions[blockNumber][0] + x;
@@ -65,6 +70,11 @@ EEPROM_manager::block3d& EEPROM_manager::newBlock(int x, int y, int z) { // Crea
     blocks3d[blockNum].blockNumber = blockNum;
     return blocks3d[blockNum];
 }
+
+void EEPROM_manager::onStart() {
+    load();
+}
+
 
 void EEPROM_manager::clear() { // clears all from EEPROM
     for (int i = 0; i < EEPROM_SIZE; i++) {
@@ -160,3 +170,5 @@ void EEPROM_manager::write(int address, int data) { // writes to the EEPROM
 
 
 EEPROM_manager eepromManager;
+
+

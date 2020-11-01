@@ -24,7 +24,7 @@ void testInterface() {
                         Serial.println("Choose state: 0/1: ");
                         cin >> state;
                         Serial.println("");
-                        keypressHandler(number, state);
+                        Keys.setSensorState(number, state);
                         printKeyStates("header");
                         printKeyStates();
 
@@ -70,7 +70,7 @@ void testInterface() {
                 
                 Serial.println("type key number: ");
                 cin >> key;
-                keypressHandler(key, 1);
+                Keys.setSensorState(key, 1);
                 printKeyStates("overall");
                 Serial.println("");
 
@@ -108,14 +108,14 @@ void testInterface() {
                     cout << data2 << "\n\n";
 
 
-                    MIDI.MIDIrecieve(status, data1, data2);
+                    MIDI.MIDIreceive(status, data1, data2);
                     printStopStates("overall");
                     printKeyStates("system");
                     break;
                 case 2:
                     cout << "Type instrument number (0-127): ";
                     cin >> choice;
-                    MIDI.MIDIrecieve(0xC1, choice, 0);
+                    MIDI.MIDIreceive(0xC1, choice, 0);
                     printStopStates("overall");
                     break;
                 }

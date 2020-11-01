@@ -7,7 +7,7 @@
 #include <EEPROM.h>
 
 
-class EEPROM_manager {
+class EEPROM_manager : public moduleTemplate{
     vector<vector<int>> blockAddresses; // stores the start and end of the addresses of EEPROM 'blocks'
     vector<vector<int>> blockDimensions;
     int nullVal = 0; // used as a reference to return (e.g. if address out of bounds))
@@ -22,7 +22,9 @@ class EEPROM_manager {
     int fetch(int address); // fetches the value from the version stored in EEPROM
     void write(int address, int data); // saves to the version stored in EEPROM
 public:
-    //EEPROM_manager();
+    
+    EEPROM_manager();
+    
 
     class block1d {
         public:
@@ -46,6 +48,8 @@ public:
     block1d& newBlock(int x);
     block2d& newBlock(int x, int y);
     block3d& newBlock(int x, int y, int z);
+
+    void onStart();
 
     void load(); // loads the EEPROM block into memory
     void save(); // saves values from memory into EEPROM

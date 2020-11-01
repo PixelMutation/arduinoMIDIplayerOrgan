@@ -6,7 +6,7 @@
 #include "multiplexer.h"
 
 
-class controls {
+class controls : public moduleTemplate {
 
     int noOfReedSwitches = 1;
     int reedSwitchFirstPin = 3;
@@ -16,6 +16,7 @@ class controls {
 public:
 
     controls();
+    void onLoop();
 
     void checkPins();
 

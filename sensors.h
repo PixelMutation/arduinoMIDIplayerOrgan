@@ -4,7 +4,7 @@
 #include "global_includes.h"
 #include "EEPROM_manager.h"
 
-class sensors {
+class sensors : public moduleTemplate{
     
     /*
     const int noOfManuals = NUM_MANUALS; // supports up to 4 manuals (though I'm sure you can do more if you are insane enough)
@@ -16,6 +16,7 @@ class sensors {
     */
 public:
     sensors();
+    onLoop();
 
     class manuals {
         int noOfPins;

@@ -81,7 +81,7 @@ public:
 	// function declarations
 	midiManager(); // constructor
 
-  void onLoop() override; // this part is called each time the program loops
+  void onLoop(); // this part is called each time the program loops
 
 	void MIDIreceive(int status , int data1 , int data2 );	// checks for and handles MIDI input
 
