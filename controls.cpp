@@ -2,12 +2,8 @@
 
 
 controls::controls() {
-    /*
-    for (int i = reedSwitchFirstPin; i < (reedSwitchFirstPin + noOfReedSwitches); i++) {
-        pinMode(i, INPUT_PULLUP);
-        reedSwitches.push_back({i,digitalRead(i)});
-    }
-    */
+    
+   pinMode(CONFIRM_PIN, CONFIRM_PIN_MODE); // sets up confirmation pin
    hook.OnLoop.push_back(this);
 
 }
@@ -32,7 +28,7 @@ void controls::checkPins() { //  guide on detecting pin states https://www.ardui
         
     }
     */
-   
+   /*
    int newReedSwitchState = testMux.muxRead(9,false,false);
    if (reedSwitch != newReedSwitchState) {
         reedSwitch = newReedSwitchState;
@@ -50,6 +46,7 @@ void controls::checkPins() { //  guide on detecting pin states https://www.ardui
             }
         }
    }
+   */
    
 }
 
