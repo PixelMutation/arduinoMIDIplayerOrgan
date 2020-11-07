@@ -7,14 +7,14 @@
 #include "octaveCoupler.h"
 
 class midiManager : public moduleTemplate { // handles MIDI I/O
-	int MIDImiddleCpos = 48;		// leave this alone
+  int MIDImiddleCpos     = 48;	// leave this alone
 	
 
-	int outputChannel = 0;	// channel on which notes are sent
+  int outputChannel      = 0;	  // channel on which notes are sent
 
-	int minForteLevel = 64;			// volume level (0-127) at which forte stops activated
-	int minChorusLevel = 64;		// chorus level at which all stops activated
-	int minModulationLevel = 64;	// level at which vox humana activated
+  int minForteLevel      = 64;	// volume level (0-127) at which forte stops activated
+  int minChorusLevel     = 64;	// chorus level at which all stops activated
+  int minModulationLevel = 64;	// level at which vox humana activated
 
   std::vector<std::vector<int>> stopPresetsTable{ // This is just some preset stop positions assigned to MIDI instruments, change these to some presets for your own instrument. Use -1 to indicate that that stop should be ignored (e.g. if it can't be moved, or won't affect anything.)
     //No.  |            Stops state          |      General MIDI instrument   
@@ -82,13 +82,10 @@ public:
 	midiManager(); // constructor
 
   void onLoop(); // this part is called each time the program loops
-
+  
 	void MIDIreceive(int status , int data1 , int data2 );	// checks for and handles MIDI input
-
 	void MIDIsendKey(int keyNumber, int state, int velocity = 63, int channel = -1);				// sends the required key state over MIDI
-
 	void stops_to_MIDI();						// converts current stop positions to a MIDI instrument and sends a MIDI program change message with this
-
 	void MIDI_to_stop(int instrumentNumber);	// converts MIDI instrument program change messages to stop positions and moves the stops to those positions
 };
 

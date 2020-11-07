@@ -42,7 +42,7 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			midiNumber = data1;
 			velocity = data2;
 			keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
-			if (velocity !=0) { // sometimes note off is sent as on with velocity 0
+			if (velocity!=0) { // sometimes note off is sent as on with velocity 0
 				Keys.requestActuatorState(keyNumber, 1); //toggles the key on
 			} else {
 				Keys.requestActuatorState(keyNumber, 0); //toggles the key off
@@ -188,8 +188,8 @@ void midiManager::stops_to_MIDI() {
 		}
 		if (foundPreset) {
 			int status = 0xC; // program change status
-			int data1 = i;
-			int data2 = 0;
+			int data1  = i  ;
+			int data2  = 0  ;
 			//cout << "\nsending preset: ";
 			printVector(stopPresets[i]);
 			//cout << " as instrument " << i << "\n";

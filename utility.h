@@ -7,8 +7,8 @@
 
 
 
-void printVector(std::vector<int> vector, bool displayZero = true);
-void printVector(std::deque<double> vector, bool displayZero = true);
+void printVector(std::vector<int   > vector, bool displayZero = true);
+void printVector(std::deque <double> vector, bool displayZero = true);
 
 
 void awaitConfirmation();

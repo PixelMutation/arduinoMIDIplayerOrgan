@@ -1,8 +1,8 @@
 #include "I2Cmanager.h"
 
 I2C_manager::I2C_manager(int _port, int _numDevices, int _baseAddress) {
-    port = _port;
-    numDevices = _numDevices;
+    port        = _port       ;
+    numDevices  = _numDevices ;
     baseAddress = _baseAddress;
     switch (port) {
     case 0:
@@ -73,8 +73,8 @@ void portExpander::writeToPin(int pin, int state, int expander) {
     
 // writes to expanders as if they are combined together
 void portExpander::writeToPinCombined(int pin, int state) {
-    int device = pin/16; // finds device number
-    int devicePin = (pin-device*16); // finds the pin on the specific expander
-    writeToPin(devicePin, state, device); // writes to the relevant pin
+    int device    =  pin/16;                // finds device number
+    int devicePin = (pin-device*16);        // finds the pin on the specific expander
+    writeToPin(devicePin, state, device);   // writes to the relevant pin
     
 }

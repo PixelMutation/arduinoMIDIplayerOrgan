@@ -13,9 +13,9 @@ class I2C_manager {
 
 
 public:
-    I2C_manager(int _port, int _numDevices, int _baseAddress);
-    void write(std::vector<int> bytes, int device);
-    int read(int device);
+         I2C_manager(int _port, int _numDevices, int _baseAddress);
+    void write      (std::vector<int> bytes, int device);
+    int  read       (int device);
 
 };
 
@@ -28,9 +28,9 @@ class portExpander { // set up for the MCP23017
     std::vector<int> regA;
     std::vector<int> regB;
 public:
-    portExpander(int _port, int _numDevices);
-    void write(int data, int device );
-    void writeToPin(int pin, int state, int expander);
+         portExpander      (int _port, int _numDevices);
+    void write             (int data, int device );
+    void writeToPin        (int pin, int state, int expander);
     void writeToPinCombined(int pin, int state);
     
 

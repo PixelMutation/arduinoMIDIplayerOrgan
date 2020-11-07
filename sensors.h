@@ -3,7 +3,7 @@
 
 #include "global_includes.h"
 #include "EEPROM_manager.h"
-#include "actuators.h"
+#include "I2Cactuators.h"
 #include "multiplexer.h"
 
 // all sensors inherit from this
@@ -67,9 +67,9 @@ public:
         int readDigital(int sensor);
     };
 
-    sensors::manuals Manuals;
-    sensors::stops Stops;
-    sensors::bassPedals BassPedals;
+    sensors::manuals       Manuals      ;
+    sensors::stops         Stops        ;
+    sensors::bassPedals    BassPedals   ;
     sensors::controlPanels ControlPanels;
 
 };

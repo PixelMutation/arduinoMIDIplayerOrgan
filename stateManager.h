@@ -11,14 +11,14 @@
 
 class stateManager {
 	std::string itemsType; // whether the object is the keys or the stops
-	int polyphony; // stores the max number of notes that can be held at once
-	int numberOfItems; // the number of keys / stops in the object
-	int set; // the manual of keys or division of stops
-	std::vector<int> itemBuffer; // a vector (list) of all keys or stops, with each item storing how many modules have requested that key or stop be active
-	std::vector<int> activatedItems; // a vector (list) of all keys or stops that the system detects (via the sensors) have been activated
+	int polyphony;         // stores the max number of notes that can be held at once
+	int numberOfItems;     // the number of keys / stops in the object
+	int set;               // the manual of keys or division of stops
+	std::vector<int> itemBuffer;           // a vector (list) of all keys or stops, with each item storing how many modules have requested that key or stop be active
+	std::vector<int> activatedItems;       // a vector (list) of all keys or stops that the system detects (via the sensors) have been activated
 	std::vector<int> systemActivatedItems; // a vector of all the keys/stops activated by the system, including a tally of how long ago active keys were activated (to avoid exceeding any polyphony limits)
-	std::vector<int> userActivatedItems; // a vector of all key/stops the user has activated themselves
-	std::vector<int> velocity; // the velocity of the keypress
+	std::vector<int> userActivatedItems;   // a vector of all key/stops the user has activated themselves
+	std::vector<int> velocity;             // the velocity of the keypress
 
 	void polyphonyManager(int index, int dir);
 	void agentManager(int index, std::string agent = "user");
@@ -38,7 +38,7 @@ public:
 
 };
 
-void printKeyStates(std::string option = "full");
+void printKeyStates (std::string option = "full");
 void printStopStates(std::string option = "full");
 
 extern stateManager Keys;

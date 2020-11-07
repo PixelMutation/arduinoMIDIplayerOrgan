@@ -38,9 +38,9 @@ void EEPROM_manager::constructBlock(std::vector<int> dimensions) { // creates a 
     if (end >= EEPROM_SIZE) {
         Serial.println("ERROR: Block exceeds EEPROM size");
     } else {
-        blockDimensions[blockAddresses.size()] = dimensions;
-        blockAddresses[blockAddresses.size()][0] = start; // adds the new block to the address list
-        blockAddresses[blockAddresses.size()][1] = end;
+        blockDimensions[blockAddresses.size()]    = dimensions;
+        blockAddresses [blockAddresses.size()][0] = start     ; // adds the new block to the address list
+        blockAddresses [blockAddresses.size()][1] = end       ;
 
         
     }

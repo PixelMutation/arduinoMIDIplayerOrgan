@@ -13,25 +13,22 @@ public:
     void onStart();
     void onLoop();
 
-    void onKeyMove(int key, int newPos, int oldPos);
-    void onUserKeyToggle(int manual, int key, int velocity, bool state, int pos);
-    void onSystemKeyToggle(int manual, int key, int velocity, bool state);
+    void onKeyMove         (int key   , int    newPos, int oldPos);
+    void onUserKeyToggle   (int manual, int    key   , int velocity, bool state, int pos);
+    void onSystemKeyToggle (int manual, int    key   , int velocity, bool state);
+    void onUserStopToggle  (int stop  , bool   state);
+    void onSystemStopToggle(int stop  , bool   state);
+    void onPedalToggle     (int pedal , bool   state);
+    void onControlChange   (int panel , int number, int state);
 
-    void onUserStopToggle(int stop, bool state);
-    void onSystemStopToggle(int stop, bool state);
-
-    void onPedalToggle(int pedal, bool state);
-
-    void onControlChange(int panel, int number, int state);
-
-    void onMidiKey(int manual, int key, int velocity);
-    void onMidiCC(int data1, int data2);
-    void onMidiCCmod(int data);
-    void onMidiCCsustain(int data);
-    void onMidiCCchorus(int data);
-    void onMidiCClegato(int data);
-    void onMidiCCvolume(int data);
-    void onMidiInstrument(int instrument);
+    void onMidiKey         (int manual, int key, int velocity);
+    void onMidiCC          (int data1 , int data2);
+    void onMidiCCmod       (int data);
+    void onMidiCCsustain   (int data);
+    void onMidiCCchorus    (int data);
+    void onMidiCClegato    (int data);
+    void onMidiCCvolume    (int data);
+    void onMidiInstrument  (int instrument);
 
     void onSerialMessage(std::string module, std::string setting, int data);
 

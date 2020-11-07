@@ -5,27 +5,27 @@ void moduleTemplate::onStart() {
 }
 void moduleTemplate::onLoop() {}
 
-void moduleTemplate::onKeyMove(int key, int newPos, int oldPos) {}
-void moduleTemplate::onUserKeyToggle(int manual, int key, int velocity, bool state, int pos) {}
-void moduleTemplate::onSystemKeyToggle(int manual, int key, int velocity, bool state) {}
+void moduleTemplate::onKeyMove         (int key, int newPos, int oldPos) {}
+void moduleTemplate::onUserKeyToggle   (int manual, int key, int velocity, bool state, int pos) {}
+void moduleTemplate::onSystemKeyToggle (int manual, int key, int velocity, bool state) {}
 
-void moduleTemplate::onUserStopToggle(int stop, bool state) {}
-void moduleTemplate::onSystemStopToggle(int stop, bool state) {}
+void moduleTemplate::onUserStopToggle  (int stop, bool state) {}
+void moduleTemplate::onSystemStopToggle(int stop , bool state) {}
 
-void moduleTemplate::onPedalToggle(int pedal, bool state) {}
+void moduleTemplate::onPedalToggle     (int pedal, bool state) {}
 
-void moduleTemplate::onControlChange(int panel, int number, int state) {}
+void moduleTemplate::onControlChange   (int panel, int number, int state) {}
 
-void moduleTemplate::onMidiKey(int manual, int key, int velocity) {}
-void moduleTemplate::onMidiCC(int data1, int data2) {}
-void moduleTemplate::onMidiCCmod(int data) {}
-void moduleTemplate::onMidiCCsustain(int data) {}
-void moduleTemplate::onMidiCCchorus(int data) {}
-void moduleTemplate::onMidiCClegato(int data) {}
-void moduleTemplate::onMidiCCvolume(int data) {}
-void moduleTemplate::onMidiInstrument(int instrument) {}
+void moduleTemplate::onMidiKey         (int manual, int key  , int velocity) {}
+void moduleTemplate::onMidiCC          (int data1 , int data2) {}
+void moduleTemplate::onMidiCCmod       (int data) {}
+void moduleTemplate::onMidiCCsustain   (int data) {}
+void moduleTemplate::onMidiCCchorus    (int data) {}
+void moduleTemplate::onMidiCClegato    (int data) {}
+void moduleTemplate::onMidiCCvolume    (int data) {}
+void moduleTemplate::onMidiInstrument  (int instrument) {}
 
-void moduleTemplate::onSerialMessage(std::string module, std::string setting, int data) {}
+void moduleTemplate::onSerialMessage   (std::string module, std::string setting, int data) {}
 
 
 void Hooks::start() {

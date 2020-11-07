@@ -4,17 +4,17 @@
 analogManager::analogManager() {
     pinMode(KEY_SIG, INPUT); 
 
-    adc->adc0->setResolution(8);
-    adc->adc0->setAveraging(ADC_AVERAGING);
-    adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
-    adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
+    adc->adc0->setResolution      (8);
+    adc->adc0->setAveraging       (ADC_AVERAGING);
+    adc->adc0->setConversionSpeed (ADC_CONVERSION_SPEED::MED_SPEED);
+    adc->adc0->setSamplingSpeed   (ADC_SAMPLING_SPEED::MED_SPEED  );
 
     adc->adc0->startContinuous(KEY_SIG);
 
-    adc->adc1->setResolution(8);
-    adc->adc1->setAveraging(ADC_AVERAGING);
-    adc->adc1->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
-    adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
+    adc->adc1->setResolution      (8);
+    adc->adc1->setAveraging       (ADC_AVERAGING);
+    adc->adc1->setConversionSpeed (ADC_CONVERSION_SPEED::MED_SPEED);
+    adc->adc1->setSamplingSpeed   (ADC_SAMPLING_SPEED  ::MED_SPEED);
     //Serial.print("val "); Serial.println(adc->adc0->analogReadContinuous());
 
 }
@@ -28,9 +28,9 @@ Multiplexer::Multiplexer(bool _input, bool _continuous, int _numOfMux, int _IOpi
     //analogReadResolution(8); // the lower the resolution the faster
     //analogReadAveraging(8); // the higher the number of measurements, the more consistent the signal but the slower it is
     continuous = _continuous;
-    numOfMux = _numOfMux;
-    IOpin = _IOpin;
-    input = _input;
+    numOfMux   = _numOfMux  ;
+    IOpin      = _IOpin     ;
+    input      = _input     ;
     vector<int> selectPins = MUX_SELECT_PINS;
     vector<int> enablePins = MUX_ENABLE_PINS;
     for (int i = 0; i < (int)selectPins.size(); i++) {

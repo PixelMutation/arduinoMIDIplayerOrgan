@@ -6,17 +6,17 @@
 
 class keyActuators {
     int keysPerManual = KEYS_PER_MANUAL;
-    int manuals = NUM_MANUALS;
-    std::vector<portExpander*> ports;    // stores expander objects (up to 2)
-    std::vector<int[2]> expanders; // stores the first and last expander for each manual
+    int manuals       = NUM_MANUALS    ;
+    std::vector<portExpander*  > ports    ; // stores expander objects (up to 2)
+    std::vector<int         [2]> expanders; // stores the first and last expander for each manual
 
     
 public:
     // test settings
-    int staccatoRepetitions = 2;
-    int staccatoDuration = 10; // ms
-    int delayDuration = 10; // ms
-    int legatoDuration = 20;
+    int staccatoRepetitions = 2 ;
+    int staccatoDuration    = 10; // ms
+    int delayDuration       = 10; // ms
+    int legatoDuration      = 20;
 
     keyActuators();
     void setState(int manual, int key, int state);
