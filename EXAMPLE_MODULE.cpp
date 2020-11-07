@@ -3,7 +3,7 @@
 
 // All hooks needed for this module are redefined here (uncomment what you need)
 
-exampleModule::exampleModule() { // The constructor must add the object to the vectors of hooks in use. uncomment / copy as needed.
+exampleModule::exampleModule() { // The constructor must add the object to the std::vectors of hooks in use. uncomment / copy as needed.
     hook.OnStart.push_back(this);
     hook.OnLoop.push_back(this);
 

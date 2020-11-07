@@ -8,13 +8,13 @@ class I2C_manager {
     TwoWire * wire;
     int port;
     int numDevices;
-    vector<int> devices;
+    std::vector<int> devices;
     int baseAddress;
 
 
 public:
     I2C_manager(int _port, int _numDevices, int _baseAddress);
-    void write(vector<int> bytes, int device);
+    void write(std::vector<int> bytes, int device);
     int read(int device);
 
 };
@@ -24,9 +24,9 @@ class portExpander { // set up for the MCP23017
     int port;
     int baseAddress = 0x20;
     I2C_manager expanders;
-    vector<int> regA;
-    vector<int> regB;
-
+    //void instantiateI2C();
+    std::vector<int> regA;
+    std::vector<int> regB;
 public:
     portExpander(int _port, int _numDevices);
     void write(int data, int device );

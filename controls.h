@@ -10,7 +10,7 @@ class controls : public moduleTemplate {
 
     int noOfReedSwitches = 1;
     int reedSwitchFirstPin = 3;
-    vector<vector<int>> reedSwitches;
+    std::vector<std::vector<int>> reedSwitches;
     int reedSwitch;
 
 public:

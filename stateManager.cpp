@@ -10,7 +10,7 @@ extern "C"{
 // stateManager.cpp contains the stateManager class definition. This class is used to store data about the positions of keys/stops and handle requests to move them.
 
 // constructor: initialises the object, taking the type ("keys" or "stops") and size (number of keys/stops) wanted and the set (which manual/stop division it is) then filling out the vectors with 0s
-stateManager::stateManager(string type, int size, int _polyphony, int _set) { // 
+stateManager::stateManager(std::string type, int size, int _polyphony, int _set) { // 
     itemsType = type;
     numberOfItems = size;
     itemBuffer.assign(numberOfItems, 0);            // sets the length of the vectors to the number of items, sets all to 0
@@ -92,7 +92,7 @@ void stateManager::polyphonyManager(int index, int dir) {
         for (int i = 0; i < (int)numberOfItems; i++) {
             if (systemActivatedItems[i] > 0) { // if the note is already active, change to the tally to show how recently it was activated
                 systemActivatedItems[i] += dir;
-                string direction;
+                std::string direction;
                 if (dir > 0) {direction = "increased"; }
                 else {direction = "decreased"; }
                 //cout << direction << " item " << i + 1<< " age by 1\n";
@@ -118,7 +118,7 @@ void stateManager::polyphonyManager(int index, int dir) {
 }
 
 // agent manager function - tracks whether a key has been physically pressed, and if this was done by the user
-void stateManager::agentManager(int index, string agent) { 
+void stateManager::agentManager(int index, std::string agent) { 
     if (agent == "system" and systemActivatedItems[index] == 0) {
         if (userActivatedItems[index] == 0) {
             activatedItems[index] = 0;
@@ -142,7 +142,7 @@ void stateManager::agentManager(int index, string agent) {
     
     
 // retrieves state of an item (key/stop) of state type: "system" (the 'age' of an active item in keypresses since the system pressed it), "buffer" (how many processes currently want that item activated), "user" (if the user pressed it) or "all" (overall state of item)
-int stateManager::getState(int itemNumber, string type) { // returns if the key is toggled on or off, either overall, by the user, or by the system
+int stateManager::getState(int itemNumber, std::string type) { // returns if the key is toggled on or off, either overall, by the user, or by the system
     if (itemNumber > numberOfItems or itemNumber < 1) {/*cout << "FAILED: item no. out of range!\n";*/ return 0; }
     int index = itemNumber - 1;
     if (type == "user") {
@@ -161,7 +161,7 @@ int stateManager::getState(int itemNumber, string type) { // returns if the key 
 }
 
 // retrieves vector of states for keys/stops of state type: "system" (if the system pressed it), "buffer" (the 'age' of an active item in keypresses since activation), "user" (if the user pressed it) or "all" (overall state of item)
-vector<int> stateManager::getStatesVector(string type, bool print, bool displayZero) {
+vector<int> stateManager::getStatesVector(std::string type, bool print, bool displayZero) {
     
     if (type == "user") {
         if (print) { printVector(userActivatedItems, displayZero); }
@@ -185,6 +185,42 @@ vector<int> stateManager::getStatesVector(string type, bool print, bool displayZ
 int stateManager::size() {
     return numberOfItems;
 }
+
+void printKeyStates(std::string option) {
+	if (option == "full") {
+		
+		Serial.print("\nkeys pressed by user  : ");    Keys.getStatesVector("user", true, false);
+		Serial.print("\nkeys pressed overall  : ");    Keys.getStatesVector("all", true, false);
+		Serial.print("\nkeys pressed by system: ");    Keys.getStatesVector("system", true, false);
+	} else if (option == "buffer") {
+		Serial.print("\nkey requests  buffer  : ");    Keys.getStatesVector("buffer", true, false);
+	} else if (option =="overall") {
+		Serial.print("\nkeys pressed overall  : ");    Keys.getStatesVector("all", true, false);
+	} else if (option == "user") {
+		Serial.print("\nkeys pressed by user  : ");    Keys.getStatesVector("user", true, false);
+	} else if (option == "system") {
+		Serial.print("\nkeys pressed by system: ");    Keys.getStatesVector("system", true, false);
+	} else if (option == "header") {
+		Serial.print("\n                        01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 ");
+	} 
+}
+
+void printStopStates(std::string option) {
+	if (option == "full") {
+		Serial.print("\n stops overall state: "); Stops.getStatesVector("all", true, true);
+		Serial.print("\n stops user state   : "); Stops.getStatesVector("user", true, true);
+		Serial.print("\n stops system state : "); Stops.getStatesVector("system", true, true);
+	} else if (option =="overall") {
+		Serial.print("\n stops overall state: "); Stops.getStatesVector("all", true, true);
+	} else if (option == "user") {
+		Serial.print("\n stops user state   : "); Stops.getStatesVector("user", true, true);
+	} else if (option == "system") {
+		Serial.print("\n stops system state : "); Stops.getStatesVector("system", true, true);
+	} else if (option == "header") {
+		Serial.print("\n                       01 02 03 04 05 06 07 08 09 10 11");
+	}
+}
+
 
 // create instance of class for keys and stops
 

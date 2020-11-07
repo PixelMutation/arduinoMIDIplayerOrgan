@@ -4,7 +4,7 @@
 #include "global_includes.h"
 
 
-void toggleItem(string type, int index, int state);
+void toggleItem(std::string type, int index, int state);
 
 
 

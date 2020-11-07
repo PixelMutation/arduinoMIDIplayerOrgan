@@ -5,9 +5,9 @@
 // called when any parameters (except arpeggio) are changed to update the active patterns
 void scale_manager::updatePatterns() {
     
-    vector<int> chordPattern {0,2,4,6}; // default is a seventh
+    std::vector<int> chordPattern {0,2,4,6}; // default is a seventh
     /*
-    // The following loop converts the string containing the chosen chord pattern into a vector
+    // The following loop converts the string containing the chosen chord pattern into a std::vector
     for (auto element : chordPatterns) { // linear search to find chosen chord pattern
         if (element[0] == chordType) {
             for (int i = 0; i < (int)element[1].size(); i++) {
@@ -18,8 +18,8 @@ void scale_manager::updatePatterns() {
         }
     }
 
-    vector<int> scalePattern {2,2,1,2,2,2,1}; // default is major scale
-    // The following loop converts the string containing the half steps patterns for the chosen scale into a single vector
+    std::vector<int> scalePattern {2,2,1,2,2,2,1}; // default is major scale
+    // The following loop converts the string containing the half steps patterns for the chosen scale into a single std::vector
     for (auto element : scalePatterns) { // linear search to find chosen chord pattern
         if (element[0] == scale) {
             for (int i = 0; i < element[1].size(); i++) {

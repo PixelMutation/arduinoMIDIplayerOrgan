@@ -7,15 +7,15 @@
 // stores the patterns used to construct scales, chords and arpeggios
 class scale_manager {
 	
-	vector<string> chordPatternNames { // stores the patterns (in terms of notes within a scale) of various supported scales
+	std::vector<std::string> chordPatternNames { // stores the patterns (in terms of notes within a scale) of various supported scales
 		"triad", "seventh"
 	};
-  vector<vector<int>> chordPatterns {
+  std::vector<std::vector<int>> chordPatterns {
     {0,2,4},
     {0,2,4,6}
   };
 	/*
-	vector<vector<string>> scalePatterns { // stores the patterns of various supported scales (in terms of a list of half and whole steps) https://www.musictheory.net/lessons https://en.wikipedia.org/wiki/List_of_musical_scales_and_modes https://gumroad.com/l/tldrmusic
+	std::vector<std::vector<std::string>> scalePatterns { // stores the patterns of various supported scales (in terms of a list of half and whole steps) https://www.musictheory.net/lessons https://en.wikipedia.org/wiki/List_of_musical_scales_and_modes https://gumroad.com/l/tldrmusic
 		//type						|half-steps|divisions|      Formula			   | Steps |	Semitones
 		// 12 divsions
 		{"chromatic",				"11111111111","12"},//										all
@@ -39,7 +39,7 @@ class scale_manager {
 	
 	};
   */
-	const string scalePatternNames[12] = {
+	const std::string scalePatternNames[12] = {
 		"chrom",  // chromatic
 		"dim",    // diminished
 		"maj",    // major
@@ -53,11 +53,11 @@ class scale_manager {
 		"dim7th", // diminished 7th
 		"dom7th"  // dominant 7th
 	};
-	const vector<vector<int>> scalePatterns  {
+	const std::vector<std::vector<int>> scalePatterns  {
 		{12,1,1,1,1,1,1,1,1,1,1,1}
 	};
 	
-	const string modes[7] = { // stores the names of the different major scale modes, indexed by their note offset from the first note of the scale
+	const std::string modes[7] = { // stores the names of the different major scale modes, indexed by their note offset from the first note of the scale
 		"ion",    // ionian
 		"dor",    // dorian
 		"phy",    // phygrian
@@ -66,14 +66,14 @@ class scale_manager {
 		"aeo",    // aeolian
 		"loc"     // locrian
 	};
-	vector<int> halfStepPattern; // stores the pattern of half steps from the current note 
+	std::vector<int> halfStepPattern; // stores the pattern of half steps from the current note 
 
 public:
 
 	bool active = true;
-	string scale = "major";
-	string mode = "ionian";
-	string chordType = "triad";
+	std::string scale = "major";
+	std::string mode = "ionian";
+	std::string chordType = "triad";
 	int delay = 10; // delay between notes (when > 0 causes arpeggio)
 
 	void updatePatterns();

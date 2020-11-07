@@ -37,7 +37,7 @@ public:
         };
         manuals();
         int read(int manual, int key);
-        void calibrate(string mode);
+        void calibrate(std::string mode);
     };
 
     class stops : public sensorsTemplate{

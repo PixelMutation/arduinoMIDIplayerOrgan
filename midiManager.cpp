@@ -1,6 +1,6 @@
 #include "midiManager.h"
 
-// constructor (int middleCpos, vector<int> channels_) 
+// constructor (int middleCpos, std::vector<int> channels_) 
 midiManager::midiManager() {
 	midi_to_key_offset = MIDImiddleCpos - keysMiddleCpos; //this offset is used when converting between MIDI key numbers and real key numbers
 
@@ -174,7 +174,7 @@ void midiManager::MIDIsendKey(int keyNumber, int state, int velocity, int channe
 
 // converts current stop positions to a MIDI instrument and sends a MIDI program change message with this
 void midiManager::stops_to_MIDI() {
-	vector<int> currentStops = Stops.getStatesVector("all"); // gets current stop positions
+	std::vector<int> currentStops = Stops.getStatesVector("all"); // gets current stop positions
 	// linear search through presets to find the preset matching current stop config
 	for (int i = 0; i < 127; i++) { 
 		bool foundPreset = true;			// defaults to true

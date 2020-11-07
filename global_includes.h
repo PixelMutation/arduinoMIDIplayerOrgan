@@ -13,8 +13,8 @@
 #include "moduleManager.h"
 #include "utility.h"
 
-using namespace std; //removes need for std:: prefix for standard library functions and classes
-
+//using namespace std; //removes need for std:: prefix for standard library functions and classes
+//using std::vector;
 
 
 

@@ -78,7 +78,7 @@ int sensors::controlPanels::readDigital(int pin) {
 
 
 // runs through key calibration
-void sensors::manuals::calibrate(string mode = "all") {
+void sensors::manuals::calibrate(std::string mode = "all") {
     for (int x = 0; x < NUM_MANUALS; x++) {
         for (int y = 0; y < KEYS_PER_MANUAL; y++) {
             if (mode == "top" or mode == "all") {

@@ -19,7 +19,7 @@ void scheduler::checkSchedule() {
             //Serial.println("\nchecking item");
             if (Keys.schedule[0][0] <= durationFromStart) {// if the time since the start is equal to or greater than the scheduled time since start, press the scheduled key 
                 //cout << "scheduled item activated\nscheduleFirstItem: ";
-                //printVector(Keys.schedule[0]);
+                //printstd::vector(Keys.schedule[0]);
                 Keys.requestActuatorState((int)(Keys.schedule[0][1]), (int)(Keys.schedule[0][2]));
                 Keys.schedule.pop_front(); // deletes the element as it has been dealt with
                 printKeyStates("system");

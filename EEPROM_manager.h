@@ -8,8 +8,8 @@
 
 
 class EEPROM_manager : public moduleTemplate{
-    vector<vector<int>> blockAddresses; // stores the start and end of the addresses of EEPROM 'blocks'
-    vector<vector<int>> blockDimensions;
+    std::vector<std::vector<int>> blockAddresses; // stores the start and end of the addresses of EEPROM 'blocks'
+    std::vector<std::vector<int>> blockDimensions;
     int nullVal = 0; // used as a reference to return (e.g. if address out of bounds))
 
     
@@ -18,7 +18,7 @@ class EEPROM_manager : public moduleTemplate{
     int index(int x, int y, int blockNumber);
     int index(int x, int y, int z, int blockNumber);
 
-    void constructBlock(vector<int> dimensions);
+    void constructBlock(std::vector<int> dimensions);
     int fetch(int address); // fetches the value from the version stored in EEPROM
     void write(int address, int data); // saves to the version stored in EEPROM
 public:
@@ -29,20 +29,20 @@ public:
     class block1d {
         public:
         int blockNumber;
-        vector<int> data;
+        std::vector<int> data;
     };
 
     class block2d {
         public:
         int blockNumber;
         
-        vector<vector<int>> data;
+        std::vector<std::vector<int>> data;
     };
     class block3d {
         public:
         int blockNumber;
         
-        vector<vector<vector<int>>> data;
+        std::vector<std::vector<std::vector<int>>> data;
     };
 
     block1d& newBlock(int x);
@@ -55,9 +55,9 @@ public:
     void save(); // saves values from memory into EEPROM
     void clear(); // clears of values from EEPROM
 protected:
-    vector<block1d> blocks1d; // stores the memory block objects
-    vector<block2d> blocks2d; // stores the memory block objects
-    vector<block3d> blocks3d; // stores the memory block objects
+    std::vector<block1d> blocks1d; // stores the memory block objects
+    std::vector<block2d> blocks2d; // stores the memory block objects
+    std::vector<block3d> blocks3d; // stores the memory block objects
     
 };
 
