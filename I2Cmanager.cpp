@@ -1,6 +1,6 @@
 #include "I2Cmanager.h"
 
-I2C_manager::I2C_manager (int _port, int _numDevices, int _baseAddress) {
+I2C_manager::I2C_manager(int _port, int _numDevices, int _baseAddress) {
     port = _port;
     numDevices = _numDevices;
     baseAddress = _baseAddress;
@@ -33,21 +33,27 @@ void I2C_manager::write(vector<int> bytes, int device) {
 int I2C_manager::read(int device) {
     if (wire->available() > 0) {
         return wire->read();
+    } else {
+        return 0;
     }
 }
 
-portExpander::portExpander(int _port, int _numDevices) {
+portExpander::portExpander(int _port, int _numDevices) : expanders(_port,_numDevices,baseAddress) {
     port = _port;
     numDevices = _numDevices;
-    I2C_manager expanders(port,numDevices,baseAddress);
     for (int i = 0; i < numDevices; i++) { 
         expanders.write({0x00,0x00},i); // A register set to output
         expanders.write({0x01,0x00},i); // B register set to output
         regA.push_back(0); // sets stored pin states to 0
         regB.push_back(0);
     }
+    //instantiateI2C(); // instantiates the "expanders" object
 }
-
+/*
+void portExpander::instantiateI2C() 
+    : expanders(port,numDevices,baseAddress)
+{}
+*/
 void portExpander::write(int data, int device) {
     expanders.write({data},device);
 }
@@ -60,7 +66,7 @@ void portExpander::writeToPin(int pin, int state, int expander) {
         expanders.write({reg},regA[expander]); // writes byte to register
     } else {
         reg = 0x13;
-        regB[expander] ^= (-state ^ regA[expander]) & (1UL << pin-8);
+        regB[expander] ^= (-state ^ regA[expander]) & (1UL << (pin-8));
         expanders.write({reg},regA[expander]);
     }
 }
