@@ -4,13 +4,12 @@
 #define UTILITY_H
 
 #include "global_includes.h"
-#include "stateManager.h"
 
 
-void printVector(vector<int> vector, bool displayZero = true);
-void printVector(deque<double> vector, bool displayZero = true);
-void printKeyStates(string option = "full");
-void printStopStates(string option = "full");
+
+void printVector(std::vector<int> vector, bool displayZero = true);
+void printVector(std::deque<double> vector, bool displayZero = true);
+
 
 void awaitConfirmation();
 
