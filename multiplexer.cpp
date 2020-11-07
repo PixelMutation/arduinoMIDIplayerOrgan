@@ -33,10 +33,10 @@ Multiplexer::Multiplexer(bool _input, bool _continuous, int _numOfMux, int _IOpi
     input = _input;
     vector<int> selectPins = MUX_SELECT_PINS;
     vector<int> enablePins = MUX_ENABLE_PINS;
-    for (int i = 0; i < selectPins.size(); i++) {
+    for (int i = 0; i < (int)selectPins.size(); i++) {
         pinMode(selectPins[i], OUTPUT);
     }
-    for (int i = 0; i < enablePins.size(); i++) {
+    for (int i = 0; i < (int)enablePins.size(); i++) {
         pinMode(enablePins[i], OUTPUT);
     }
     if (input) {
@@ -49,7 +49,7 @@ Multiplexer::Multiplexer(bool _input, bool _continuous, int _numOfMux, int _IOpi
 // sets 4 pins to represent a 4 bit binary value
 void Multiplexer::writeBinary(vector<int> pins, int value) {
     vector<int> binarySelect;
-    for (int i = 0; i < pins.size(); i++) { // for each pin, set the binary state to select the mux output https://learn.sparkfun.com/tutorials/multiplexer-breakout-hookup-guide/all
+    for (int i = 0; i < (int)pins.size(); i++) { // for each pin, set the binary state to select the mux output https://learn.sparkfun.com/tutorials/multiplexer-breakout-hookup-guide/all
         if (value & (1<<i)) {
             digitalWrite(pins[i], HIGH);
             binarySelect[i] = 1;
