@@ -45,6 +45,16 @@ void setup() {
   }
   */
 
+
+
+  while (true) {
+    KeyActuators.setState(0,0,1);
+    delay(100);
+    KeyActuators.setState(0,0,1);
+  }
+  
+
+
   // Calls all module functions set to run on startup
   hook.start();   
 }
