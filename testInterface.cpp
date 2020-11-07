@@ -29,7 +29,7 @@ void testInterface() {
                         printKeyStates();
 
                         while (! Keys.schedule.empty()) {
-                            checkSchedule();
+                            //checkSchedule();
                             delay(200);
                             //this_thread::sleep_for(chrono::milliseconds(200));
                         }
@@ -75,7 +75,7 @@ void testInterface() {
                 Serial.println("");
 
                 while (! Keys.schedule.empty()) {
-                    checkSchedule();
+                    //checkSchedule();
                     //this_thread::sleep_for(chrono::milliseconds(200));
                     delay(200);
                 }
