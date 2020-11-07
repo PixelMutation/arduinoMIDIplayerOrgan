@@ -19,7 +19,7 @@ class EEPROM_manager : public moduleTemplate{
     int index(int x, int y, int z, int blockNumber);
 
     void constructBlock(std::vector<int> dimensions);
-    int  fetch(int address); // fetches the value from the version stored in EEPROM
+    int  fetch(int address);           // fetches the value from the version stored in EEPROM
     void write(int address, int data); // saves to the version stored in EEPROM
 public:
     

@@ -70,9 +70,9 @@ class midiManager : public moduleTemplate { // handles MIDI I/O
 	
 	std::vector<std::vector<int>> stopPresets;// a 2D std::vector table containing all the possible reed stop configurations indexed by their MIDI instrument assignment
 public:
-	std::vector<int> channels{ 0,1,2,3,4 };// the MIDI channels the system responds to
-  int midi_to_key_offset;			// offset between MIDI key number and real key number
-	int keysMiddleCpos = 32;		// the key number (index starting at 0) of middle C on your organ
+	std::vector<int> channels{ 0,1,2,3,4 };  // the MIDI channels the system responds to
+  int midi_to_key_offset;			             // offset between MIDI key number and real key number
+	int keysMiddleCpos = 32;		             // the key number (index starting at 0) of middle C on your organ
 
 	// Special stops positions
 	int voxHumanaPos = 5;			// stop number of the vox humana (-1 if not present)
@@ -85,8 +85,8 @@ public:
   
 	void MIDIreceive(int status , int data1 , int data2 );	// checks for and handles MIDI input
 	void MIDIsendKey(int keyNumber, int state, int velocity = 63, int channel = -1);				// sends the required key state over MIDI
-	void stops_to_MIDI();						// converts current stop positions to a MIDI instrument and sends a MIDI program change message with this
-	void MIDI_to_stop(int instrumentNumber);	// converts MIDI instrument program change messages to stop positions and moves the stops to those positions
+	void stops_to_MIDI();						              // converts current stop positions to a MIDI instrument and sends a MIDI program change message with this
+	void MIDI_to_stop(int instrumentNumber);	    // converts MIDI instrument program change messages to stop positions and moves the stops to those positions
 };
 
 extern midiManager MIDI;

@@ -70,10 +70,10 @@ int Multiplexer::muxRead(int index, bool analog, bool pullup, int microsecondDel
     int multiplexer = index/16; // each has 16 outputs so this finds which multiplexer is needed
     setEnablePins(multiplexer); // enables the chosen multiplexer
     int selectNumber = index - 16 * multiplexer; // the number (0-15) of the output on the corresponding multiplexer
-    writeBinary(MUX_SELECT_PINS,selectNumber); // sets mux to point to selectNumber
-    if (input) { // sanity check: output mux cannot act as input
+    writeBinary(MUX_SELECT_PINS,selectNumber);   // sets mux to point to selectNumber
+    if (input) {                      // sanity check: output mux cannot act as input
         if (multiplexer < numOfMux) { // sanity check!
-            if (pullup) { // if it is a pullup sensor
+            if (pullup) {             // if it is a pullup sensor
                 pinMode(IOpin, INPUT_PULLUP);
             } else {
                 pinMode(IOpin, INPUT);

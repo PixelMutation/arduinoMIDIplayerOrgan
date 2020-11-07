@@ -38,7 +38,7 @@ void stateManager::requestActuatorState(int itemNumber, int state) {
         }
 
     }
-    else {                                        // if request is to turn key on
+    else {                                          // if request is to turn key on
         itemBuffer[index] += 1;
         if (itemBuffer[index] == 1) {               // if it is at 1, then it must have been at 0 so the key or stop needs to be toggled on.
             toggleItem(itemsType, itemNumber, 1);   // toggles key on
