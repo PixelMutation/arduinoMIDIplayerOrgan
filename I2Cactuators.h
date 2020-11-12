@@ -8,7 +8,6 @@ class keyActuators {
     int keysPerManual = KEYS_PER_MANUAL;
     int manuals       = NUM_MANUALS    ;
     std::vector<portExpander*  > ports    ; // stores expander objects (up to 2)
-    std::vector<int         [2]> expanders; // stores the first and last expander for each manual
     std::vector<std::vector<int>> expanders; // stores the first and last expander for each manual
 
     
