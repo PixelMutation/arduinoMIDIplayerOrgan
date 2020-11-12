@@ -22,7 +22,7 @@ public:
     void onLoop();
     class manuals : public sensorsTemplate {
         int muxPerManual; // the number of multiplexers per manual
-        vector<int[2]> multiplexers; // the first and last multiplexer of each manual
+        vector<vector<int>> multiplexers; // the first and last multiplexer of each manual
         int uncertainty; // read values are compared to stored value +- this 
         int calibrationDelay = 500; // delay after keypress before measurement taken (ms)
     public:
