@@ -9,7 +9,6 @@ class keyActuators {
     int manuals       = NUM_MANUALS    ;
     std::vector<portExpander*  > ports    ; // stores expander objects (up to 2)
     std::vector<int         [2]> expanders; // stores the first and last expander for each manual
-
     
 public:
     // test settings
@@ -28,11 +27,12 @@ class stopActuators {
     std::vector<int> divisions = DIVISIONS;
 public:
     stopActuators();
-    void setState(int manual, int key, int state);
+    void setState(int division, int key, int state);
     void test();
 };
 
 
 extern keyActuators KeyActuators;
+extern stopActuators StopActuators;
 
 #endif

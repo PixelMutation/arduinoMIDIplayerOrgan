@@ -63,5 +63,7 @@ void keyActuators::test(std::string mode="legato") {
         }
     }
 }
+//TODO write stop actuators methods
 
 keyActuators KeyActuators;
+stopActuators StopActuators;
