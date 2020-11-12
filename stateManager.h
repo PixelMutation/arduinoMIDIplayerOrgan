@@ -6,9 +6,43 @@
 #include "global_includes.h"
 #include "utility.h"
 #include "midiManager.h"
-#include "toggleItem.h"
+#include "scheduler.h"
+#include "I2Cactuators.h"
 
+class stateManagerTemplate : public schedule {
+protected:
+	std::vector<int> sets; 			// stores the size of each set (manual or stop division)
+	std::vector<vector<int>> requestBuffer; // a buffer of requests to activate / deactivate a stop or key
+	std::vector<vector<int>> actuationState;// a list of the actuators and their state
+	virtual void polyphonyManager (int set, int index,int state);
+	virtual void actuate          (int set, int index,int state); // used to call the actuation method
+	
+	void onSchedule(std::vector<int> params); // an override of the schedule method, called when a scheduled event is activated
+public:
 
+	std::deque<std::vector<unsigned long>> schedule; // a deque containing the schedule for when keys should be pressed if a delay is wanted
+	void requestActuatorState(int set, int index, int state);
+	void scheduleActuatorState (int set, int index, int state, int delay);
+	int getState(int set, int index, std::string type = "all");
+	std::vector<int> getStatesVector(std::string type, bool print = false, bool displayZero = true);
+};
+
+class keyStateManager : public stateManagerTemplate{
+	void polyphonyManager (int set, int index,int state);
+	void actuate          (int set, int index,int state); 
+public:
+	keyStateManager();
+};
+
+class stopStateManager : public stateManagerTemplate{
+	void polyphonyManager (int set, int index,int state); // this does nothing, since stops have no polyphony
+	void actuate          (int set, int index,int state);
+public:
+	stopStateManager();
+		
+};
+
+/*
 class stateManager {
 	std::string itemsType; // whether the object is the keys or the stops
 	int polyphony;         // stores the max number of notes that can be held at once
@@ -22,11 +56,12 @@ class stateManager {
 
 	void polyphonyManager(int index, int dir);
 	void agentManager(int index, std::string agent = "user");
+	
 public:
 	std::deque<std::vector<unsigned long>> schedule; // a deque containing the schedule for when keys should be pressed if a delay is wanted
 	//deque<deque<double>> schedule;
 	//std::chrono::time_point<std::chrono::high_resolution_clock> progStartTime; // datatype found at https://en.cppreference.com/w/cpp/chrono/high_resolution_clock/now
-	unsigned long progStartTime;
+	
 
 	stateManager(std::string type, int size, int polyphony_, int _set);
 	void requestActuatorState(int itemNumber, int state);
@@ -44,6 +79,9 @@ void printStopStates(std::string option = "full");
 extern stateManager Keys;
 extern stateManager Stops;
 
+*/
 
+extern keyStateManager KeyStateManager;
+extern stopStateManager StopStateManager;
 
 #endif

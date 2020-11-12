@@ -1,12 +1,99 @@
-
-
-
 #include "stateManager.h"
-
+/*
 extern "C"{
   __attribute__((weak)) int __exidx_start(){ return -1;}
   __attribute__((weak)) int __exidx_end(){ return -1; }
 }
+*/
+
+/* ---------------------- GENERAL STATE MANAGER METHODS --------------------- */
+
+// request system state function - when something wants a key or stop on or off, it calls this
+void stateManagerTemplate::requestActuatorState(int set, int index, int state) {
+    if (index+1 > sets[set] or index+1 < 1) { cout << "FAILED: item no. out of range!\n"; return; }
+    if (state == 0) {                           // if request is to turn key off
+        if (requestBuffer[set][index] > 0) {         // if it isn't already off
+            requestBuffer[set][index] -= 1;
+            if (requestBuffer[set][index] == 0) {    // if it is at 0, then the key or stop needs to be toggled off.
+                actuate(set,index,0);           // toggles key off
+                polyphonyManager(set,index 0);  // runs polyphony manager, reducing tallies by 1
+            }
+        }
+    }
+    else {                                // if request is to turn key on
+        requestBuffer[set][index] += 1;
+        if (requestBuffer[set][index] == 1) {  // if it is at 1, then it must have been at 0 so the key or stop needs to be toggled on.
+            actuate(set,index,1);         // toggles key on
+            polyphonyManager(index, 1);   // runs polyphony manager, increasing tallies by 1
+        }
+    }
+}
+// run when the scheduler reaches an actuation event
+void stateManagerTemplate::onSchedule(std::vector<int> params) {
+    requestActuatorState(params[0],params[1],params[2]);
+}
+// request system state function - when something wants a key or stop on or off after a specific delay, it calls this
+void stateManagerTemplate::scheduleActuatorState(int set, int index, int state, int delay) {
+    if (index+1 > sets[set] or index < 1) { cout << "FAILED: item no. out of range!\n"; return; }
+    unsigned long currentTime = millis();
+    unsigned long delayDurationFromStart = currentTime - scheduler.fetchStartTime();
+    scheduler.addToSchedule(this, delay, {set,index,state});
+}
+
+/* ------------------------ KEY STATE MANAGER METHODS ----------------------- */
+
+
+keyStateManager::keyStateManager() {
+    for (int i = 0; i < NUM_MANUALS; i++) {
+        sets[i] = KEYS_PER_MANUAL;
+    }
+}
+// when an actuator is activated, this works out if the polyphony is exceeded and deactivates the oldest actuator
+void keyStateManager::polyphonyManager(int set, int index, int state) {
+    int dir;
+    if (state == 1) { // whether to add or subtract from the polyphony
+        dir = 1;
+    } else {
+        dir = -1;
+    }
+    actuationState[set][index] = 0; //resets the tally for the current key to stop the loop adding to it
+    for (int i = 0; i < sets[set]; i++) { // for each item in the set
+        if (actuationState[set][i] > 0) { // if the note is already active, change to the tally to show how recently it was activated
+            actuationState[set][i] += dir;
+        }
+        if (actuationState[set][i] > POLYPHONY) { // if the tally exceeds the polyphony, that note gets deactivated
+            actuationState[set][i] = 0;
+            requestBuffer[set][i] = 0;              // clears the buffer for that item as it is forced off
+        }
+    }
+    if (dir == 1) { // if the system activates the item, it becomes the most recently activated. If the system deactivates the item, its state stays at 0
+        actuationState[set][index] = 1;
+    }
+}
+// tells the actuator module to actuate the key
+void keyStateManager::actuate(int set, int index,int state) {
+    KeyActuators.setState(set,index,state);
+}
+
+/* ----------------------- STOP STATE MANAGER METHODS ----------------------- */
+stopStateManager::stopStateManager() {
+    sets = DIVISIONS;
+}
+// tells the actuator module to actuate the key
+void keyStateManager::actuate(int set, int index,int state) {
+    StopActuators.setState(set,index,state);
+}
+// tells the actuator module to actuate the stop
+void keyStateManager::actuate(int set, int index,int state) {
+    StopActuators.setState(set,index,state);
+}
+
+
+
+
+/* ------------------------------- DEPRECATED ------------------------------- */
+
+/*
 // stateManager.cpp contains the stateManager class definition. This class is used to store data about the positions of keys/stops and handle requests to move them.
 
 // constructor: initialises the object, taking the type ("keys" or "stops") and size (number of keys/stops) wanted and the set (which manual/stop division it is) then filling out the vectors with 0s
@@ -96,14 +183,14 @@ void stateManager::polyphonyManager(int index, int dir) {
                 if (dir > 0) {direction = "increased"; }
                 else {direction = "decreased"; }
                 //cout << direction << " item " << i + 1<< " age by 1\n";
-                agentManager(i, "system");
+                //agentManager(i, "system");
             }
             if (systemActivatedItems[i] > polyphony) { // if the tally exceeds the polyphony, that note gets deactivated
                 //cout << "Polyphony exceeded, deactivated item " << i + 1 << "\n";
                 systemActivatedItems[i] = 0;
-                toggleItem(itemsType, i, 0);    // deactivates the note
+                //toggleItem(itemsType, i, 0);    // deactivates the note
                 itemBuffer[i] = 0;              // clears the buffer for that item as it is forced off
-                agentManager(i, "system");
+                //agentManager(i, "system");
             }
         }
 
@@ -140,10 +227,10 @@ void stateManager::agentManager(int index, std::string agent) {
     }
 }
     
-    
+// TODO modify getState and getStatesVector methods for new setup   
 // retrieves state of an item (key/stop) of state type: "system" (the 'age' of an active item in keypresses since the system pressed it), "buffer" (how many processes currently want that item activated), "user" (if the user pressed it) or "all" (overall state of item)
 int stateManager::getState(int itemNumber, std::string type) { // returns if the key is toggled on or off, either overall, by the user, or by the system
-    if (itemNumber > numberOfItems or itemNumber < 1) {/*cout << "FAILED: item no. out of range!\n";*/ return 0; }
+    if (itemNumber > numberOfItems or itemNumber < 1) {cout << "FAILED: item no. out of range!\n"; return 0; }
     int index = itemNumber - 1;
     if (type == "user") {
         return userActivatedItems[index];   // 0 if off, 1 if on
@@ -180,11 +267,12 @@ vector<int> stateManager::getStatesVector(std::string type, bool print, bool dis
         return activatedItems;
     }
 }
-   
+
 //returns number of items (keys/stops) in the class
 int stateManager::size() {
     return numberOfItems;
 }
+
 
 void printKeyStates(std::string option) {
 	if (option == "full") {
@@ -220,12 +308,9 @@ void printStopStates(std::string option) {
 		Serial.print("\n                       01 02 03 04 05 06 07 08 09 10 11");
 	}
 }
-
+*/
 
 // create instance of class for keys and stops
 
-//stateManager Keys("keys", KEYS_PER_MANUAL, POLYPHONY);
-
-
-
-//stateManager Stops("stops", NUM_STOPS, NUM_STOPS);
+keyStateManager KeyStateManager;
+stopStateManager StopStateManager;
