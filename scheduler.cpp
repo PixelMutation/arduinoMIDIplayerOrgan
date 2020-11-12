@@ -1,36 +1,44 @@
 #include "scheduler.h"
 
 
-scheduler::scheduler() {
+scheduleManager::scheduleManager() {
+    progStartTime == millis();
     hook.OnLoop.push_back(this);
 }
 
-void scheduler::checkSchedule() {
-    unsigned long durationFromStart = millis() - Keys.progStartTime;
-    //auto currentTime = chrono::high_resolution_clock::now(); // using std::chrono answer from https://stackoverflow.com/questions/1735307/c-keeping-track-of-how-many-seconds-has-passed-since-start-of-program
-    //using the code finding real time difference in double form at https://en.cppreference.com/w/cpp/chrono/c/clock 
-    //double durationFromStart = std::chrono::duration<double, std::milli>(currentTime - Keys.progStartTime).count();
-
-    if (! Keys.schedule.empty()) {
-        //cout << "\nitem in schedule";
-
-        for (int i = 0; i < (int)Keys.schedule.size(); i++) { // checks each element in the schedule
-            //cout << "\nchecking item in schedule";
-            //Serial.println("\nchecking item");
-            if (Keys.schedule[0][0] <= durationFromStart) {// if the time since the start is equal to or greater than the scheduled time since start, press the scheduled key 
-                //cout << "scheduled item activated\nscheduleFirstItem: ";
-                //printstd::vector(Keys.schedule[0]);
-                Keys.requestActuatorState((int)(Keys.schedule[0][1]), (int)(Keys.schedule[0][2]));
-                Keys.schedule.pop_front(); // deletes the element as it has been dealt with
-                printKeyStates("system");
+// checks the schedule and calls scheduled event methods 
+void scheduleManager::checkSchedule() {
+    unsigned long currentTime = millis() - progStartTime; // calculates current time
+    if (! scheduleMethod.empty()){ 
+        vector<int> events; // since the schedule is not in order, this stores which events have passed
+        for (int i=0; i < (int)scheduleMethod.size(); i++) {            // for each event in the schedule
+            if (scheduleTime[i] <= currentTime) {                       // if current time is equal to or past the event time
+                scheduleMethod[i]->onSchedule(scheduleParameters[i]);   // call the event's method//
+                events.push_back(i);
+            } else {
+                break; // if current time is less than the scheduled time, there is no point checking the rest
             }
-
+        }
+        for (int i=0; i < (int)events.size(); i ++) {   // erases all events that have been passed
+            scheduleMethod    .erase(events[i]);
+            scheduleTime      .erase(events[i]);
+            scheduleParameters.erase(events[i]);
         }
     }
 }
-   
-void scheduler::onLoop() {
+
+unsigned long scheduleManager::fetchStartTime() {
+    return progStartTime;
+}
+// adds the event to the back of the schedule
+void scheduleManager::addToSchedule(schedule *method, unsigned long time, std::vector<int> params) {
+    scheduleMethod.push_back(method);       // 
+    scheduleTime.push_back(time);           //
+    scheduleParameters.push_back(params);   //
+}
+
+void scheduleManager::onLoop() {
     checkSchedule();
 }
 
-scheduler Scheduler;
+scheduleManager scheduler;
