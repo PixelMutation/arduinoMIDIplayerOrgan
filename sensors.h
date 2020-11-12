@@ -21,10 +21,10 @@ public:
     sensors();
     void onLoop();
     class manuals : public sensorsTemplate {
-        int muxPerManual;            // the number of multiplexers per manual
-        vector<int[2]> multiplexers; // the first and last multiplexer of each manual
-        int uncertainty;             // read values are compared to stored value +- this 
-        int calibrationDelay = 500;  // delay after keypress before measurement taken (ms)
+        int muxPerManual; // the number of multiplexers per manual
+        vector<vector<int>> multiplexers; // the first and last multiplexer of each manual
+        int uncertainty; // read values are compared to stored value +- this 
+        int calibrationDelay = 500; // delay after keypress before measurement taken (ms)
     public:
         
         EEPROM_manager::block3d& calibratedPositions = eepromManager.newBlock(NUM_MANUALS,3,KEYS_PER_MANUAL);

@@ -9,7 +9,8 @@
 // HEADER FILES FOR CORE MODULES (probably don't deactivate any!):
 //#include "main.h"
 
-#include "configuration.h"   // GO HERE FOR GENERAL SETUP
+
+#include "configuration.h" // GO HERE FOR GENERAL SETUP
 
 /* -------------------------------------------------------------------------- */
 /*                                MAIN MODULES                                */
@@ -22,7 +23,7 @@
 #include "scheduler.h"       // tracks time and activates any scheduled events when the time is right
 
 #include "controls.h"        // just for testing various analog and digital input devices
-#include "toggleItem.h"      // sends signal to move keys or stops
+//#include "toggleItem.h"      // sends signal to move keys or stops
 //include "recieveSignal.h"  // recieves signals from the sensors / switches
 
 #include "utility.h"         // utility functions, such as printing vectors to console
@@ -31,8 +32,14 @@
 #include "moduleManager.h"   // Movement commands are sent through here so plugin effects can be applied
 #include "EEPROM_manager.h"  // Stores a live version of EEPROM in memory in the form of 'blocks' which are objects with the appropriate data structure for what is needed.
 
+#include "scheduler.h"       // tracks time and activates any scheduled events when the time is right
+#include "controls.h"        // just for testing various analog and digital input devices
+//include "recieveSignal.h"  // recieves signals from the sensors / switches
+//#include "userInterface.h" // allows user to configure settings for core modules and plugins
 #include "I2Cmanager.h"      // allows easy use of I2C ports and I/O expanders
 #include "I2Cactuators.h"    // sends signals to I2C actuators
+
+#include "utility.h"         // utility functions, such as printing vectors to console
 #include "global_includes.h" // stores includes for the globally required libraries
 
 /* -------------------------------------------------------------------------- */
@@ -50,9 +57,10 @@
 
 
 
-
+/*
 
 vector<stateManager*> manuals;
 void instantiateModules();
+*/
 
 #endif
