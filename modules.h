@@ -16,17 +16,21 @@
 /* -------------------------------------------------------------------------- */
 
 #include "multiplexer.h"     // controls the multiplexers used by sensors
+#include "sensors.h"         // manages the sensors in the program
+
+#include "stateManager.h"    // class storing keys or stops
 #include "scheduler.h"       // tracks time and activates any scheduled events when the time is right
+
 #include "controls.h"        // just for testing various analog and digital input devices
 #include "toggleItem.h"      // sends signal to move keys or stops
 //include "recieveSignal.h"  // recieves signals from the sensors / switches
-#include "stateManager.h"    // class storing keys or stops
+
 #include "utility.h"         // utility functions, such as printing vectors to console
 #include "midiManager.h"     // manages MIDI I/O and MIDI instruments
 //#include "userInterface.h" allows user to configure settings for core modules and plugins
 #include "moduleManager.h"   // Movement commands are sent through here so plugin effects can be applied
 #include "EEPROM_manager.h"  // Stores a live version of EEPROM in memory in the form of 'blocks' which are objects with the appropriate data structure for what is needed.
-#include "sensors.h"         // manages the sensors in the program
+
 #include "I2Cmanager.h"      // allows easy use of I2C ports and I/O expanders
 #include "I2Cactuators.h"    // sends signals to I2C actuators
 #include "global_includes.h" // stores includes for the globally required libraries
