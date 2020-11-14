@@ -24,16 +24,17 @@ void testInterface() {
                         Serial.println("Choose state: 0/1: ");
                         cin >> state;
                         Serial.println("");
-                        Keys.setSensorState(number, state);
-                        printKeyStates("header");
-                        printKeyStates();
-
+                        //KeyStateManager.setSensorState(number, state);
+                        //printKeyStates("header");
+                        //printKeyStates();
+                        /*
                         while (! Keys.schedule.empty()) {
                             //checkSchedule();
                             delay(200);
                             //this_thread::sleep_for(chrono::milliseconds(200));
                         }
-                        Serial.println("keys pressed overall  : ");    Keys.getStatesVector("all", true, true);
+                        */
+                        Serial.println("keys pressed overall  : ");    //Keys.getStatesVector("all", true, true);
 
                         Serial.println("Choose item number (1-61) or -1 to stop: ");
                         cin >> number;
@@ -47,10 +48,10 @@ void testInterface() {
                         Serial.println("Choose state: 0/1: ");
                         cin >> state;
                         Serial.println("");
-                        Stops.setSensorState(number, state);
+                        //StopStateManager.setSensorState(number, state);
 
-                        printStopStates("header");
-                        printKeyStates();
+                        //printStopStates("header");
+                        //printKeyStates();
 
                         Serial.print("Choose item number (1-61) or -1 to stop: ");
                         cin >> number;
@@ -70,16 +71,17 @@ void testInterface() {
                 
                 Serial.println("type key number: ");
                 cin >> key;
-                Keys.setSensorState(key, 1);
-                printKeyStates("overall");
+                //KeyStateManager.setSensorState(key, 1);
+                //printKeyStates("overall");
                 Serial.println("");
-
+                /*
                 while (! Keys.schedule.empty()) {
                     //checkSchedule();
                     //this_thread::sleep_for(chrono::milliseconds(200));
                     delay(200);
                 }
-                printKeyStates("overall");
+                */
+                //printKeyStates("overall");
 
             }
             Serial.println("Choose testing options: 1. Simulate key / stop presses 2. Test key scheduling 3. Simulate MIDI input 4. Test hall sensors or -1. to end: ");
@@ -109,14 +111,14 @@ void testInterface() {
 
 
                     MIDI.MIDIreceive(status, data1, data2);
-                    printStopStates("overall");
-                    printKeyStates("system");
+                    //printStopStates("overall");
+                    //printKeyStates("system");
                     break;
                 case 2:
                     cout << "Type instrument number (0-127): ";
                     cin >> choice;
                     MIDI.MIDIreceive(0xC1, choice, 0);
-                    printStopStates("overall");
+                    //printStopStates("overall");
                     break;
                 }
                 
@@ -133,5 +135,5 @@ void testInterface() {
             break;
         }
     }
-    printKeyStates("header");
+    //printKeyStates("header");
 }
