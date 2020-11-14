@@ -6,6 +6,9 @@ scheduleManager::scheduleManager() {
     hook.OnLoop.push_back(this);
 }
 
+
+
+
 // checks the schedule and calls scheduled event methods 
 void scheduleManager::checkSchedule() {
     unsigned long currentTime = millis() - progStartTime; // calculates current time
@@ -20,9 +23,9 @@ void scheduleManager::checkSchedule() {
             }
         }
         for (int i=0; i < (int)events.size(); i ++) {   // erases all events that have been passed
-            scheduleMethod    .erase(events[i]);
-            scheduleTime      .erase(events[i]);
-            scheduleParameters.erase(events[i]);
+            scheduleMethod     .erase(scheduleMethod    .begin() + events[i]);
+            scheduleTime       .erase(scheduleTime      .begin() + events[i]);
+            scheduleParameters .erase(scheduleParameters.begin() + events[i]);
         }
     }
 }
