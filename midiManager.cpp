@@ -1,5 +1,6 @@
 #include "midiManager.h"
 
+//TODO make this code handle the different stop divisions
 // constructor (int middleCpos, std::vector<int> channels_) 
 midiManager::midiManager() {
 	midi_to_key_offset = MIDImiddleCpos - keysMiddleCpos; //this offset is used when converting between MIDI key numbers and real key numbers
@@ -43,12 +44,12 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			velocity = data2;
 			keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
 			if (velocity!=0) { // sometimes note off is sent as on with velocity 0
-				Keys.requestActuatorState(keyNumber, 1); //toggles the key on
+				KeyStateManager.requestActuatorState(0,keyNumber, 1); //toggles the key on
 			} else {
-				Keys.requestActuatorState(keyNumber, 0); //toggles the key off
+				KeyStateManager.requestActuatorState(0,keyNumber, 0); //toggles the key off
 			}
-			printKeyStates("header");
-			printKeyStates("full");
+			//printKeyStates("header");
+			//printKeyStates("full");
 
 			// Calls all module functions for midi key on
 			hook.midiKey(0,data1,data2);
@@ -57,9 +58,9 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			
 			midiNumber = data1;	
 			keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
-			Keys.requestActuatorState(keyNumber, 0); //toggles the key off
-			printKeyStates("header");
-			printKeyStates("full");
+			KeyStateManager.requestActuatorState(0,keyNumber, 0); //toggles the key off
+			//printKeyStates("header");
+			//printKeyStates("full");
 
 			// Calls all module functions for midi key off
 			hook.midiKey(0,data1,0);
@@ -79,10 +80,10 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			case 1: // modulation wheel (vibrato)
 				if (voxHumanaPos != -1) {
 					if (data2 >= minModulationLevel) {
-						Stops.requestActuatorState(voxHumanaPos, 1);
+						StopStateManager.requestActuatorState(0,voxHumanaPos, 1);
 					}
 					else {
-						Stops.requestActuatorState(voxHumanaPos, 0);
+						StopStateManager.requestActuatorState(0,voxHumanaPos, 0);
 					}
 				}
 				// Calls all module functions for midi mod messages
@@ -103,8 +104,8 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 				break;
 			case 93: // chorus level (if high enough, pulls out all the stops and activates coupler)
 				if (data2 >= minChorusLevel) {
-					for (int i = 0; i < (int)Stops.size(); i++) {
-						Stops.requestActuatorState(i, 1);
+					for (int i = 0; i < NUM_STOPS; i++) {
+						StopStateManager.requestActuatorState(0, i, 1);
 					}
 					//octaveCoupler.active = true;
 				}
@@ -129,7 +130,7 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 						state = 0;
 					}
 					for (auto element : fortePos) {
-						Stops.requestActuatorState(element, state);
+						StopStateManager.requestActuatorState(0, element, state);
 					}
 				}
 				// Calls all module functions for midi volume messages
@@ -173,8 +174,8 @@ void midiManager::MIDIsendKey(int keyNumber, int state, int velocity, int channe
 }
 
 // converts current stop positions to a MIDI instrument and sends a MIDI program change message with this
-void midiManager::stops_to_MIDI() {
-	std::vector<int> currentStops = Stops.getStatesVector("all"); // gets current stop positions
+void midiManager::stops_to_MIDI() { //TODO reconnect this part to get the states vector
+	std::vector<int> currentStops;// = Stops.getStatesVector("all"); // gets current stop positions
 	// linear search through presets to find the preset matching current stop config
 	for (int i = 0; i < 127; i++) { 
 		bool foundPreset = true;			// defaults to true
@@ -191,7 +192,7 @@ void midiManager::stops_to_MIDI() {
 			int data1  = i  ;
 			int data2  = 0  ;
 			//cout << "\nsending preset: ";
-			printVector(stopPresets[i]);
+			//printVector(stopPresets[i]);
 			//cout << " as instrument " << i << "\n";
 			/*
 			code to send instrument (program) change signal via MIDI
@@ -213,11 +214,11 @@ void midiManager::MIDI_to_stop(int instrumentNumber) {
       found = true;
   		for (int i = 1; i < (int)stopPresetsTable[instrumentNumber].size(); i++) {	// for each item in the preset (excluding first item)
   			if (stopPresetsTable[instrumentNumber][i] != -1) {						// if it isn't -1 (ie. ignore it) then set each stop state to the preset value
-  				Stops.requestActuatorState(i , stopPresetsTable[instrumentNumber][i]);
+  				StopStateManager.requestActuatorState(0, i , stopPresetsTable[instrumentNumber][i]);
   			}
   				
   		}
-		printStopStates("overall");
+		//printStopStates("overall");
       	break;
   	
   	}
@@ -226,11 +227,11 @@ void midiManager::MIDI_to_stop(int instrumentNumber) {
 		int defaultInstrument = 0; 
 		for (int i = 1; i < (int)stopPresetsTable[defaultInstrument].size(); i++) {
 			if (stopPresetsTable[defaultInstrument][i] != -1) {
-				Stops.requestActuatorState(i, stopPresetsTable[defaultInstrument][i]);
+				StopStateManager.requestActuatorState(0, i, stopPresetsTable[defaultInstrument][i]);
 			}
 
 		}
-		printStopStates("overall");
+		//printStopStates("overall");
 	}
   
 }
