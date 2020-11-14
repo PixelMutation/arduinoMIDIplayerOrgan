@@ -8,7 +8,7 @@
 
 
 class EEPROM_manager : public moduleTemplate{
-    std::vector<std::vector<int>> blockAddresses; // stores the start and end of the addresses of EEPROM 'blocks'
+    std::vector<std::array<int,2>> blockAddresses; // stores the start and end of the addresses of EEPROM 'blocks'
     std::vector<std::vector<int>> blockDimensions;
     int nullVal = 0; // used as a reference to return (e.g. if address out of bounds))
 
@@ -20,7 +20,7 @@ class EEPROM_manager : public moduleTemplate{
 
     void constructBlock(std::vector<int> dimensions);
     int  fetch(int address);           // fetches the value from the version stored in EEPROM
-    void write(int address, int data); // saves to the version stored in EEPROM
+    void write(int address, byte data); // saves to the version stored in EEPROM
 public:
     
     EEPROM_manager();
@@ -29,20 +29,20 @@ public:
     class block1d {
         public:
         int blockNumber;
-        std::vector<int> data;
+        std::vector<byte> data;
     };
 
     class block2d {
         public:
         int blockNumber;
         
-        std::vector<std::vector<int>> data;
+        std::vector<std::vector<byte>> data;
     };
     class block3d {
         public:
         int blockNumber;
         
-        std::vector<std::vector<std::vector<int>>> data;
+        std::vector<std::vector<std::vector<byte>>> data;
     };
 
     block1d& newBlock(int x);
