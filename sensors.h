@@ -22,15 +22,15 @@ public:
     void onLoop();
     class manuals : public sensorsTemplate {
         int muxPerManual; // the number of multiplexers per manual
-        vector<vector<int>> multiplexers; // the first and last multiplexer of each manual
+        std::vector<std::array<int,2>> multiplexers; // the first and last multiplexer of each manual
         int uncertainty; // read values are compared to stored value +- this 
         int calibrationDelay = 500; // delay after keypress before measurement taken (ms)
     public:
         
         EEPROM_manager::block3d& calibratedPositions = eepromManager.newBlock(NUM_MANUALS,3,KEYS_PER_MANUAL);
-        int oldPositions[NUM_MANUALS][KEYS_PER_MANUAL]; // the position of each key at the last measurement, indexed as [manual][key]. used to compare to see if the key has moved
-        int topPositions[NUM_MANUALS][KEYS_PER_MANUAL]; // the position when key is at the top, measued upon system start
-        int defaultPositions[3] = {
+        byte oldPositions[NUM_MANUALS][KEYS_PER_MANUAL]; // the position of each key at the last measurement, indexed as [manual][key]. used to compare to see if the key has moved
+        byte topPositions[NUM_MANUALS][KEYS_PER_MANUAL]; // the position when key is at the top, measued upon system start
+        byte defaultPositions[3] = {
             220, // pos when sound produced
             200, // pos when held by system
             170  // pos at bottom
