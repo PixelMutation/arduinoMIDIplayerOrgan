@@ -3,17 +3,17 @@
 
 
 keyActuators::keyActuators() {
-    int expandersPerManual = (keysPerManual + 15)/16; // divides and rounds up to find the number of expanders required per manual
+    int expandersPerManual = (KEYS_PER_MANUAL + 15)/16; // divides and rounds up to find the number of expanders required per manual
     if (expandersPerManual <= 8) {
         ports.push_back(new portExpander(0,expandersPerManual));     // activates first port
-        if (manuals * keysPerManual > 128) {                         // each port supports up to 128 keys
+        if (NUM_MANUALS * KEYS_PER_MANUAL > 128) {                         // each port supports up to 128 keys
             ports.push_back(new portExpander(2,expandersPerManual)); // use second port as well
         }   
     } else {
         ports.push_back(new portExpander(0,8)); // uses all of port one
-        ports.push_back(new portExpander(2,(expandersPerManual*manuals)-8)); //oveflows into second port
+        ports.push_back(new portExpander(2,(expandersPerManual*NUM_MANUALS)-8)); //oveflows into second port
     }
-    for (int i=0; i < manuals; i++) { // for every manual
+    for (int i=0; i < NUM_MANUALS; i++) { // for every manual
         expanders.push_back({expandersPerManual*i,expandersPerManual*(i+1)-1}); // add the first and last expander for this manual
     }
 }
@@ -31,8 +31,8 @@ void keyActuators::setState(int manual, int key, int state) {
 void keyActuators::test(std::string mode="legato") {
     // staccato test
     if (mode == "staccato" or mode == "all") {
-        for (int i=0; i < manuals; i++) {
-            for (int j=0; j < keysPerManual; j++) {
+        for (int i=0; i < NUM_MANUALS; i++) {
+            for (int j=0; j < KEYS_PER_MANUAL; j++) {
                 for (int k=0; k < staccatoRepetitions; k++) {
                     setState(i,j,1);
                     delay(staccatoDuration);
@@ -44,20 +44,20 @@ void keyActuators::test(std::string mode="legato") {
     }
     // legato test
     if (mode == "legato" or mode == "all") {
-        for (int i=0; i < manuals; i++) {
+        for (int i=0; i < NUM_MANUALS; i++) {
             setState(i,0,1);        // turns first key on
-            for (int j=1; j < keysPerManual; j++) {
+            for (int j=1; j < KEYS_PER_MANUAL; j++) {
                 setState(i,j-1,0);  // turns previous key off
                 setState(i,j,1);    // turns next key on
                 delay(legatoDuration);
             }
-            setState(i,keysPerManual-1,0); // turns the last key off
+            setState(i,KEYS_PER_MANUAL-1,0); // turns the last key off
         }
     }
     // chord test
     if (mode == "arpeggio" or mode == "all" ) {
-        for (int i=0; i < manuals; i++) {
-            for (int j=0; j < keysPerManual; j++) {
+        for (int i=0; i < NUM_MANUALS; i++) {
+            for (int j=0; j < KEYS_PER_MANUAL; j++) {
                 
             }
         }
