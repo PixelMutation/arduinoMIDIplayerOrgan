@@ -23,10 +23,10 @@ void octave_coupler::run(int keyNumber, int state) { // main function which runs
 			if (newKeyNumber <= max and newKeyNumber >= min) {	// check it is within the range where the coupler is active
 				
 				if (delay > 0) { // if a delay is wanted between each note
-					Keys.requestActuatorState(newKeyNumber, state, delay * i);
+					KeyStateManager.scheduleActuatorState(0,newKeyNumber, state, delay * i);
 				}
 				else {
-					Keys.requestActuatorState(newKeyNumber, state);
+					KeyStateManager.requestActuatorState(0,newKeyNumber, state);
 					//cout << "octave coupled\n";
 				}
 

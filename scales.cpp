@@ -71,9 +71,9 @@ void scale_manager::autoChord(int startNote, int state) {
         for (int i = 0; i < (int)halfStepPattern.size(); i++) { // for each note in the pattern
             cout << halfStepPattern[i];
             if (delay > 0) { // if there is a delay, play as an arpeggio
-                Keys.requestActuatorState(startNote + halfStepPattern[i], state, delay * i); // request a keypress offset from the current note by the number of half steps for the new note
+                KeyStateManager.scheduleActuatorState(0,startNote + halfStepPattern[i], state, delay * i); // request a keypress offset from the current note by the number of half steps for the new note
             } else {
-                Keys.requestActuatorState(startNote + halfStepPattern[i], state); // request a keypress offset from the current note by the number of half steps for the new note
+                KeyStateManager.requestActuatorState(0,startNote + halfStepPattern[i], state); // request a keypress offset from the current note by the number of half steps for the new note
             }
         }
     }
