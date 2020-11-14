@@ -16,7 +16,7 @@ class midiManager : public moduleTemplate { // handles MIDI I/O
   int minChorusLevel     = 64;	// chorus level at which all stops activated
   int minModulationLevel = 64;	// level at which vox humana activated
 
-  std::vector<std::vector<int>> stopPresetsTable{ // This is just some preset stop positions assigned to MIDI instruments, change these to some presets for your own instrument. Use -1 to indicate that that stop should be ignored (e.g. if it can't be moved, or won't affect anything.)
+  std::vector<std::vector<int8_t>> stopPresetsTable{ // This is just some preset stop positions assigned to MIDI instruments, change these to some presets for your own instrument. Use -1 to indicate that that stop should be ignored (e.g. if it can't be moved, or won't affect anything.)
     //No.  |            Stops state          |      General MIDI instrument   
     // all off                          SFX
     {127,  0, 0, 0,  -1,-1,-1,-1,-1,  0, 0, 0},   //      Gunshot 
@@ -68,9 +68,9 @@ class midiManager : public moduleTemplate { // handles MIDI I/O
   };
 	
 	
-	std::vector<std::vector<int>> stopPresets;// a 2D std::vector table containing all the possible reed stop configurations indexed by their MIDI instrument assignment
+	std::vector<std::vector<int8_t>> stopPresets;// a 2D std::vector table containing all the possible reed stop configurations indexed by their MIDI instrument assignment
 public:
-	std::vector<int> channels{ 0,1,2,3,4 };  // the MIDI channels the system responds to
+	std::vector<byte> channels { 0,1,2,3,4 }; // the MIDI channels the system responds to
   int midi_to_key_offset;			             // offset between MIDI key number and real key number
 	int keysMiddleCpos = 32;		             // the key number (index starting at 0) of middle C on your organ
 
