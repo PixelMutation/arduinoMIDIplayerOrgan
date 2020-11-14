@@ -41,20 +41,42 @@ class scale_manager {
   */
 	const std::string scalePatternNames[12] = {
 		"chrom",  // chromatic
+		
 		"dim",    // diminished
+		
 		"maj",    // major
 		"harmMin",// harmonic minor
 		"melMin", // melodic minor ascending
 		"natMin", // natural minor
+		
 		"blues",
 		"whole tone",
 		"aug",    // augmented
+		
 		"pent",   // pentatonic
+		
 		"dim7th", // diminished 7th
 		"dom7th"  // dominant 7th
 	};
-	const std::vector<std::vector<int>> scalePatterns  {
-		{12,1,1,1,1,1,1,1,1,1,1,1}
+	const std::vector<std::vector<byte>> scalePatterns  {	
+		{12,1,1,1,1,1,1,1,1,1,1,1},													
+
+		{8,	1,2,1,2,1,2,1,2},								// 1^2 3^4 5^6 7^8 1		hWhWhWhW	1-2 3-4 5-6 7-8 						
+
+		{7,	2,2,1,2,2,2,1},	// "major"						// 1 2 3^4 5 6 7^1			WWhWWWh		3-4 7-8
+		{7,	2,1,2,2,1,2,1},	// "harmonic minor"				// 1 2^b3 4 5^b6 7^1		WhWWhWh		2-3 5-6 7-8
+		{7,	2,1,2,2,2,2,1},	// "melodic minor ascending"	// 1 2^b3 4 5 6 7^1			WhWWWWh		2-3 7-8
+		{7,	2,1,2,2,1,2,2},	// "melodic minor descending"	// 1 2^b3 4 5^b6 7 1		WhWWhWW		2-3 5-6
+		{7,	2,1,2,2,1,2,2},	// "aeolian/natural minor"		//							WhWWhWW		2-3 5-6
+																				
+		{6,	3,2,1,1,3,2},	// blues						
+		{6,	2,2,2,2,2,2},	// whole tone					
+		{6,	3,1,3,1,3,1},	// augmented					
+
+		{5,	2,2,3,2,3},		// black key pentatonic			
+
+		{4,	3,3,3,3},		// diminished 7th				
+		{4,	3,3,3,3}		// dominant 7th					
 	};
 	
 	const std::string modes[7] = { // stores the names of the different major scale modes, indexed by their note offset from the first note of the scale
