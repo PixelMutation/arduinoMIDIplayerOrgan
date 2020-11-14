@@ -6,10 +6,11 @@
 
 class I2C_manager {
     TwoWire * wire;
-    int port;
-    int numDevices;
+    int port; // which port on the Teensy is used (0-2)
+    int numDevices; // the total number of expanders
     std::vector<int> devices;
     int baseAddress;
+    
 
 
 public:
