@@ -16,7 +16,7 @@ void stateManagerTemplate::requestActuatorState(int set, int index, int state) {
             requestBuffer[set][index] -= 1;
             if (requestBuffer[set][index] == 0) {    // if it is at 0, then the key or stop needs to be toggled off.
                 actuate(set,index,0);           // toggles key off
-                polyphonyManager(set,index 0);  // runs polyphony manager, reducing tallies by 1
+                polyphonyManager(set,index,0);  // runs polyphony manager, reducing tallies by 1
             }
         }
     }
@@ -24,7 +24,7 @@ void stateManagerTemplate::requestActuatorState(int set, int index, int state) {
         requestBuffer[set][index] += 1;
         if (requestBuffer[set][index] == 1) {  // if it is at 1, then it must have been at 0 so the key or stop needs to be toggled on.
             actuate(set,index,1);         // toggles key on
-            polyphonyManager(index, 1);   // runs polyphony manager, increasing tallies by 1
+            polyphonyManager(set,index, 1);   // runs polyphony manager, increasing tallies by 1
         }
     }
 }
@@ -33,7 +33,7 @@ void stateManagerTemplate::onSchedule(std::vector<int> params) {
     requestActuatorState(params[0],params[1],params[2]);
 }
 // request system state function - when something wants a key or stop on or off after a specific delay, it calls this
-void stateManagerTemplate::scheduleActuatorState(int set, int index, int state, int delay) {
+void stateManagerTemplate::scheduleActuatorState(int set, int index, int state, long delay) {
     if (index+1 > sets[set] or index < 1) { cout << "FAILED: item no. out of range!\n"; return; }
     unsigned long currentTime = millis();
     unsigned long delayDurationFromStart = currentTime - scheduler.fetchStartTime();
@@ -79,14 +79,11 @@ void keyStateManager::actuate(int set, int index,int state) {
 stopStateManager::stopStateManager() {
     sets = DIVISIONS;
 }
-// tells the actuator module to actuate the key
-void keyStateManager::actuate(int set, int index,int state) {
-    StopActuators.setState(set,index,state);
-}
 // tells the actuator module to actuate the stop
-void keyStateManager::actuate(int set, int index,int state) {
+void stopStateManager::actuate(int set, int index,int state) {
     StopActuators.setState(set,index,state);
 }
+
 
 
 
