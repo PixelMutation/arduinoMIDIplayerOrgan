@@ -2,11 +2,19 @@
 
 // BASICS
 
+#define DEBUG true  // whether debug messages should be printed
+
+#define SERIAL_BAUDRATE 115200
+#define MIDI_BAUDRATE 31250
+
 /* -------------------------------------------------------------------------- */
 /*                          MICROCONTROLLER SETTINGS:                         */
 /* -------------------------------------------------------------------------- */
 
-#define EEPROM_SIZE   1024 // amount in Teensy 4.0, for 4.1 it is larger
+#define MICROCONTROLLER
+//define TEENSY 4_1
+
+#define EEPROM_SIZE   1080 // amount in Teensy 4.0, for 4.1 it is larger
 #define NUM_I2C_PORTS 2    // there are 2 on Teensy 4.0 and 3 and Teensy 4.1
 
 
@@ -24,16 +32,17 @@
 #define COOLDOWN_TRIGGER 60 // any keypresses longer than this require a cooldown before being used again
 #define COOLDOWN         0  // the cooldown duration
 
+#define _I2C_TIMEOUT 50
 /* -------------------------------------------------------------------------- */
 /*                              SENSORS SETTINGS:                             */
 /* -------------------------------------------------------------------------- */
 
-#define INTERNAL_ADC      false // whether the internal ADC is used
+#define INTERNAL_ADC      false // whether the internal ADC is used //TODO add alternative
 #define ANALOG            true  // whether the sensors are analog (should be)
 #define ADC_AVERAGING     16    // the averaging level of the ADCs
 #define MICROSECOND_DELAY 0     // the delay in microseconds before taking a measurement to allow stabilisation
 
-// PINS:
+/* ---------------------------------- PINS ---------------------------------- */
 #define KEY_SIG  A9 // has to be supported by Continuous read
 #define STOP_SIG A8
 #define PED_SIG  A7
@@ -47,7 +56,7 @@
 #define CONFIRM_PIN_MODE INPUT // either INPUT or INPUT_PULLUP depending on the button's wiring
 
 #define MUX_SELECT_PINS {2,3,4,5} // the pins used to select an individual I/O pin on a mux
-#define MUX_ENABLE_PINS {9,10,11,12} // the pins used to select which mux to enable via a 4-16 inverting demux
+#define MUX_ENABLE_PINS {9,10,11,12} // the pins used to select which mux to enable via a 4-16 inverting demux (or two 3-8 inverting demuxes)
 
 /* -------------------------------------------------------------------------- */
 /*                               STOPS SETTINGS:                              */
