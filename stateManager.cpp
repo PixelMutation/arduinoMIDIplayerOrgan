@@ -6,10 +6,17 @@ extern "C"{
 }
 */
 
-/* ---------------------- GENERAL STATE MANAGER METHODS --------------------- */
+/* ----------------------------- VIRTUAL METHODS ---------------------------- */
+
+void StateManagerTemplate::polyphonyManager(int set, int index,int state){}
+void StateManagerTemplate::actuate(int set, int index,int state){}
+
+/* -------------------------------------------------------------------------- */
+/*                        GENERAL STATE MANAGER METHODS                       */
+/* -------------------------------------------------------------------------- */
 
 // request system state function - when something wants a key or stop on or off, it calls this
-void stateManagerTemplate::requestActuatorState(int set, int index, int state) {
+void StateManagerTemplate::requestActuatorState(int set, int index, int state) {
     if (index+1 > sets[set] or index+1 < 1) { cout << "FAILED: item no. out of range!\n"; return; }
     if (state == 0) {                           // if request is to turn key off
         if (requestBuffer[set][index] > 0) {         // if it isn't already off
@@ -29,27 +36,40 @@ void stateManagerTemplate::requestActuatorState(int set, int index, int state) {
     }
 }
 // run when the scheduler reaches an actuation event
-void stateManagerTemplate::onSchedule(std::vector<int> params) {
+void StateManagerTemplate::onSchedule(std::vector<int> params) {
     requestActuatorState(params[0],params[1],params[2]);
 }
 // request system state function - when something wants a key or stop on or off after a specific delay, it calls this
-void stateManagerTemplate::scheduleActuatorState(int set, int index, int state, long delay) {
+void StateManagerTemplate::scheduleActuatorState(int set, int index, int state, unsigned long delay) {
     if (index+1 > sets[set] or index < 1) { cout << "FAILED: item no. out of range!\n"; return; }
-    unsigned long currentTime = millis();
-    unsigned long delayDurationFromStart = currentTime - scheduler.fetchStartTime();
     scheduler.addToSchedule(this, delay, {set,index,state});
 }
 
-/* ------------------------ KEY STATE MANAGER METHODS ----------------------- */
+StateManager::StateManager() : keys(),stops(){
+    console.section("StateManager",CORE_PREFIX);
+    
+    console.sectionEnd("StateManager initialised",CORE_PREFIX);
+}
 
 
-keyStateManager::keyStateManager() {
+
+
+/* -------------------------------------------------------------------------- */
+/*                          KEY STATE MANAGER METHODS                         */
+/* -------------------------------------------------------------------------- */
+
+StateManager::Keys::Keys() {
+    console.section("StateManager::Keys",CORE_PREFIX);
     for (int i = 0; i < NUM_MANUALS; i++) {
         sets[i] = KEYS_PER_MANUAL;
     }
+    
+    
+    
+    console.sectionEnd("StateManager::Keys initialised",CORE_PREFIX);
 }
 // when an actuator is activated, this works out if the polyphony is exceeded and deactivates the oldest actuator
-void keyStateManager::polyphonyManager(int set, int index, int state) {
+void StateManager::Keys::polyphonyManager(int set, int index, int state) {
     int dir;
     if (state == 1) { // whether to add or subtract from the polyphony
         dir = 1;
@@ -71,16 +91,24 @@ void keyStateManager::polyphonyManager(int set, int index, int state) {
     }
 }
 // tells the actuator module to actuate the key
-void keyStateManager::actuate(int set, int index,int state) {
+void StateManager::Keys::actuate(int set, int index,int state) {
     KeyActuators.setState(set,index,state);
 }
 
-/* ----------------------- STOP STATE MANAGER METHODS ----------------------- */
-stopStateManager::stopStateManager() {
+/* -------------------------------------------------------------------------- */
+/*                         STOP STATE MANAGER METHODS                         */
+/* -------------------------------------------------------------------------- */
+
+StateManager::Stops::Stops() {
+    console.section("StateManager::Stops",CORE_PREFIX);
     sets = DIVISIONS;
+    
+    
+    console.sectionEnd("StateManager::Stops initialised",CORE_PREFIX);
 }
+void StateManager::Stops::polyphonyManager(int set, int index,int state){}
 // tells the actuator module to actuate the stop
-void stopStateManager::actuate(int set, int index,int state) {
+void StateManager::Stops::actuate(int set, int index,int state) {
     StopActuators.setState(set,index,state);
 }
 
@@ -309,5 +337,4 @@ void printStopStates(std::string option) {
 
 // create instance of class for keys and stops
 
-keyStateManager KeyStateManager;
-stopStateManager StopStateManager;
+StateManager stateManager;

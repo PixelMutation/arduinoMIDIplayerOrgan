@@ -9,7 +9,7 @@
 #include "scheduler.h"
 #include "I2Cactuators.h"
 
-class stateManagerTemplate : public schedule {
+class StateManagerTemplate : public schedule {
 protected:
 	std::vector<byte> sets; 			// stores the size of each set (manual or stop division)
 	std::vector<vector<byte>> requestBuffer; // a buffer of requests to activate / deactivate a stop or key
@@ -22,24 +22,35 @@ public:
 
 	std::deque<std::vector<unsigned long>> schedule; // a deque containing the schedule for when keys should be pressed if a delay is wanted
 	void requestActuatorState(int set, int index, int state);
-	void scheduleActuatorState (int set, int index, int state, long delay);
+	void scheduleActuatorState (int set, int index, int state, unsigned long delay);
 	int getState(int set, int index, std::string type = "all");
 	std::vector<int> getStatesVector(std::string type, bool print = false, bool displayZero = true);
 };
 
-class keyStateManager : public stateManagerTemplate{
-	void polyphonyManager (int set, int index,int state);
-	void actuate          (int set, int index,int state); 
+class StateManager : public moduleTemplate {
 public:
-	keyStateManager();
-};
+	class Keys : public StateManagerTemplate {
+		void polyphonyManager (int set, int index,int state);
+		void actuate          (int set, int index,int state); 
+	public:
+		Keys();
+	};
 
-class stopStateManager : public stateManagerTemplate{
-	void polyphonyManager (int set, int index,int state); // this does nothing, since stops have no polyphony
-	void actuate          (int set, int index,int state);
-public:
-	stopStateManager();
-		
+	class Stops : public StateManagerTemplate {
+		void polyphonyManager (int set, int index,int state); // this does nothing, since stops have no polyphony
+		void actuate          (int set, int index,int state);
+	public:
+		Stops();
+			
+	};
+	
+	Keys keys;
+	Stops stops;
+	
+	StateManager();
+	
+	
+	
 };
 
 /*
@@ -81,7 +92,7 @@ extern stateManager Stops;
 
 */
 
-extern keyStateManager KeyStateManager;
-extern stopStateManager StopStateManager;
+extern StateManager stateManager;
+
 
 #endif
