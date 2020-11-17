@@ -126,6 +126,15 @@ void Hooks::serialMessage(std::string target, std::string setting, int data) {
 }
 
 
+Hooks::Hooks() {
+    console.section("hooks",CORE_PREFIX);
+    
+    
+    
+    console.sectionEnd("hooks initialised",CORE_PREFIX);
+}
+
+
 
 
 

@@ -9,7 +9,11 @@ each time with a "delay" within the given range of notes ("min" and "max")
 */
 
 octave_coupler::octave_coupler() {
+	console.section("plugin octaveCoupler");
 	hook.OnUserKeyToggle.push_back(this);
+	
+	
+	console.sectionEnd("plugin octaveCoupler initialised");
 }
 
 
@@ -23,10 +27,10 @@ void octave_coupler::run(int keyNumber, int state) { // main function which runs
 			if (newKeyNumber <= max and newKeyNumber >= min) {	// check it is within the range where the coupler is active
 				
 				if (delay > 0) { // if a delay is wanted between each note
-					KeyStateManager.scheduleActuatorState(0,newKeyNumber, state, delay * i);
+					stateManager.keys.scheduleActuatorState(0,newKeyNumber, state, delay * i);
 				}
 				else {
-					KeyStateManager.requestActuatorState(0,newKeyNumber, state);
+					stateManager.keys.requestActuatorState(0,newKeyNumber, state);
 					//cout << "octave coupled\n";
 				}
 

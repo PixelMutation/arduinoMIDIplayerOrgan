@@ -6,7 +6,11 @@
 
 
 EEPROM_manager::EEPROM_manager() {
+    console.section("eepromManager",CORE_PREFIX);
     hook.OnStart.push_back(this);
+    
+    
+    console.sectionEnd("eepromManager initialized",CORE_PREFIX);
 }
 
 

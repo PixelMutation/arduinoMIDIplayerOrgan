@@ -1,14 +1,19 @@
 #include "sensors.h"
 
 // CONSTRUCTORS
-sensors::sensors() {
+Sensors::Sensors() : manuals(),stops(),bassPedals(),controlPanels() {
+    console.section("Sensors",CORE_PREFIX);
     hook.OnLoop.push_back(this);
+      
+    console.sectionEnd("Sensors initialised",CORE_PREFIX);
 }
-sensors::manuals::manuals() {
+Sensors::Manuals::Manuals() {
+    console.section("Sensors::Manuals",CORE_PREFIX);
+    
     pin = KEY_SIG;
     muxPerManual = (KEYS_PER_MANUAL+15)/ 16;
 
-    mux = new Multiplexer(true,true,muxPerManual*NUM_MANUALS,KEY_SIG); // creates mux for the manual sensors
+    mux = new Multiplexer(true,true,muxPerManual*NUM_MANUALS,KEY_SIG); // creates mux for the manual Sensors
  
     if (calibratedPositions.data[0][1][0] == 0) { // If keys not calibrated, apply defaults: If it is 0, it likely hasn't been calibrated yet.
         for (int x = 0; x < NUM_MANUALS; x++) { // for each manual
@@ -26,24 +31,37 @@ sensors::manuals::manuals() {
         }
         multiplexers.push_back({muxPerManual*x,muxPerManual*(x+1)-1}); // adds the first and last mux in the manual to a list
     }
-
+    
+    
+    console.sectionEnd("Sensors::Manuals initialised",CORE_PREFIX);
 }
 
-sensors::stops::stops() {
+Sensors::Stops::Stops() {
+    console.section("Sensors::Stops",CORE_PREFIX);
     pin = STOP_SIG;
     numMux = (NUM_STOPS + 15) / 16;
-    mux = new Multiplexer(true,false,numMux,STOP_SIG); // creates mux for the manual sensors
+    mux = new Multiplexer(true,false,numMux,STOP_SIG); // creates mux for the manual Sensors
+    
+    
+    console.sectionEnd("Sensors::Stops initialised",CORE_PREFIX);
 }
-sensors::bassPedals::bassPedals() {
+Sensors::BassPedals::BassPedals() {
+    console.section("Sensors::BassPedals");
     pin = PED_SIG;
     numMux = (NUM_BASS_PEDALS +15)/16;
-    mux = new Multiplexer(true,false,numMux,PED_SIG); // creates mux for the manual sensors
+    mux = new Multiplexer(true,false,numMux,PED_SIG); // creates mux for the manual Sensors
 
+
+    console.sectionEnd("Sensors::BassPedals initialised",CORE_PREFIX);
 }
-sensors::controlPanels::controlPanels() {
+Sensors::ControlPanels::ControlPanels() {
+    console.section("Sensors::ControlPanels",CORE_PREFIX);
     pin = CTRL_SIG;
     numMux = (NUM_BASS_PEDALS +15)/16;
-    mux = new Multiplexer(true,false,numMux,CTRL_SIG); // creates mux for the manual sensors
+    mux = new Multiplexer(true,false,numMux,CTRL_SIG); // creates mux for the manual Sensors
+
+
+    console.sectionEnd("Sensors::ControlPanels initialised",CORE_PREFIX);
 }
 
 
@@ -53,32 +71,32 @@ sensors::controlPanels::controlPanels() {
 //READ VALUES
 
 // reads the raw value from a key
-int sensors::manuals::read(int manual, int key) {
+int Sensors::Manuals::read(int manual, int key) {
     return mux->muxRead(manual*key+key,true,KEY_PULLUP,MICROSECOND_DELAY);
 }
 // reads the raw value from a stop
-int sensors::stops::read(int division, int stop) {
+int Sensors::Stops::read(int division, int stop) {
     return mux->muxRead(division*stop + stop,analog,STOP_PULLUP,MICROSECOND_DELAY);
 }
 // reads the raw value from a bass pedal
-int sensors::bassPedals::read(int pedal) {
+int Sensors::BassPedals::read(int pedal) {
     return mux->muxRead(pedal,analog,PED_PULLUP,MICROSECOND_DELAY);
 }
 // reads the analog state of a control panel pin
-int sensors::controlPanels::readAnalog(int pin) {
+int Sensors::ControlPanels::readAnalog(int pin) {
     return mux->muxRead(pin,true,inputMode[pin],MICROSECOND_DELAY);
 }
 // reads the digital state of a control panel pin
-int sensors::controlPanels::readDigital(int pin) {
+int Sensors::ControlPanels::readDigital(int pin) {
     return mux->muxRead(pin,false,inputMode[pin],MICROSECOND_DELAY);
 }
 
-// SCAN SENSORS
+// SCAN Sensors
 
 
 
 // runs through key calibration
-void sensors::manuals::calibrate(std::string mode = "all") {
+void Sensors::Manuals::calibrate(std::string mode = "all") {
     for (int x = 0; x < NUM_MANUALS; x++) {
         for (int y = 0; y < KEYS_PER_MANUAL; y++) {
             if (mode == "top" or mode == "all") {
@@ -105,12 +123,12 @@ void sensors::manuals::calibrate(std::string mode = "all") {
 }
 
 // runs all the scan operations each time the whole program loops
-void sensors::onLoop() {
-    Manuals.scan();
-    Stops.scan();
-    BassPedals.scan();
-    ControlPanels.scan();
+void Sensors::onLoop() {
+    manuals.scan();
+    stops.scan();
+    bassPedals.scan();
+    controlPanels.scan();
 }
 
 
-sensors Sensors;
+Sensors sensors;

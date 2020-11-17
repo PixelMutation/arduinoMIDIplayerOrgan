@@ -2,12 +2,13 @@
 
 
 analogManager::analogManager() {
+    console.section("analogManager",CORE_PREFIX);
     pinMode(KEY_SIG, INPUT); 
 
     adc->adc0->setResolution      (8);
     adc->adc0->setAveraging       (ADC_AVERAGING);
     adc->adc0->setConversionSpeed (ADC_CONVERSION_SPEED::MED_SPEED);
-    adc->adc0->setSamplingSpeed   (ADC_SAMPLING_SPEED::MED_SPEED  );
+    adc->adc0->setSamplingSpeed   (ADC_SAMPLING_SPEED  ::MED_SPEED);
 
     adc->adc0->startContinuous(KEY_SIG);
 
@@ -16,6 +17,7 @@ analogManager::analogManager() {
     adc->adc1->setConversionSpeed (ADC_CONVERSION_SPEED::MED_SPEED);
     adc->adc1->setSamplingSpeed   (ADC_SAMPLING_SPEED  ::MED_SPEED);
     //Serial.print("val "); Serial.println(adc->adc0->analogReadContinuous());
+    console.sectionEnd("analogManager initialised",CORE_PREFIX);
 
 }
 
@@ -23,8 +25,7 @@ analogManager analog_manager;
 
 // constructor: (if an input mux,no. of muxes used in this I/O array, mux select pins (vector, ordered, 4 items), I/O pin for each mux (vector, ordered) )
 Multiplexer::Multiplexer(bool _input, bool _continuous, int _numOfMux, int _IOpin) {
-
-    
+    console.section("multiplexer",CORE_PREFIX);
     //analogReadResolution(8); // the lower the resolution the faster
     //analogReadAveraging(8); // the higher the number of measurements, the more consistent the signal but the slower it is
     continuous = _continuous;
@@ -43,7 +44,7 @@ Multiplexer::Multiplexer(bool _input, bool _continuous, int _numOfMux, int _IOpi
         pinMode(IOpin, INPUT);
     }
     
-
+    console.sectionEnd("multiplexer initialised",CORE_PREFIX);
 
 }
 // sets 4 pins to represent a 4 bit binary value

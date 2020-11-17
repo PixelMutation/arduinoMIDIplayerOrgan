@@ -4,6 +4,9 @@
 // All hooks needed for this module are redefined here (uncomment what you need)
 
 exampleModule::exampleModule() { // The constructor must add the object to the std::vectors of hooks in use. uncomment / copy as needed.
+    console.section("exampleModule","PLUG: ");
+    
+    
     hook.OnStart.push_back(this);
     hook.OnLoop.push_back(this);
 
@@ -30,6 +33,8 @@ exampleModule::exampleModule() { // The constructor must add the object to the s
     hook.OnSerialMessage.push_back(this);
 
     
+    
+    console.sectionEnd("exampleModule initialised","PLUG: ");
 }
 
 
