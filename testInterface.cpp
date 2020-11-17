@@ -24,7 +24,7 @@ void testInterface() {
                         Serial.println("Choose state: 0/1: ");
                         cin >> state;
                         Serial.println("");
-                        //KeyStateManager.setSensorState(number, state);
+                        //stateManager.keys.setSensorState(number, state);
                         //printKeyStates("header");
                         //printKeyStates();
                         /*
@@ -48,7 +48,7 @@ void testInterface() {
                         Serial.println("Choose state: 0/1: ");
                         cin >> state;
                         Serial.println("");
-                        //StopStateManager.setSensorState(number, state);
+                        //stateManager.stops.setSensorState(number, state);
 
                         //printStopStates("header");
                         //printKeyStates();
@@ -71,7 +71,7 @@ void testInterface() {
                 
                 Serial.println("type key number: ");
                 cin >> key;
-                //KeyStateManager.setSensorState(key, 1);
+                //stateManager.keys.setSensorState(key, 1);
                 //printKeyStates("overall");
                 Serial.println("");
                 /*
