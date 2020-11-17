@@ -2,10 +2,15 @@
 
 
 controls::controls() {
+    console.section("controls ");
+    hook.OnLoop.push_back(this);
     
-   pinMode(CONFIRM_PIN, CONFIRM_PIN_MODE); // sets up confirmation pin
-   hook.OnLoop.push_back(this);
+    pinMode(CONFIRM_PIN, CONFIRM_PIN_MODE); // sets up confirmation pin
+    
 
+
+
+    console.sectionEnd("controls initialised");
 }
 
 void controls::onLoop() {
