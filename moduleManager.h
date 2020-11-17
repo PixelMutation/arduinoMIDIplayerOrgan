@@ -63,6 +63,7 @@ public:
 
     std::vector<moduleTemplate*> OnSerialMessage;       void serialMessage(string module, string setting, int data);
 
+    Hooks();
 };
 
 extern Hooks hook;
