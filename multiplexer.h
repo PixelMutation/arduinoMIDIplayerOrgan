@@ -32,6 +32,6 @@ public:
 };
 
 
-extern Multiplexer testMux;
+//extern Multiplexer testMux;
 
 #endif
