@@ -10,10 +10,10 @@ class scale_manager {
 	std::vector<std::string> chordPatternNames { // stores the patterns (in terms of notes within a scale) of various supported scales
 		"triad", "seventh"
 	};
-  std::vector<std::vector<int>> chordPatterns {
-    {0,2,4},
-    {0,2,4,6}
-  };
+	std::vector<std::vector<int>> chordPatterns {
+		{0,2,4},
+		{0,2,4,6}
+	};
 	/*
 	std::vector<std::vector<std::string>> scalePatterns { // stores the patterns of various supported scales (in terms of a list of half and whole steps) https://www.musictheory.net/lessons https://en.wikipedia.org/wiki/List_of_musical_scales_and_modes https://gumroad.com/l/tldrmusic
 		//type						|half-steps|divisions|      Formula			   | Steps |	Semitones
@@ -97,6 +97,8 @@ public:
 	std::string mode = "ionian";
 	std::string chordType = "triad";
 	int delay = 10; // delay between notes (when > 0 causes arpeggio)
+
+	scale_manager();
 
 	void updatePatterns();
 

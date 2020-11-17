@@ -16,11 +16,11 @@ public:
 };
 
 // contains the various sensor objects
-class sensors : public moduleTemplate{
+class Sensors : public moduleTemplate{
 public:
-    sensors();
-    void onLoop();
-    class manuals : public sensorsTemplate {
+    
+    
+    class Manuals : public sensorsTemplate {
         int muxPerManual; // the number of multiplexers per manual
         std::vector<std::array<int,2>> multiplexers; // the first and last multiplexer of each manual
         int uncertainty; // read values are compared to stored value +- this 
@@ -35,48 +35,50 @@ public:
             200, // pos when held by system
             170  // pos at bottom
         };
-        manuals();
+        Manuals();
         int read(int manual, int key);
         void calibrate(std::string mode);
     };
 
-    class stops : public sensorsTemplate{
+    class Stops : public sensorsTemplate{
 
         int onPosition;
         bool analog;
     public:
-        stops();
+        Stops();
         int read(int division, int stop);
     };
 
-    class bassPedals : public sensorsTemplate{
+    class BassPedals : public sensorsTemplate{
 
         bool analog;
         int onPosition;
         
     public:
-        bassPedals();
+        BassPedals();
         int read(int pedal);
     };
 
-    class controlPanels : public sensorsTemplate{
+    class ControlPanels : public sensorsTemplate{
         vector<int> inputMode; // which sensors are pullups
     public:
-        controlPanels();
+        ControlPanels();
         int readAnalog(int sensor);
         int readDigital(int sensor);
     };
 
-    sensors::manuals       Manuals      ;
-    sensors::stops         Stops        ;
-    sensors::bassPedals    BassPedals   ;
-    sensors::controlPanels ControlPanels;
-
+    Sensors::Manuals       manuals      ;
+    Sensors::Stops         stops        ;
+    Sensors::BassPedals    bassPedals   ;
+    Sensors::ControlPanels controlPanels;
+    
+    void onLoop();
+    
+    Sensors();
 };
 
 
-extern sensors Sensors;
-
+extern Sensors sensors;
 
 
 #endif
