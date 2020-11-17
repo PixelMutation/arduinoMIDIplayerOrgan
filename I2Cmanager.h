@@ -2,17 +2,18 @@
 #define I2C_MANAGER
 
 #include "global_includes.h"
-#include "Wire.h"
+//#include "Wire.h"
+
+//#include <i2c_t3.h>
+//#include <Wire.h>
+#include <Wire.h>
 
 class I2C_manager {
     TwoWire * wire;
     int port; // which port on the Teensy is used (0-2)
     int numDevices; // the total number of expanders
-    std::vector<int> devices;
+    std::vector<signed> devices; // the device addresses
     int baseAddress;
-    
-
-
 public:
     I2C_manager     (int _port, int _numDevices, int _baseAddress);
     void write      (std::vector<int> bytes, int device);
