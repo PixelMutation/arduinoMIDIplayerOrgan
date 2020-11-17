@@ -2,10 +2,19 @@
 
 // BASICS
 
+/* -------------------------------------------------------------------------- */
+/*                         SERIAL AND CONSOLE SETTINGS                        */
+/* -------------------------------------------------------------------------- */
+
 #define DEBUG true  // whether debug messages should be printed
+#define CORE_PREFIX "CORE: "
+#define PLUGIN_PREFIX "PLUG: "
+#define INFO_PREFIX "INFO: "
 
 #define SERIAL_BAUDRATE 115200
 #define MIDI_BAUDRATE 31250
+#define SERIAL_DELAY 5
+
 
 /* -------------------------------------------------------------------------- */
 /*                          MICROCONTROLLER SETTINGS:                         */
