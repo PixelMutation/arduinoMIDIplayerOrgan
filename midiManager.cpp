@@ -3,10 +3,11 @@
 //TODO make this code handle the different stop divisions
 // constructor (int middleCpos, std::vector<int> channels_) 
 midiManager::midiManager() {
+	console.section("midiManager",CORE_PREFIX);
 	midi_to_key_offset = MIDImiddleCpos - keysMiddleCpos; //this offset is used when converting between MIDI key numbers and real key numbers
 
 	hook.OnLoop.push_back(this);
-
+	console.sectionEnd("midiManager initialised",CORE_PREFIX);
 }
 
 // runs each loop
@@ -44,9 +45,9 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			velocity = data2;
 			keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
 			if (velocity!=0) { // sometimes note off is sent as on with velocity 0
-				KeyStateManager.requestActuatorState(0,keyNumber, 1); //toggles the key on
+				stateManager.keys.requestActuatorState(0,keyNumber, 1); //toggles the key on
 			} else {
-				KeyStateManager.requestActuatorState(0,keyNumber, 0); //toggles the key off
+				stateManager.keys.requestActuatorState(0,keyNumber, 0); //toggles the key off
 			}
 			//printKeyStates("header");
 			//printKeyStates("full");
@@ -58,7 +59,7 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			
 			midiNumber = data1;	
 			keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
-			KeyStateManager.requestActuatorState(0,keyNumber, 0); //toggles the key off
+			stateManager.keys.requestActuatorState(0,keyNumber, 0); //toggles the key off
 			//printKeyStates("header");
 			//printKeyStates("full");
 
@@ -80,10 +81,10 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			case 1: // modulation wheel (vibrato)
 				if (voxHumanaPos != -1) {
 					if (data2 >= minModulationLevel) {
-						StopStateManager.requestActuatorState(0,voxHumanaPos, 1);
+						stateManager.stops.requestActuatorState(0,voxHumanaPos, 1);
 					}
 					else {
-						StopStateManager.requestActuatorState(0,voxHumanaPos, 0);
+						stateManager.stops.requestActuatorState(0,voxHumanaPos, 0);
 					}
 				}
 				// Calls all module functions for midi mod messages
@@ -105,7 +106,7 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			case 93: // chorus level (if high enough, pulls out all the stops and activates coupler)
 				if (data2 >= minChorusLevel) {
 					for (int i = 0; i < NUM_STOPS; i++) {
-						StopStateManager.requestActuatorState(0, i, 1);
+						stateManager.stops.requestActuatorState(0, i, 1);
 					}
 					//octaveCoupler.active = true;
 				}
@@ -130,7 +131,7 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 						state = 0;
 					}
 					for (auto element : fortePos) {
-						StopStateManager.requestActuatorState(0, element, state);
+						stateManager.stops.requestActuatorState(0, element, state);
 					}
 				}
 				// Calls all module functions for midi volume messages
@@ -214,7 +215,7 @@ void midiManager::MIDI_to_stop(int instrumentNumber) {
       found = true;
   		for (int i = 1; i < (int)stopPresetsTable[instrumentNumber].size(); i++) {	// for each item in the preset (excluding first item)
   			if (stopPresetsTable[instrumentNumber][i] != -1) {						// if it isn't -1 (ie. ignore it) then set each stop state to the preset value
-  				StopStateManager.requestActuatorState(0, i , stopPresetsTable[instrumentNumber][i]);
+  				stateManager.stops.requestActuatorState(0, i , stopPresetsTable[instrumentNumber][i]);
   			}
   				
   		}
@@ -227,7 +228,7 @@ void midiManager::MIDI_to_stop(int instrumentNumber) {
 		int defaultInstrument = 0; 
 		for (int i = 1; i < (int)stopPresetsTable[defaultInstrument].size(); i++) {
 			if (stopPresetsTable[defaultInstrument][i] != -1) {
-				StopStateManager.requestActuatorState(0, i, stopPresetsTable[defaultInstrument][i]);
+				stateManager.stops.requestActuatorState(0, i, stopPresetsTable[defaultInstrument][i]);
 			}
 
 		}
