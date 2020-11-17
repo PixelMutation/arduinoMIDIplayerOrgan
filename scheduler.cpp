@@ -1,9 +1,22 @@
 #include "scheduler.h"
-
+#include "I2Cactuators.h"
 
 scheduleManager::scheduleManager() {
-    progStartTime == millis();
+    console.section("scheduleManager",CORE_PREFIX);
     hook.OnLoop.push_back(this);
+    /*
+    while (true) {
+        //digitalWrite(13,HIGH);
+        KeyActuators.setState(0,0,0);
+        delay(analogRead(22));
+        //digitalWrite(13,LOW);
+        KeyActuators.setState(0,0,1);
+        delay(analogRead(21));
+    }
+    */
+    
+    
+    console.sectionEnd("scheduleManager initialised",CORE_PREFIX);
 }
 
 
@@ -11,7 +24,6 @@ scheduleManager::scheduleManager() {
 
 // checks the schedule and calls scheduled event methods 
 void scheduleManager::checkSchedule() {
-    unsigned long currentTime = millis() - progStartTime; // calculates current time
     if (! scheduleMethod.empty()){ 
         vector<int> events; // since the schedule is not in order, this stores which events have passed
         for (int i=0; i < (int)scheduleMethod.size(); i++) {            // for each event in the schedule
@@ -30,13 +42,13 @@ void scheduleManager::checkSchedule() {
     }
 }
 
-unsigned long scheduleManager::fetchStartTime() {
-    return progStartTime;
+unsigned long scheduleManager::CurrentTime(){
+    return currentTime;
 }
 // adds the event to the back of the schedule
-void scheduleManager::addToSchedule(schedule *method, unsigned long time, std::vector<int> params) {
+void scheduleManager::addToSchedule(schedule *method, unsigned long delay, std::vector<int> params) {
     scheduleMethod.push_back(method);       // 
-    scheduleTime.push_back(time);           //
+    scheduleTime.push_back(delay+currentTime);           //
     scheduleParameters.push_back(params);   //
 }
 
