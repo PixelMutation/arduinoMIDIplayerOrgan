@@ -11,42 +11,34 @@ public:
     exampleModule();
 
 
-    // All hooks that are needed for this module are redeclared as overrides here (uncomment what you need, then add them in modules)
+    //All hooks that are needed for this module are redeclared as overrides here (uncomment what you need, then add them in modules)
     
-    //void onStart();
-    //void onLoop();
-
-    //void onKeyMove(int key, int newPos, int oldPos);
-    //void onUserKeyToggle(int manual, int key, int velocity, bool state, int pos);
-    //void onSystemKeyToggle(int manual, int key, int velocity, bool state);
-
-    //void onUserStopToggle(int stop, bool state);
-    //void onSystemStopToggle(int stop, bool state);
-
-    //void onPedalToggle(int pedal, bool state);
-
-    //void onControlChange(int panel, int number, int state);
-
-    //void onMidiKey(int manual, int key, int velocity);
-    //void onMidiCC(int data1, int data2);
-    //void onMidiCCmod(int data);
-    //void onMidiCCsustain(int data);
-    //void onMidiCCchorus(int data);
-    //void onMidiCClegato(int data);
-    //void onMidiCCvolume(int data);
-    //void onMidiInstrument(int instrument);
-
-    //void onSerialMessage(string module, string setting, int data) ;
-
-
-
-    // Other functions within the module might be placed here:
+    void OnStart                (PARAM_onStart              ) ;
+    void OnLoop                 (PARAM_onLoop               ) ;
+    void OnKeyMove              (PARAM_onKeyMove            ) ;
+    void OnUserKeyToggle        (PARAM_onUserKeyToggle      ) ;
+    void OnSystemKeyToggle      (PARAM_onSystemKeyToggle    ) ;
+    void OnUserStopToggle       (PARAM_onUserStopToggle     ) ;
+    void OnSystemStopToggle     (PARAM_onSystemStopToggle   ) ;
+    void OnPedalToggle          (PARAM_onPedalToggle        ) ;
+    void OnControlChange        (PARAM_onControlChange      ) ;
+    void OnMidiKey              (PARAM_onMidiKey            ) ;
+    void OnMidiCC               (PARAM_onMidiCC             ) ;
+    void OnMidiCCmod            (PARAM_onMidiCCmod          ) ;
+    void OnMidiCCsustain        (PARAM_onMidiCCsustain      ) ;
+    void OnMidiCCchorus         (PARAM_onMidiCCchorus       ) ;
+    void OnMidiCClegato         (PARAM_onMidiCClegato       ) ;
+    void OnMidiCCvolume         (PARAM_onMidiCCvolume       ) ;
+    void OnMidiInstrument       (PARAM_onMidiInstrument     ) ;
+    void OnSerialMessage        (PARAM_onSerialMessage      ) ;
+    
+/* --------- Other members within the module might be placed here: -------- */
 
 
 
 };
 
-extern exampleModule ExampleModule;
+//extern exampleModule ExampleModule;
 
 
 

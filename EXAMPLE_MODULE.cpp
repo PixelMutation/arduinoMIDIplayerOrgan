@@ -1,75 +1,58 @@
 #include "EXAMPLE_MODULE.h"
 
 
-// All hooks needed for this module are redefined here (uncomment what you need)
 
 exampleModule::exampleModule() { // The constructor must add the object to the std::vectors of hooks in use. uncomment / copy as needed.
-    console.section("exampleModule","PLUG: ");
+    console.section("exampleModule","PLUG: "); // any console .println will be indented within the section
     
-    
-    hook.OnStart.push_back(this);
-    hook.OnLoop.push_back(this);
+    //All hooks that are needed for this module are activated here (uncomment what you need)
 
-    hook.OnKeyMove.push_back(this);
-    hook.OnUserKeyToggle.push_back(this);
-    hook.OnSystemKeyToggle.push_back(this);
-
-    hook.OnUserStopToggle.push_back(this);
-    hook.OnSystemStopToggle.push_back(this);
-
-    hook.OnPedalToggle.push_back(this);
-
-    hook.OnControlChange.push_back(this);
-
-    hook.OnMidiKey.push_back(this);
-    hook.OnMidiCC.push_back(this);
-    hook.OnMidiCCmod.push_back(this);
-    hook.OnMidiCCsustain.push_back(this);
-    hook.OnMidiCCchorus.push_back(this);
-    hook.OnMidiCClegato.push_back(this);
-    hook.OnMidiCCvolume.push_back(this);
-    hook.OnMidiInstrument.push_back(this);
-
-    hook.OnSerialMessage.push_back(this);
+    hooks.OnStart               .add(this);
+    hooks.OnLoop                .add(this);
+    hooks.OnKeyMove             .add(this);
+    hooks.OnUserKeyToggle       .add(this);
+    hooks.OnSystemKeyToggle     .add(this);
+    hooks.OnUserStopToggle      .add(this);
+    hooks.OnSystemStopToggle    .add(this);
+    hooks.OnPedalToggle         .add(this);
+    hooks.OnControlChange       .add(this);
+    hooks.OnMidiKey             .add(this);
+    hooks.OnMidiCC              .add(this);
+    hooks.OnMidiCCmod           .add(this);
+    hooks.OnMidiCCsustain       .add(this);
+    hooks.OnMidiCCchorus        .add(this);
+    hooks.OnMidiCClegato        .add(this);
+    hooks.OnMidiCCvolume        .add(this);
+    hooks.OnMidiInstrument      .add(this);
+    hooks.OnSerialMessage       .add(this);
 
     
     
     console.sectionEnd("exampleModule initialised","PLUG: ");
 }
 
+//All hooks that are needed for this module are defined here (uncomment what you need)
 
-//void exampleModule::onStart() {}
-//void exampleModule::onLoop() {}
-
-
-//void exampleModule::onKeyMove(int key, int newPos, int oldPos) {}
-//void exampleModule::onUserKeyToggle(int manual, int key, int velocity, bool state, int pos) {}
-//void exampleModule::onSystemKeyToggle(int manual, int key, int velocity, bool state) {}
-
-//void exampleModule::onUserStopToggle(int stop, bool state) {}
-//void exampleModule::onSystemStopToggle(int stop, bool state) {}
-
-
-//void exampleModule::onPedalToggle(int pedal, bool state) {}
-
-
-//void exampleModule::onControlChange(int panel, int number, int state) {}
-
-
-//void exampleModule::onMidiKey(int manual, int key, bool state) {}
-//void exampleModule::onMidiCC(int data1, int data2) {}
-//void exampleModule::onMidiCCmod(int data){}}
-//void exampleModule::onMidiCCsustain(int data){}}
-//void exampleModule::onMidiCCchorus(int data){}}
-//void exampleModule::onMidiCClegato(int data){}}
-//void exampleModule::onMidiCCvolume(int data){}}
-//void exampleModule::onMidiInstrument(int instrument) {}
+void exampleModule::OnStart           (PARAM_onStart           ) {}
+void exampleModule::OnLoop            (PARAM_onLoop            ) {}
+void exampleModule::OnKeyMove         (PARAM_onKeyMove         ) {}
+void exampleModule::OnUserKeyToggle   (PARAM_onUserKeyToggle   ) {}
+void exampleModule::OnSystemKeyToggle (PARAM_onSystemKeyToggle ) {}
+void exampleModule::OnUserStopToggle  (PARAM_onUserStopToggle  ) {}
+void exampleModule::OnSystemStopToggle(PARAM_onSystemStopToggle) {}
+void exampleModule::OnPedalToggle     (PARAM_onPedalToggle     ) {}
+void exampleModule::OnControlChange   (PARAM_onControlChange   ) {}
+void exampleModule::OnMidiKey         (PARAM_onMidiKey         ) {}
+void exampleModule::OnMidiCC          (PARAM_onMidiCC          ) {}
+void exampleModule::OnMidiCCmod       (PARAM_onMidiCCmod       ) {}
+void exampleModule::OnMidiCCsustain   (PARAM_onMidiCCsustain   ) {}
+void exampleModule::OnMidiCCchorus    (PARAM_onMidiCCchorus    ) {}
+void exampleModule::OnMidiCClegato    (PARAM_onMidiCClegato    ) {}
+void exampleModule::OnMidiCCvolume    (PARAM_onMidiCCvolume    ) {}
+void exampleModule::OnMidiInstrument  (PARAM_onMidiInstrument  ) {}
+void exampleModule::OnSerialMessage   (PARAM_onSerialMessage   ) {}
 
 
-//void exampleModule::onSerialMessage(string module, string setting, int data) {}
+// uncomment to instantiate
+//exampleModule ExampleModule;
 
-
-
-exampleModule ExampleModule;
-
-// Now go to modules.cpp and add the ExampleModule object to whichever hooks you require
