@@ -8,6 +8,7 @@
 
 
 class EEPROM_manager : public moduleTemplate{
+    int numBlocks;
     std::vector<std::array<int,2>> blockAddresses; // stores the start and end of the addresses of EEPROM 'blocks'
     std::vector<std::vector<int>> blockDimensions;
     int nullVal = 0; // used as a reference to return (e.g. if address out of bounds))
@@ -25,23 +26,23 @@ public:
     
     EEPROM_manager();
     
-
-    class block1d {
-        public:
+    class block1d{
+        friend EEPROM_manager;
         int blockNumber;
+        public:
         std::vector<byte> data;
     };
 
-    class block2d {
-        public:
+    class block2d{
+        friend EEPROM_manager;
         int blockNumber;
-        
+        public:
         std::vector<std::vector<byte>> data;
     };
-    class block3d {
-        public:
+    class block3d{
+        friend EEPROM_manager;
         int blockNumber;
-        
+        public:
         std::vector<std::vector<std::vector<byte>>> data;
     };
 
@@ -61,7 +62,9 @@ protected:
     
 };
 
-
+using eepromBlock1D = EEPROM_manager::block1d&;
+using eepromBlock2D = EEPROM_manager::block2d&;
+using eepromBlock3D = EEPROM_manager::block3d&;
 
 extern EEPROM_manager eepromManager;
 

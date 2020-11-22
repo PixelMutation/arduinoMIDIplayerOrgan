@@ -7,7 +7,7 @@
 
 EEPROM_manager::EEPROM_manager() {
     console.section("eepromManager",CORE_PREFIX);
-    hook.OnStart.push_back(this);
+    hooks.OnStart.add(this); 
     
     
     console.sectionEnd("eepromManager initialized",CORE_PREFIX);
@@ -42,41 +42,55 @@ void EEPROM_manager::constructBlock(std::vector<int> dimensions) { // creates a 
     if (end >= EEPROM_SIZE) {
         Serial.println("ERROR: Block exceeds EEPROM size");
     } else {
-        int block = blockAddresses.size();
-        blockDimensions[block]    = dimensions;
-        blockAddresses [block][0] = start     ; // adds the new block to the address list
-        blockAddresses [block][1] = end       ;
-
-        
+        blockDimensions.push_back(dimensions);
+        blockAddresses.push_back({start,end}); // adds the new block to the address list
+ 
     }
-
+    numBlocks +=1;
 }
 
 // Creates a new block according to the shape given, and returns a reference to it
 
+
 EEPROM_manager::block1d& EEPROM_manager::newBlock(int x) { // Creates a new block according to the shape given, and returns a reference to it
-    int blockNum =  blocks1d.size() - 1;
+    int blockNum = blocks1d.size();
     blocks1d.push_back(block1d()); // Creates a block and adds it to the block std::vector using Cameron's answer to adding an object to a std::vector inline from https://stackoverflow.com/questions/15802006/how-can-i-create-objects-while-adding-them-into-a-std::vector
     constructBlock({x});
     blocks1d[blockNum].blockNumber = blockNum;
+    blocks1d[blockNum].data.resize(x);
+    
     return blocks1d[blockNum];
 }
 EEPROM_manager::block2d& EEPROM_manager::newBlock(int x, int y) { // Creates a new block according to the shape given, and returns a reference to it
-    int blockNum =  blocks2d.size() - 1;
+    int blockNum =  blocks2d.size();
     blocks2d.push_back(block2d()); // Creates a block and adds it to the block std::vector using Cameron's answer to adding an object to a std::vector inline from https://stackoverflow.com/questions/15802006/how-can-i-create-objects-while-adding-them-into-a-std::vector
     constructBlock({x,y});
     blocks2d[blockNum].blockNumber = blockNum;
+    blocks2d[blockNum].data.resize(x);
+    for (int i = 0; i < x; i++) {
+        blocks2d[blockNum].data[i].resize(y);
+    }
+    
     return blocks2d[blockNum];
 }
 EEPROM_manager::block3d& EEPROM_manager::newBlock(int x, int y, int z) { // Creates a new block according to the shape given, and returns a reference to it
-    int blockNum =  blocks3d.size() - 1;
+    int blockNum =  blocks3d.size();
     blocks3d.push_back(block3d()); // Creates a block and adds it to the block std::vector using Cameron's answer to adding an object to a std::vector inline from https://stackoverflow.com/questions/15802006/how-can-i-create-objects-while-adding-them-into-a-std::vector
     constructBlock({x,y,z});
     blocks3d[blockNum].blockNumber = blockNum;
+    blocks3d[blockNum].data.resize(x);
+    for (int i = 0; i < x; i++) {
+        blocks3d[blockNum].data[i].resize(y);
+        for (int j = 0; j < y; j++) {
+            blocks3d[blockNum].data[i][j].resize(z);
+        }
+    }
+    
     return blocks3d[blockNum];
 }
 
 void EEPROM_manager::onStart() {
+    console.println("reached eeprom load");
     load();
 }
 
@@ -172,6 +186,7 @@ void EEPROM_manager::write(int address, byte data) { // writes to the EEPROM
         Serial.println("ERROR: Invalid EEPROM address");
     }
 }
+
 
 
 EEPROM_manager eepromManager;
