@@ -3,11 +3,15 @@
 
 #include "global_includes.h"
 #include <bitset>
+//#include "elapsedMillis.h"
 
-class Console {
+class Console  {
 	int consoleIndent = 0;
 	
+
 public:
+	
+
 	template<typename T>
 	void print(T message) {
 		delay(SERIAL_DELAY);
@@ -18,10 +22,11 @@ public:
 		delay(SERIAL_DELAY);
 		Serial.print("");
 		delay(SERIAL_DELAY);
+		Serial.flush();
 	}
 	template<typename T>
 	void println(T message) {
-		if (DEBUG) {
+		#if DEBUG == true
 			Serial.begin(SERIAL_BAUDRATE);
 			delay(SERIAL_DELAY);
 			Serial.print(INFO_PREFIX);
@@ -37,11 +42,12 @@ public:
 			delay(SERIAL_DELAY);
 			Serial.print("");
 			delay(SERIAL_DELAY);
-		}
+			Serial.flush();
+		#endif
 	}
 	template<typename T>
 	void println(T message, T prefix) {
-		if (DEBUG) {
+		#if DEBUG == true
 			Serial.begin(SERIAL_BAUDRATE);
 			delay(SERIAL_DELAY);
 			Serial.print(prefix);
@@ -57,7 +63,8 @@ public:
 			delay(SERIAL_DELAY);
 			Serial.print("");
 			delay(SERIAL_DELAY);
-		}
+			Serial.flush();
+		#endif
 	}
     template<typename T>
     void section(T name) {
@@ -80,6 +87,10 @@ public:
         println(message,prefix);
     }
     void printByte(int8_t u);
+	void addPlotVar(int var);
+	void addPlotVar(double var);
+	void plot();
+	
     Console();
 };
 
