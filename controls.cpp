@@ -3,7 +3,7 @@
 
 controls::controls() {
     console.section("controls ");
-    hook.OnLoop.push_back(this);
+    hooks.OnLoop.add(this);
     
     pinMode(CONFIRM_PIN, CONFIRM_PIN_MODE); // sets up confirmation pin
     
