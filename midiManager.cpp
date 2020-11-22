@@ -6,7 +6,7 @@ midiManager::midiManager() {
 	console.section("midiManager",CORE_PREFIX);
 	midi_to_key_offset = MIDImiddleCpos - keysMiddleCpos; //this offset is used when converting between MIDI key numbers and real key numbers
 
-	hook.OnLoop.push_back(this);
+	hooks.OnLoop.add(this);
 	console.sectionEnd("midiManager initialised",CORE_PREFIX);
 }
 
@@ -53,7 +53,7 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			//printKeyStates("full");
 
 			// Calls all module functions for midi key on
-			hook.midiKey(0,data1,data2);
+			hooks.OnMidiKey.call(0,data1,data2);
 			break;
 		case 0x8: // if it is a key off command
 			
@@ -64,13 +64,13 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			//printKeyStates("full");
 
 			// Calls all module functions for midi key off
-			hook.midiKey(0,data1,0);
+			hooks.OnMidiKey.call(0,data1,0);
 			break;
 		case 0xC: // if it is a program change (instrument change) command
 			MIDI_to_stop(data1);
 
 			// Calls all module functions for when a midi instrument change is requested
-			hook.midiInstrument(data1);
+			hooks.OnMidiInstrument.call(data1);
 
 			break;
 		case 0xB: // if it is a control change
@@ -88,7 +88,7 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 					}
 				}
 				// Calls all module functions for midi mod messages
-				hook.midiCCmod(data2);
+				hooks.OnMidiCCmod.call(data2);
 
 
 				break;
@@ -100,7 +100,7 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 					//sustain.active = false;
 				}
 				// Calls all module functions for midi sustain messages
-				hook.midiCCsustain(data2);
+				hooks.OnMidiCCsustain.call(data2);
 
 				break;
 			case 93: // chorus level (if high enough, pulls out all the stops and activates coupler)
@@ -112,12 +112,12 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 				}
 
 				// Calls all module functions for midi chorus messages
-				hook.midiCCchorus(data2);
+				hooks.OnMidiCCchorus.call(data2);
 
 				break;
 			case 68: // legato pedal (when pedal active, hold each note until the next is pressed)
 				// Calls all module functions for midi chorus messages
-				hook.midiCClegato(data2);
+				hooks.OnMidiCClegato.call(data2);
 
 
 				break;
@@ -135,7 +135,7 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 					}
 				}
 				// Calls all module functions for midi volume messages
-				hook.midiCCvolume(data2);
+				hooks.OnMidiCCvolume.call(data2);
 
 
 				break;

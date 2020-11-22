@@ -4,7 +4,7 @@
 #include "global_includes.h"
 #include "stateManager.h"
 #include "utility.h"
-#include "octaveCoupler.h"
+//#include "octaveCoupler.h"
 
 class midiManager : public moduleTemplate { // handles MIDI I/O
   int MIDImiddleCpos     = 48;	// leave this alone

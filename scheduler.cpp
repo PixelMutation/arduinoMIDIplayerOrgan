@@ -3,7 +3,7 @@
 
 scheduleManager::scheduleManager() {
     console.section("scheduleManager",CORE_PREFIX);
-    hook.OnLoop.push_back(this);
+    hooks.OnLoop.add(this);
     /*
     while (true) {
         //digitalWrite(13,HIGH);
