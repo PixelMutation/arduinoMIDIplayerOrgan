@@ -6,14 +6,17 @@
 /*                         SERIAL AND CONSOLE SETTINGS                        */
 /* -------------------------------------------------------------------------- */
 
-#define DEBUG true  // whether debug messages should be printed
+#define DEBUG false  // whether debug messages should be printed
+#define PLOTTER true // plots graphs over serial. cannot be used at the same time as DEBUG
+#define PLOT_SPEED true // plots the frequency (of complete program cycles)
+
 #define CORE_PREFIX "CORE: "
 #define PLUGIN_PREFIX "PLUG: "
 #define INFO_PREFIX "INFO: "
 
 #define SERIAL_BAUDRATE 115200
 #define MIDI_BAUDRATE 31250
-#define SERIAL_DELAY 5
+#define SERIAL_DELAY 0 // used for debug so serial can keep up
 
 
 /* -------------------------------------------------------------------------- */
@@ -48,14 +51,22 @@
 
 #define INTERNAL_ADC      false // whether the internal ADC is used //TODO add alternative
 #define ANALOG            true  // whether the sensors are analog (should be)
-#define ADC_AVERAGING     16    // the averaging level of the ADCs
+#define ADC_AVERAGING     16    // the averaging level of the ADCs: 8,16,32
 #define MICROSECOND_DELAY 0     // the delay in microseconds before taking a measurement to allow stabilisation
+#define ADC_RESOLUTION 8        // ADC resolution - keep this at 8 since EEPROM can't handle more
 
+#define NOISE_LEVEL 1           // Cuts this amount from the bottom of the signal
+#define SIGNAL_MULTIPLIER 100   // Reading multiplied by this before square rooting
+#define VELOCITY_MULTIPLIER 1   // The velocity is multiplied by this amount
+#define VELOCITY_CYCLES 15      // no. cycles between velocity measurements
+#define TOP_THRESHOLD 2         // The point above which readings are used
+#define VELOCITY_THRESHOLD 5    // The size of the negative velocity at which keys are released
+#define RELEASE_THRESHOLD 50
 /* ---------------------------------- PINS ---------------------------------- */
-#define KEY_SIG  A9 // has to be supported by Continuous read
-#define STOP_SIG A8
-#define PED_SIG  A7
-#define CTRL_SIG A6
+#define KEY_SIG  24 // has to be supported by Continuous read
+#define STOP_SIG 22
+#define PED_SIG  21
+#define CTRL_SIG 20
 
 #define KEY_PULLUP  false // whether the sensors are pullup or not (can be a mix for CTRL)
 #define STOP_PULLUP false
