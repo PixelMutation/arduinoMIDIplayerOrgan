@@ -15,34 +15,35 @@ void StateManagerTemplate::actuate(int set, int index,int state){}
 /*                        GENERAL STATE MANAGER METHODS                       */
 /* -------------------------------------------------------------------------- */
 
-// request system state function - when something wants a key or stop on or off, it calls this
-void StateManagerTemplate::requestActuatorState(int set, int index, int state) {
-    if (index+1 > sets[set] or index+1 < 1) { cout << "FAILED: item no. out of range!\n"; return; }
-    if (state == 0) {                           // if request is to turn key off
-        if (requestBuffer[set][index] > 0) {         // if it isn't already off
-            requestBuffer[set][index] -= 1;
-            if (requestBuffer[set][index] == 0) {    // if it is at 0, then the key or stop needs to be toggled off.
-                actuate(set,index,0);           // toggles key off
-                polyphonyManager(set,index,0);  // runs polyphony manager, reducing tallies by 1
-            }
-        }
-    }
-    else {                                // if request is to turn key on
-        requestBuffer[set][index] += 1;
-        if (requestBuffer[set][index] == 1) {  // if it is at 1, then it must have been at 0 so the key or stop needs to be toggled on.
-            actuate(set,index,1);         // toggles key on
-            polyphonyManager(set,index, 1);   // runs polyphony manager, increasing tallies by 1
-        }
-    }
-}
+
 // run when the scheduler reaches an actuation event
 void StateManagerTemplate::onSchedule(std::vector<int> params) {
     requestActuatorState(params[0],params[1],params[2]);
 }
 // request system state function - when something wants a key or stop on or off after a specific delay, it calls this
-void StateManagerTemplate::scheduleActuatorState(int set, int index, int state, unsigned long delay) {
+void StateManagerTemplate::requestActuatorState(int set, int index, int state, unsigned long delay) {
     if (index+1 > sets[set] or index < 1) { cout << "FAILED: item no. out of range!\n"; return; }
-    scheduler.addToSchedule(this, delay, {set,index,state});
+    if (delay != 0) {
+        scheduler.addToSchedule(this, delay, {set,index,state});
+    } else {
+        if (state == 0) {                           // if request is to turn key off
+            if (requestBuffer[set][index] > 0) {         // if it isn't already off
+                requestBuffer[set][index] -= 1;
+                if (requestBuffer[set][index] == 0) {    // if it is at 0, then the key or stop needs to be toggled off.
+                    actuate(set,index,0);           // toggles key off
+                    polyphonyManager(set,index,0);  // runs polyphony manager, reducing tallies by 1
+                }
+            }
+        }
+        else {                                // if request is to turn key on
+            requestBuffer[set][index] += 1;
+            if (requestBuffer[set][index] == 1) {  // if it is at 1, then it must have been at 0 so the key or stop needs to be toggled on.
+                actuate(set,index,state);         // toggles key on
+                polyphonyManager(set,index, 1);   // runs polyphony manager, increasing tallies by 1
+            }
+        }
+    }
+    
 }
 
 StateManager::StateManager() : keys(),stops(){
@@ -60,9 +61,12 @@ StateManager::StateManager() : keys(),stops(){
 
 StateManager::Keys::Keys() {
     console.section("StateManager::Keys",CORE_PREFIX);
+
+    
     for (int i = 0; i < NUM_MANUALS; i++) {
-        sets[i] = KEYS_PER_MANUAL;
+        sets.push_back(KEYS_PER_MANUAL);
     }
+
     
     
     
