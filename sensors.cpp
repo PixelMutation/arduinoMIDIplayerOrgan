@@ -1,9 +1,11 @@
 #include "sensors.h"
+#include <ADC.h>
+
 
 // CONSTRUCTORS
 Sensors::Sensors() : manuals(),stops(),bassPedals(),controlPanels() {
     console.section("Sensors",CORE_PREFIX);
-    hook.OnLoop.push_back(this);
+    hooks.OnLoop.add(this);
       
     console.sectionEnd("Sensors initialised",CORE_PREFIX);
 }
@@ -12,19 +14,20 @@ Sensors::Manuals::Manuals() {
     
     pin = KEY_SIG;
     muxPerManual = (KEYS_PER_MANUAL+15)/ 16;
-
+    
     mux = new Multiplexer(true,true,muxPerManual*NUM_MANUALS,KEY_SIG); // creates mux for the manual Sensors
- 
-    if (calibratedPositions.data[0][1][0] == 0) { // If keys not calibrated, apply defaults: If it is 0, it likely hasn't been calibrated yet.
+    /*
+    if ((int)calibratedPositions.data[0][1][0] == 0) { // If keys not calibrated, apply defaults: If it is 0, it likely hasn't been calibrated yet.
         for (int x = 0; x < NUM_MANUALS; x++) { // for each manual
             for (int y = 0; y < 3; y++) { // for each type of position
                 for (int z = 0; z < KEYS_PER_MANUAL; z++) { // for each key
-                    calibratedPositions.data[x][y][z] = defaultPositions[y]; //set position to position type default
+                    calibratedPositions.data[x][y][z] = (byte)defaultPositions[y]; //set position to position type default
                 }
             }
         }
     }
-
+    */
+    
     for (int x = 0; x < NUM_MANUALS; x++) {
         for (int y = 0; y < KEYS_PER_MANUAL; y++) {
             topPositions[x][y] = read(x,y);
@@ -46,7 +49,7 @@ Sensors::Stops::Stops() {
     console.sectionEnd("Sensors::Stops initialised",CORE_PREFIX);
 }
 Sensors::BassPedals::BassPedals() {
-    console.section("Sensors::BassPedals");
+    console.section("Sensors::BassPedals",CORE_PREFIX);
     pin = PED_SIG;
     numMux = (NUM_BASS_PEDALS +15)/16;
     mux = new Multiplexer(true,false,numMux,PED_SIG); // creates mux for the manual Sensors
@@ -65,7 +68,7 @@ Sensors::ControlPanels::ControlPanels() {
 }
 
 
-
+void Sensors::sensorsTemplate::scan() {} // virtual
 // MAIN FUNCTIONS
 
 //READ VALUES
@@ -121,7 +124,99 @@ void Sensors::Manuals::calibrate(std::string mode = "all") {
         } 
     }
 }
+double Sensors::Manuals::findGradient(int value, int manual, int key, double time) {
+    if (value > TOP_THRESHOLD) {
+        if (time > 0) {
+            cycles=0;
+            gradient[manual][key] = (double)(value-oldPositions[manual][key])/(time)*VELOCITY_MULTIPLIER;
+            oldPositions[manual][key] = value;
+            
+        }
+        
+    } else {
+        gradient[manual][key] = 0;
+        oldPositions[manual][key] = 1;
+    }
+    return gradient[manual][key];
+}
 
+void Sensors::Manuals::scan() {
+    cycles += 1;
+    
+    int val;
+    //Serial.println(gradient[0][3]); 
+    for (int manual = 0; manual < NUM_MANUALS; manual++) {
+        for (int key = 0; key < KEYS_PER_MANUAL; key++) {
+            val = standardizedRead(0,key);
+            if (cycles >= VELOCITY_CYCLES) {
+                findGradient(val,manual,key,measurementTime);
+            }
+            
+            console.addPlotVar(val);
+            console.addPlotVar(gradient[manual][key]);
+            console.addPlotVar(oldPositions[manual][key]); 
+            
+            if (val > TOP_THRESHOLD) {
+                if (predictKeyRelease) {
+                    if (gradient[manual][key] < -VELOCITY_THRESHOLD && val < RELEASE_THRESHOLD) {
+                        Fx.runFx(manual,key,0);
+                        console.addPlotVar(0);
+                        forceOff[manual][key]=true;
+                    } else if (forceOff[manual][key] == 0){
+                        Fx.runFx(manual,key,1);
+                        console.addPlotVar(100);
+                        if (gradient[manual][key] > 2) {
+                            forceOff[manual][key]=false;
+                        }
+                    } else {
+                        Fx.runFx(manual,key,0);
+                        console.addPlotVar(0);
+                    }
+                } else {
+                    Fx.runFx(manual,key,1);
+                    console.addPlotVar(100);
+                }
+            } else {
+                Fx.runFx(manual,key,0);
+                console.addPlotVar(0);
+                forceOff[manual][key]=false;
+            }
+        }
+    }
+    if (cycles >= VELOCITY_CYCLES) {
+        measurementTime = 0;
+    }
+    //console.addPlotVar(gradient[0][3]);
+    console.addPlotVar(0); 
+    console.addPlotVar(0); 
+    console.addPlotVar(110); 
+    console.addPlotVar(-20); 
+
+
+    measurementTime = 0;
+}
+int Sensors::Manuals::standardize(int value, int manual, int key) {
+    
+    int val = abs(value-topPositions[manual][key])-NOISE_LEVEL;
+    if (val <0) {
+        val = 0;
+    }
+    return round(sqrt(SIGNAL_MULTIPLIER*val));
+    
+    //eturn abs(value-topPositions[manual][key]);
+}
+int Sensors::Manuals::standardizedRead(int manual, int key) {
+    return standardize(read(manual,key),manual,key);
+}
+void Sensors::Stops::scan() {
+    
+}
+void Sensors::BassPedals::scan() {
+
+}
+void Sensors::ControlPanels::scan() {
+
+}
 // runs all the scan operations each time the whole program loops
 void Sensors::onLoop() {
     manuals.scan();
