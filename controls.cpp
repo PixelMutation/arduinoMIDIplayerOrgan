@@ -56,7 +56,7 @@ void controls::checkPins() { //  guide on detecting pin states https://www.ardui
 }
 
 // create instance
-controls Controls;
+//controls Controls;
 
 
 

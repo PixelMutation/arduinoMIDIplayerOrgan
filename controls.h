@@ -24,5 +24,5 @@ public:
 };
 
 
-extern controls Controls;
+//extern controls Controls;
 #endif
