@@ -8,14 +8,16 @@
 class Console  {
 	int consoleIndent = 0;
 	
-
+	int plotCycles; // increments with each plot request
+	int cycleGap=20;
+	bool plotActive = false;
 public:
 	
 
 	template<typename T>
 	void print(T message) {
 		delay(SERIAL_DELAY);
-		Serial.begin(SERIAL_BAUDRATE);
+		
 		if (DEBUG) {
 			Serial.print(message);
 		}
@@ -27,7 +29,7 @@ public:
 	template<typename T>
 	void println(T message) {
 		#if DEBUG == true
-			Serial.begin(SERIAL_BAUDRATE);
+			
 			delay(SERIAL_DELAY);
 			Serial.print(INFO_PREFIX);
 			delay(SERIAL_DELAY);
@@ -48,7 +50,7 @@ public:
 	template<typename T>
 	void println(T message, T prefix) {
 		#if DEBUG == true
-			Serial.begin(SERIAL_BAUDRATE);
+			
 			delay(SERIAL_DELAY);
 			Serial.print(prefix);
 			delay(SERIAL_DELAY);
@@ -87,6 +89,15 @@ public:
         println(message,prefix);
     }
     void printByte(int8_t u);
+	template<typename T>
+	void addPlotLabel(T label){
+		#if PLOTTER == true 
+			if (plotActive) {
+				Serial.print(label);
+				Serial.print(":");
+			}
+		#endif
+	}
 	void addPlotVar(int var);
 	void addPlotVar(double var);
 	void plot();
