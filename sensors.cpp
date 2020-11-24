@@ -155,7 +155,7 @@ void Sensors::Manuals::scan() {
             console.addPlotVar(val);
             console.addPlotVar(gradient[manual][key]);
             console.addPlotVar(oldPositions[manual][key]); 
-            
+            //console.addPlotVar(topPositions[manual][key]); 
             if (val > TOP_THRESHOLD) {
                 if (predictKeyRelease) {
                     if (gradient[manual][key] < -VELOCITY_THRESHOLD && val < RELEASE_THRESHOLD) {
@@ -190,7 +190,7 @@ void Sensors::Manuals::scan() {
     console.addPlotVar(0); 
     console.addPlotVar(0); 
     console.addPlotVar(110); 
-    console.addPlotVar(-20); 
+    console.addPlotVar(-50); 
 
 
     measurementTime = 0;
@@ -201,7 +201,7 @@ int Sensors::Manuals::standardize(int value, int manual, int key) {
     if (val <0) {
         val = 0;
     }
-    return round(sqrt(SIGNAL_MULTIPLIER*val));
+    return ((int)(sqrt(SIGNAL_MULTIPLIER*val)))/SIGNAL_DIVIDER;
     
     //eturn abs(value-topPositions[manual][key]);
 }
