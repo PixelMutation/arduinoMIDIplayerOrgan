@@ -7,15 +7,15 @@ analogManager::analogManager() {
 
     adc->adc0->setResolution      (ADC_RESOLUTION);
     adc->adc0->setAveraging       (ADC_AVERAGING);
-    adc->adc0->setConversionSpeed (ADC_CONVERSION_SPEED::MED_SPEED);
-    adc->adc0->setSamplingSpeed   (ADC_SAMPLING_SPEED  ::MED_SPEED);
+    adc->adc0->setConversionSpeed (ADC_CONVERSION_SPEED::VERY_HIGH_SPEED);
+    adc->adc0->setSamplingSpeed   (ADC_SAMPLING_SPEED  ::HIGH_VERY_HIGH_SPEED);
 
     adc->adc0->startContinuous(KEY_SIG);
 
     adc->adc1->setResolution      (ADC_RESOLUTION);
     adc->adc1->setAveraging       (ADC_AVERAGING);
-    adc->adc1->setConversionSpeed (ADC_CONVERSION_SPEED::MED_SPEED);
-    adc->adc1->setSamplingSpeed   (ADC_SAMPLING_SPEED  ::MED_SPEED);
+    adc->adc1->setConversionSpeed (ADC_CONVERSION_SPEED::VERY_HIGH_SPEED);
+    adc->adc1->setSamplingSpeed   (ADC_SAMPLING_SPEED  ::HIGH_VERY_HIGH_SPEED);
     //Serial.print("val "); Serial.println(adc->adc0->analogReadContinuous());
     console.sectionEnd("analogManager initialised",CORE_PREFIX);
 
