@@ -5,7 +5,7 @@
 
 #if PLOT_SPEED == true
   elapsedMicros cycleLength;
-  int cycle;
+  int progCycle;
   double cycleDuration;
   double cycleFrequency;
 #endif
@@ -38,17 +38,17 @@ void loop() {
   
 
   #if PLOT_SPEED == true
-    cycle +=1;
-    if (cycle >= 20) {
+    progCycle +=1;
+    if (progCycle >= 20) {
       cycleDuration = (double)cycleLength/20;
-      cycleFrequency = (double)1/(cycleDuration*0.0001);
+      cycleFrequency = (double)1/(cycleDuration*0.001);
       #if PLOTTER == false
-        Serial.print("cycleFreq(100Hz):"); Serial.println(cycleFrequency);
+        Serial.print("cycleFreq(kHz):"); Serial.println(cycleFrequency);
         Serial.flush();
       #endif
         
       cycleLength=0;
-      cycle=0;
+      progCycle=0;
     }
     /*
     if (cycleDuration>1000) {
@@ -61,7 +61,7 @@ void loop() {
     */
     #if PLOTTER == true
 
-      Serial.print("cycleFreq(100Hz):"); Serial.print(cycleFrequency);Serial.print(",");
+      console.addPlotLabel("cycleFreq(kHz)");console.addPlotVar(cycleFrequency);
     #endif
   #endif
   
@@ -72,19 +72,21 @@ void loop() {
   digitalWrite(13,LOW);
   //stateManager.keys.requestActuatorState(0,0,1);
   //KeyActuators.setState(0,0,1);
-  
+  /*
   double Delay=log(analogRead(21))*100;
   //console.addPlotVar(Delay);
   
   if (Delay>0) {
     delayMicroseconds(Delay);
   }
+  */
+
   
   
   // Calls all module functions set to run each loop
   hooks.OnLoop.call();
-  
   console.plot();
+  //console.plot();
 
   
 }
