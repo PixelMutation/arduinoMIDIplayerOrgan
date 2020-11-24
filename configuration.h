@@ -26,8 +26,8 @@
 #define MICROCONTROLLER
 //define TEENSY 4_1
 
-#define EEPROM_SIZE   1080 // amount in Teensy 4.0, for 4.1 it is larger
-#define NUM_I2C_PORTS 2    // there are 2 on Teensy 4.0 and 3 and Teensy 4.1
+#define EEPROM_SIZE   1080 // amount in Teensy 0.0, for 0.1 it is larger
+#define NUM_I2C_PORTS 2    // there are 2 on Teensy 0.0 and 3 and Teensy 0.1
 
 
 /* -------------------------------------------------------------------------- */
@@ -51,19 +51,20 @@
 
 #define INTERNAL_ADC      false // whether the internal ADC is used //TODO add alternative
 #define ANALOG            true  // whether the sensors are analog (should be)
-#define ADC_AVERAGING     16    // the averaging level of the ADCs: 8,16,32
-#define MICROSECOND_DELAY 0     // the delay in microseconds before taking a measurement to allow stabilisation
-#define ADC_RESOLUTION 8        // ADC resolution - keep this at 8 since EEPROM can't handle more
+#define ADC_AVERAGING     0    // the number of readings (4,8,16,32) per analogRead() (lower = faster)
+#define MICROSECOND_DELAY 0    // the delay in microseconds before taking a measurement to allow stabilisation
+#define ADC_RESOLUTION 10        // ADC resolution - keep this at 8 since EEPROM can't handle more
 
-#define NOISE_LEVEL 1           // Cuts this amount from the bottom of the signal
+#define NOISE_LEVEL 10           // Cuts this amount from the bottom of the signal
 #define SIGNAL_MULTIPLIER 100   // Reading multiplied by this before square rooting
+#define SIGNAL_DIVIDER 1        // square rooted reading divided by this
 #define VELOCITY_MULTIPLIER 1   // The velocity is multiplied by this amount
-#define VELOCITY_CYCLES 15      // no. cycles between velocity measurements
-#define TOP_THRESHOLD 2         // The point above which readings are used
+#define VELOCITY_CYCLES 2      // no. cycles between velocity measurements - the lower the more accurate
+#define TOP_THRESHOLD 5         // The point above which readings are used
 #define VELOCITY_THRESHOLD 5    // The size of the negative velocity at which keys are released
 #define RELEASE_THRESHOLD 50
 /* ---------------------------------- PINS ---------------------------------- */
-#define KEY_SIG  24 // has to be supported by Continuous read
+#define KEY_SIG  23 // has to be supported by Continuous read
 #define STOP_SIG 22
 #define PED_SIG  21
 #define CTRL_SIG 20
@@ -76,7 +77,7 @@
 #define CONFIRM_PIN_MODE INPUT // either INPUT or INPUT_PULLUP depending on the button's wiring
 
 #define MUX_SELECT_PINS {2,3,4,5} // the pins used to select an individual I/O pin on a mux
-#define MUX_ENABLE_PINS {9,10,11,12} // the pins used to select which mux to enable via a 4-16 inverting demux (or two 3-8 inverting demuxes)
+#define MUX_ENABLE_PINS {9,10,11,12} // the pins used to select which mux to enable via a 0-16 inverting demux (or two 3-8 inverting demuxes)
 
 /* -------------------------------------------------------------------------- */
 /*                               STOPS SETTINGS:                              */
