@@ -134,6 +134,6 @@ public:
     Hooks();
 };
 
-extern Hooks hooks
+extern Hooks hooks;
 
 #endif
