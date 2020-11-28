@@ -75,7 +75,7 @@ void Sensors::sensorsTemplate::scan() {} // virtual
 
 // reads the raw value from a key
 int Sensors::Manuals::read(int manual, int key) {
-    return mux->muxRead(manual*key+key,true,KEY_PULLUP,MICROSECOND_DELAY);
+    return SIGNAL_MULTIPLIER*mux->muxRead(manual*key+key,true,KEY_PULLUP,MICROSECOND_DELAY);
 }
 // reads the raw value from a stop
 int Sensors::Stops::read(int division, int stop) {
@@ -139,69 +139,138 @@ double Sensors::Manuals::findGradient(int value, int manual, int key, double tim
     }
     return gradient[manual][key];
 }
+// a public fetcher function for the calculated velocity
+double Sensors::Manuals::fetchVelocity(int manual, int key) {
+    return gradient[manual][key];
+}
+// a public fetcher for the calculated key position
+int Sensors::Manuals::fetchPosition(int manual, int key) {
+    return currentPosition[manual][key];
+}
+
+void Sensors::Manuals::runEffects(int manual, int key, int state) {
+    if (effectState[manual][key] != state) {
+        int velocity = 0;
+        if (state != 0 ) {
+            velocity=findGradient(currentPosition[manual][key],manual,key,measurementTime);
+        }
+        Fx.runFx(manual,key,abs(velocity));
+        effectState[manual][key] = state;
+    }
+    
+}
+
 
 void Sensors::Manuals::scan() {
-    cycles += 1;
     
-    int val;
+    cycles += 1;
+    int thresholdVal,val,velocity;
+
     //Serial.println(gradient[0][3]); 
     for (int manual = 0; manual < NUM_MANUALS; manual++) {
         for (int key = 0; key < KEYS_PER_MANUAL; key++) {
-            val = standardizedRead(0,key);
+            currentPosition[manual][key] = standardizedRead(0,key);
+            val = currentPosition[manual][key];
             if (cycles >= VELOCITY_CYCLES) {
-                findGradient(val,manual,key,measurementTime);
+                findGradient(currentPosition[manual][key],manual,key,measurementTime);
             }
+            velocity = gradient[manual][key];
+            
+            //console.addPlotVar(topPositions[manual][key]); 
+            if (val > TOP_THRESHOLD) {
+                readState[manual][key] = 200;
+                console.addPlotVar(200);
+                thresholdVal = thresholdCheck(val,ACTIVATION_THRESHOLD);
+                if (thresholdVal==1) { 
+                    if (predictKeyRelease) {
+                        
+                        if (thresholdCheck(velocity, -NEG_VELOCITY_THRESHOLD,VELOCITY_DEADZONE) == -1 && thresholdCheck(val,RELEASE_THRESHOLD)==-1) {
+                            runEffects(manual,key,0);
+                            console.addPlotVar(0);
+
+                            forceOff[manual][key]=true;
+                        } else if (forceOff[manual][key] == false){
+                            console.addPlotVar(195);
+                            runEffects(manual,key,195);
+
+                        } else {
+                            console.addPlotVar(0);
+                            runEffects(manual,key,0);
+
+                        }
+                        if (thresholdCheck(velocity,POS_VELOCITY_THRESHOLD,VELOCITY_DEADZONE == 1)) {
+                            forceOff[manual][key]=false;
+                        }
+                    } else {
+                        
+                        console.addPlotVar(195);
+                        runEffects(manual,key,195);
+                        
+                    }
+                } else if (thresholdVal==-1){
+                    runEffects(manual,key,0);
+                    //forceOff[manual][key]=false;
+                    console.addPlotVar(0);
+
+                } else {
+                    console.addPlotVar(effectState[manual][key]);
+                }
+            } else if (val == 0) {
+                runEffects(manual,key,0);
+                console.addPlotVar(0);
+                console.addPlotVar(0);
+                readState[manual][key] = 0;
+            } else {
+                console.addPlotVar(readState[manual][key]);
+                console.addPlotVar(effectState[manual][key]);
+            }
+            
             
             console.addPlotVar(val);
             console.addPlotVar(gradient[manual][key]);
             console.addPlotVar(oldPositions[manual][key]); 
-            //console.addPlotVar(topPositions[manual][key]); 
-            if (val > TOP_THRESHOLD) {
-                if (predictKeyRelease) {
-                    if (gradient[manual][key] < -VELOCITY_THRESHOLD && val < RELEASE_THRESHOLD) {
-                        Fx.runFx(manual,key,0);
-                        console.addPlotVar(0);
-                        forceOff[manual][key]=true;
-                    } else if (forceOff[manual][key] == 0){
-                        Fx.runFx(manual,key,1);
-                        console.addPlotVar(100);
-                        if (gradient[manual][key] > 2) {
-                            forceOff[manual][key]=false;
-                        }
-                    } else {
-                        Fx.runFx(manual,key,0);
-                        console.addPlotVar(0);
-                    }
-                } else {
-                    Fx.runFx(manual,key,1);
-                    console.addPlotVar(100);
-                }
-            } else {
-                Fx.runFx(manual,key,0);
-                console.addPlotVar(0);
-                forceOff[manual][key]=false;
-            }
+
         }
     }
     if (cycles >= VELOCITY_CYCLES) {
         measurementTime = 0;
     }
+    
     //console.addPlotVar(gradient[0][3]);
     console.addPlotVar(0); 
     console.addPlotVar(0); 
-    console.addPlotVar(110); 
+    console.addPlotVar(210); 
     console.addPlotVar(-50); 
 
 
     measurementTime = 0;
+    
 }
 int Sensors::Manuals::standardize(int value, int manual, int key) {
-    
-    int val = abs(value-topPositions[manual][key])-NOISE_LEVEL;
+    #if SENSOR_INVERT == true
+    double val = -(value-topPositions[manual][key])-NOISE_LEVEL;
+    #else
+    int val = (value-topPositions[manual][key])-NOISE_LEVEL;
+    #endif
     if (val <0) {
         val = 0;
     }
-    return ((int)(sqrt(SIGNAL_MULTIPLIER*val)))/SIGNAL_DIVIDER;
+    #if AVERAGES > 1
+    int total=0;
+    for (int i = 0; i < AVERAGES-2; i++) {
+        total+=averagingPositions[manual][key][i];
+        averagingPositions[manual][key][i]=averagingPositions[manual][key][i+1];
+    }
+    total+=averagingPositions[manual][key][AVERAGES-2];
+    averagingPositions[manual][key][AVERAGES-2] = val;
+    total+=val;
+    val= total/AVERAGES;
+
+    
+    #endif
+    
+    
+    return ((/*sqrt*/(val)))/(double)SIGNAL_DIVIDER;
     
     //eturn abs(value-topPositions[manual][key]);
 }
