@@ -40,7 +40,7 @@ public:
         bool    forceOff    [NUM_MANUALS][KEYS_PER_MANUAL] = {{}};
     public:
         
-        bool predictKeyRelease = true;
+        bool predictKeyRelease = false;
         
         eepromBlock3D calibratedPositions = eepromManager.newBlock(NUM_MANUALS,3,KEYS_PER_MANUAL);
         

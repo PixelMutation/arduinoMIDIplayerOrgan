@@ -15,6 +15,7 @@ class midiManager : public moduleTemplate { // handles MIDI I/O
   int minForteLevel      = 64;	// volume level (0-127) at which forte stops activated
   int minChorusLevel     = 64;	// chorus level at which all stops activated
   int minModulationLevel = 64;	// level at which vox humana activated
+  bool midiStates[KEYS_PER_MANUAL];
 
   std::vector<std::vector<int8_t>> stopPresetsTable{ // This is just some preset stop positions assigned to MIDI instruments, change these to some presets for your own instrument. Use -1 to indicate that that stop should be ignored (e.g. if it can't be moved, or won't affect anything.)
     //No.  |            Stops state          |      General MIDI instrument   

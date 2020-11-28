@@ -5,24 +5,32 @@
 midiManager::midiManager() {
 	console.section("midiManager",CORE_PREFIX);
 	midi_to_key_offset = MIDImiddleCpos - keysMiddleCpos; //this offset is used when converting between MIDI key numbers and real key numbers
-
+	Serial1.begin(MIDI_BAUDRATE);
+	Serial2.begin(MIDI_BAUDRATE);
+	
+	
 	hooks.OnLoop.add(this);
+	
 	console.sectionEnd("midiManager initialised",CORE_PREFIX);
 }
 
 // runs each loop
 void midiManager::onLoop(){
+	/*
 	if (Serial1.available() > 2) {  // https://www.instructables.com/id/Send-and-Receive-MIDI-with-Arduino/
 		MIDIreceive(Serial1.read(), Serial1.read(),Serial1.read());
 	}
+	*/
 	if (Serial2.available() > 2) {
 		MIDIreceive(Serial2.read(), Serial2.read(),Serial2.read());
+		console.println("midi recieved");
 	}
+	
 }
 
 // checks for and handles incoming MIDI messages (use parameters ONLY for SIMULATING midi, otherwise ignores real midi input)
 void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters only for simulation purposes
-
+	console.println("scanMidi");
 	// the Status byte is split into 2 nibbles: the command type and the channel number
 	int type = status / 16; // divides the status message by 16 to find the type of command, discarding the channel number
 	int channel = status % 16; // finds the channel number
@@ -34,8 +42,8 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 		}
 	}
 	if (found) {
-		cout << "\nchannel " << channel << " active";
-		cout << "\ntype " << type << " data1 " << data1 << " data2 " << data2 << "\n";
+		//cout << "\nchannel " << channel << " active";
+		//cout << "\ntype " << type << " data1 " << data1 << " data2 " << data2 << "\n";
 		int midiNumber, velocity, keyNumber;
 
 		switch (type) { // using table of HEX midi commands at https://www.songstuff.com/recording/article/midi_message_format/
@@ -45,11 +53,14 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 			velocity = data2;
 			keyNumber = midiNumber - midi_to_key_offset; //applies midi to real key offset
 			if (velocity!=0) { // sometimes note off is sent as on with velocity 0
+				KeyActuators.setState(0,1,1);
+				console.println("note recieved");
 				stateManager.keys.requestActuatorState(0,keyNumber, 1); //toggles the key on
 			} else {
 				stateManager.keys.requestActuatorState(0,keyNumber, 0); //toggles the key off
+				KeyActuators.setState(0,1,0);
 			}
-			//printKeyStates("header");
+			//printKeyStates("header");E
 			//printKeyStates("full");
 
 			// Calls all module functions for midi key on
@@ -155,23 +166,35 @@ void midiManager::MIDIreceive(int status, int data1, int data2) { // parameters 
 
 // sends the required key state over MIDI (velocity and channel parameters are OPTIONAL)
 void midiManager::MIDIsendKey(int keyNumber, int state, int velocity, int channel) {
-	int midiNumber = keyNumber + midi_to_key_offset;
-	int type;
+	if (state == 1 || (state == 0 && midiStates[keyNumber] != 0)) {
+		int midiNumber = keyNumber + midi_to_key_offset;
+		int type;
+		if (state == 1) {
+			type = 0x9; // Note on status type
+		}
+		else {
+			type = 0x8; // Note off status type
+		}
+		if (channel == -1) {
+			channel = outputChannel; // if channel unspecified, use default
+		}
+		int status = type * 16 + channel;
+		int data1 = keyNumber;
+		int data2 = velocity;
+		if(false) {
+			Serial2.write(status);
+			Serial2.write(data1);
+			Serial2.write(data2);
+		
+			Serial2.flush();
+		}
+	}
 	if (state == 1) {
-		type = 0x9; // Note on status type
+		midiStates[keyNumber]=1;
+	} else {
+		midiStates[keyNumber]=0;
 	}
-	else {
-		type = 0x8; // Note off status type
-	}
-	if (channel == -1) {
-		channel = outputChannel; // if channel unspecified, use default
-	}
-	int status = type * 16 + channel;
-	int data1 = keyNumber;
-	int data2 = velocity;
-	/*
-	code to send midi here
-	*/
+	
 }
 
 // converts current stop positions to a MIDI instrument and sends a MIDI program change message with this
@@ -239,4 +262,4 @@ void midiManager::MIDI_to_stop(int instrumentNumber) {
 
 
 // create instance of MIDI class
-midiManager MIDI;
+midiManager MIDI;//(MODULE_ARG);

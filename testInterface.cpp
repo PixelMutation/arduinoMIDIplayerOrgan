@@ -2,6 +2,7 @@
 //#include <thread>
 
 void testInterface() {
+    /*
     int number, state, choice;
     choice = 0;
     Serial.println("\nWelcome to the Player Organ Test Interface!");
@@ -27,13 +28,13 @@ void testInterface() {
                         //stateManager.keys.setSensorState(number, state);
                         //printKeyStates("header");
                         //printKeyStates();
-                        /*
+                        
                         while (! Keys.schedule.empty()) {
                             //checkSchedule();
                             delay(200);
                             //this_thread::sleep_for(chrono::milliseconds(200));
                         }
-                        */
+                        
                         Serial.println("keys pressed overall  : ");    //Keys.getStatesVector("all", true, true);
 
                         Serial.println("Choose item number (1-61) or -1 to stop: ");
@@ -74,13 +75,13 @@ void testInterface() {
                 //stateManager.keys.setSensorState(key, 1);
                 //printKeyStates("overall");
                 Serial.println("");
-                /*
+                
                 while (! Keys.schedule.empty()) {
                     //checkSchedule();
                     //this_thread::sleep_for(chrono::milliseconds(200));
                     delay(200);
                 }
-                */
+                
                 //printKeyStates("overall");
 
             }
@@ -136,4 +137,5 @@ void testInterface() {
         }
     }
     //printKeyStates("header");
+    */
 }

@@ -6,13 +6,15 @@
 /*                         SERIAL AND CONSOLE SETTINGS                        */
 /* -------------------------------------------------------------------------- */
 
-#define DEBUG false  // whether debug messages should be printed
-#define PLOTTER true // plots graphs over serial. cannot be used at the same time as DEBUG
-#define PLOT_SPEED true // plots the frequency (of complete program cycles)
+#define DEBUG true  // whether debug messages should be printed
+#define PLOTTER false // plots graphs over serial. cannot be used at the same time as DEBUG
+#define PLOT_SPEED false // plots the frequency (of complete program cycles)
 
 #define CORE_PREFIX "CORE: "
 #define PLUGIN_PREFIX "PLUG: "
 #define INFO_PREFIX "INFO: "
+
+
 
 #define SERIAL_BAUDRATE 115200
 #define MIDI_BAUDRATE 31250
@@ -59,7 +61,7 @@
 #define SIGNAL_MULTIPLIER 100   // Reading multiplied by this before square rooting
 #define SIGNAL_DIVIDER 1        // square rooted reading divided by this
 #define VELOCITY_MULTIPLIER 1   // The velocity is multiplied by this amount
-#define VELOCITY_CYCLES 2      // no. cycles between velocity measurements - the lower the more accurate
+#define VELOCITY_CYCLES 50      // no. cycles between velocity measurements - the lower the more accurate
 #define TOP_THRESHOLD 5         // The point above which readings are used
 #define VELOCITY_THRESHOLD 5    // The size of the negative velocity at which keys are released
 #define RELEASE_THRESHOLD 50
