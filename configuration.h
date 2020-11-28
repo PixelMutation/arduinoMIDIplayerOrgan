@@ -57,14 +57,23 @@
 #define MICROSECOND_DELAY 0    // the delay in microseconds before taking a measurement to allow stabilisation
 #define ADC_RESOLUTION 10        // ADC resolution - keep this at 8 since EEPROM can't handle more
 
+#define SENSOR_INVERT true      // whether the value increases with distance from the sensor (true for most hall sensors)
 #define NOISE_LEVEL 10           // Cuts this amount from the bottom of the signal
-#define SIGNAL_MULTIPLIER 100   // Reading multiplied by this before square rooting
+#define SIGNAL_MULTIPLIER 1   // Reading multiplied by this before square rooting
 #define SIGNAL_DIVIDER 1        // square rooted reading divided by this
 #define VELOCITY_MULTIPLIER 1   // The velocity is multiplied by this amount
-#define VELOCITY_CYCLES 50      // no. cycles between velocity measurements - the lower the more accurate
-#define TOP_THRESHOLD 5         // The point above which readings are used
-#define VELOCITY_THRESHOLD 5    // The size of the negative velocity at which keys are released
-#define RELEASE_THRESHOLD 50
+#define VELOCITY_CYCLES 100      // no. cycles between velocity measurements - the lower the more accurate
+#define AVERAGES 20
+
+#define POSITION_DEADZONE 4   // A zone centred around each threshold in which values do not cause any changes to prevent dithering artefacts
+#define VELOCITY_DEADZONE 4
+
+#define TOP_THRESHOLD 3             // The point above which readings are used (should be very low)
+#define ACTIVATION_THRESHOLD 30    // the point above which effects are activated
+#define NEG_VELOCITY_THRESHOLD 5    // The magnitude of the negative velocity at which keys are released (not taking into account deadzone)
+#define POS_VELOCITY_THRESHOLD 2    // The magnitude of the positive velocity at which keys are reactivated
+#define RELEASE_THRESHOLD 80        // Position below which the key release prediction operates
+
 /* ---------------------------------- PINS ---------------------------------- */
 #define KEY_SIG  23 // has to be supported by Continuous read
 #define STOP_SIG 22
