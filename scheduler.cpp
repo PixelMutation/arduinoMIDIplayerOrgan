@@ -25,7 +25,7 @@ scheduleManager::scheduleManager() {
 // checks the schedule and calls scheduled event methods 
 void scheduleManager::checkSchedule() {
     if (! scheduleMethod.empty()){ 
-        vector<int> events; // since the schedule is not in order, this stores which events have passed
+        std::vector<int> events; // since the schedule is not in order, this stores which events have passed
         for (int i=0; i < (int)scheduleMethod.size(); i++) {            // for each event in the schedule
             if (scheduleTime[i] <= currentTime) {                       // if current time is equal to or past the event time
                 scheduleMethod[i]->onSchedule(scheduleParameters[i]);   // call the event's method//

@@ -2,8 +2,8 @@
 #define MODULE_MANAGER_H
 
 #include "global_includes.h"
-#include <vector>
-using namespace std;
+
+
 //#include "stateManager.h"
 
 //void keypressHandler(int keyNumber, int state);
@@ -85,9 +85,11 @@ class Hooks { // This struct contains the vectors of references to objects for e
         bool activate(moduleTemplate* module, int pos);
         bool deactivate(int pos);
     };
-    bool isSetup = false;
-public:
+    bool isSetup=false;
     void setup();
+
+public:
+
     int numHooks=0; // increments each time a new hook is initialised
     std::vector<std::vector<moduleTemplate*>> hookModules; // stores pointers to the actual modules
 
@@ -132,6 +134,6 @@ public:
     Hooks();
 };
 
-extern Hooks hooks;
+extern Hooks hooks
 
 #endif

@@ -47,7 +47,7 @@ Multiplexer::Multiplexer(bool _input, bool _continuous, int _numOfMux, int _IOpi
 
 }
 // sets 4 pins to represent a 4 bit binary value
-void Multiplexer::writeBinary(vector<int>& pins, int value) {
+void Multiplexer::writeBinary(std::vector<int>& pins, int value) {
    // console.println("start binary write");
 
     for (int i = 0; i < (int)pins.size(); i++) { // for each pin, set the binary state to select the mux output https://learn.sparkfun.com/tutorials/multiplexer-breakout-hookup-guide/all
@@ -66,12 +66,13 @@ void Multiplexer::writeBinary(vector<int>& pins, int value) {
 // uses the demux to set all but the selected mux to be disabled
 void Multiplexer::setEnablePins(int mux) {
     writeBinary(enablePins,mux);
+
 }
 
 
 // returns the value of the input (input number, if you want analog result, if a pullup sensor)
 int Multiplexer::muxRead(int index, bool analog, bool pullup, int microsecondDelay) {
-    console.println("startRead");
+    //console.println("startRead");
     int multiplexer = index/16; // each has 16 outputs so this finds which multiplexer is needed
     setEnablePins(multiplexer); // enables the chosen multiplexer
     int selectNumber = index - 16 * multiplexer; // the number (0-15) of the output on the corresponding multiplexer
@@ -86,7 +87,7 @@ int Multiplexer::muxRead(int index, bool analog, bool pullup, int microsecondDel
             if (analog) { // whether an analog response is wanted
                 delayMicroseconds(microsecondDelay); // delay so analog has time to stabilise
                 if (continuous) {
-                    console.println("reach cont");
+                    //console.println("reach cont");
                     return(/*analog_manager.adc->adc0->analogReadContinuous()*/analogRead(23)); //TODO make continous reads work again
                 } else {
                     return /*analog_manager.adc->adc1->analogRead(IOpin)*/ analogRead(23);

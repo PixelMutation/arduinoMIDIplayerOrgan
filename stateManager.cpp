@@ -22,7 +22,8 @@ void StateManagerTemplate::onSchedule(std::vector<int> params) {
 }
 // request system state function - when something wants a key or stop on or off after a specific delay, it calls this
 void StateManagerTemplate::requestActuatorState(int set, int index, int state, unsigned long delay) {
-    if (index+1 > sets[set] or index < 1) { cout << "FAILED: item no. out of range!\n"; return; }
+    console.section("request actuator state","CORE: ");
+    if (index+1 > sets[set] or index < 1) { console.println("FAILED: item no. out of range!\n"); return; }
     if (delay != 0) {
         scheduler.addToSchedule(this, delay, {set,index,state});
     } else {
@@ -43,7 +44,7 @@ void StateManagerTemplate::requestActuatorState(int set, int index, int state, u
             }
         }
     }
-    
+    console.sectionEnd("requested actuator state","CORE: ");
 }
 
 StateManager::StateManager() : keys(),stops(){
@@ -74,6 +75,7 @@ StateManager::Keys::Keys() {
 }
 // when an actuator is activated, this works out if the polyphony is exceeded and deactivates the oldest actuator
 void StateManager::Keys::polyphonyManager(int set, int index, int state) {
+    console.println("checking polyphony","CORE: ");
     int dir;
     if (state == 1) { // whether to add or subtract from the polyphony
         dir = 1;
@@ -93,10 +95,13 @@ void StateManager::Keys::polyphonyManager(int set, int index, int state) {
     if (dir == 1) { // if the system activates the item, it becomes the most recently activated. If the system deactivates the item, its state stays at 0
         actuationState[set][index] = 1;
     }
+    console.println("checked polyphony","CORE: ");
 }
 // tells the actuator module to actuate the key
 void StateManager::Keys::actuate(int set, int index,int state) {
+    console.println("actuating","CORE: ");
     KeyActuators.setState(set,index,state);
+    console.println("actuated"),"CORE: ";
 }
 
 /* -------------------------------------------------------------------------- */

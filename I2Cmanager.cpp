@@ -28,7 +28,7 @@ I2C_manager::I2C_manager(int _port, int _numDevices, int _baseAddress) {
     console.sectionEnd("I2Cmanager initialised",CORE_PREFIX);
 }
 
-void I2C_manager::write(vector<int> bytes, int device) {
+void I2C_manager::write(std::vector<int> bytes, int device) {
     console.println("start I2C write");
     console.println(device);
     wire->beginTransmission((signed)devices[device]);

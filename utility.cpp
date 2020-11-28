@@ -27,7 +27,7 @@ void printvector(std::vector<int> vector, bool displayZero) {
 
 }
 
-void printvector(deque<double> vector, bool displayZero) {
+void printvector(std::deque<double> vector, bool displayZero) {
 	for (double element : vector) {
 
 		if (element != 0) {

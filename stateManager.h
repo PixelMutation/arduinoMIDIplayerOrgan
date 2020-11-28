@@ -11,8 +11,8 @@
 class StateManagerTemplate : public schedule {
 protected:
 	std::vector<int> sets; 			// stores the size of each set (manual or stop division)
-	std::vector<vector<byte>> requestBuffer; // a buffer of requests to activate / deactivate a stop or key
-	std::vector<vector<byte>> actuationState;// a list of the actuators and their state
+	std::vector<std::vector<byte>> requestBuffer; // a buffer of requests to activate / deactivate a stop or key
+	std::vector<std::vector<byte>> actuationState;// a list of the actuators and their state
 	virtual void polyphonyManager (int set, int index,int state);
 	virtual void actuate          (int set, int index,int state); // used to call the actuation method
 	
@@ -25,7 +25,7 @@ public:
 	std::vector<int> getStatesVector(std::string type, bool print = false, bool displayZero = true);
 };
 
-class StateManager : public moduleTemplate {
+class StateManager {
 public:
 	class Keys : public StateManagerTemplate {
 		void polyphonyManager (int set, int index,int state);
