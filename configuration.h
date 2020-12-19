@@ -18,7 +18,6 @@
 
 #define SERIAL_BAUDRATE 115200
 #define MIDI_BAUDRATE 31250
-#define SERIAL_DELAY 0 // used for debug so serial can keep up
 
 
 /* -------------------------------------------------------------------------- */
