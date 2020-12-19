@@ -10,10 +10,14 @@
 #include <iostream>
 
 #include "configuration.h"
-#include "moduleManager.h"
 #include "utility.h"
+
+/*
+
+#include "moduleManager.h"
 #include "console.h"
 
+*/
 //using namespace std; //removes need for std:: prefix for standard library functions and classes
 //using std::vector;
 

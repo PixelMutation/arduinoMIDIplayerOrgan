@@ -1,8 +1,6 @@
 
 #ifndef MODULES_H
 #define MODULES_H
-// This header file ties together all the modules automatically so any function or class is available anywhere.
-
 
 // core libraries
 
@@ -25,16 +23,13 @@
 #include "scheduler.h"       // tracks time and activates any scheduled events when the time is right
 
 //#include "controls.h"        // just for testing various analog and digital input devices
-//#include "toggleItem.h"      // sends signal to move keys or stops
-//include "recieveSignal.h"  // recieves signals from the sensors / switches
 
 #include "midiManager.h"     // manages MIDI I/O and MIDI instruments
 
 #include "moduleManager.h"   // Movement commands are sent through here so plugin effects can be applied
 #include "EEPROM_manager.h"  // Stores a live version of EEPROM in memory in the form of 'blocks' which are objects with the appropriate data structure for what is needed.
 
-//#include "controls.h"        // just for testing various analog and digital input devices
-//#include "userInterface.h" // allows user to configure settings for core modules and plugins
+#include "controls.h"        // just for testing various analog and digital input devices
 
 #include "I2Cmanager.h"      // allows easy use of I2C ports and I/O expanders
 #include "I2Cactuators.h"    // sends signals to I2C actuators
@@ -45,7 +40,7 @@
 /*                      PLUGINS (COMMENT OUT TO DISABLE)                      */
 /* -------------------------------------------------------------------------- */
 
-//#include "EXAMPLE_MODULE.h"  // If developing a plugin, look at this. 
+#include "EXAMPLE_MODULE.h"  // If developing a plugin, look at this. 
 
 
 //#include "testInterface.h"   // a console interface for debugging
