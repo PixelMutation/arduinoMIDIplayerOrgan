@@ -1,6 +1,8 @@
 
 
 #include "console.h"
+
+#include <bitset>
 #include "multiplexer.h"
 
 Console::Console() {
@@ -10,10 +12,17 @@ Console::Console() {
 	//cycleGap = analogRead(22)/10;
 	cycleGap = (((int)exp(analogRead(22)/100)));
 	//cycleGap = 40;
-	//hooks.OnLoop.add(this);
+	//hooks->OnLoop->add(this);
     sectionEnd("console initialised",CORE_PREFIX);
 }
-
+void print(std::string message) {	
+    #if DEBUG == true 
+        for (auto Char : message) {
+            Serial.print(Char);
+        }
+        Serial.flush();
+    #endif
+}
 void Console::printByte(int8_t u) 
 { 
 	
@@ -61,7 +70,6 @@ void Console::plot() {
 	
 }
 
+Console * console = nullptr;
 
 
-
-Console console;

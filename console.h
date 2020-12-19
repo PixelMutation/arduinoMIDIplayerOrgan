@@ -2,7 +2,9 @@
 #define CONSOLE_H
 
 #include "global_includes.h"
-#include <bitset>
+
+#include "moduleManager.h"
+
 //#include "elapsedMillis.h"
 
 class Console  {
@@ -16,81 +18,92 @@ public:
 
 	template<typename T>
 	void print(T message) {
-		delay(SERIAL_DELAY);
-		
-		if (DEBUG) {
+		#if DEBUG == true
 			Serial.print(message);
-		}
-		delay(SERIAL_DELAY);
-		Serial.print("");
-		delay(SERIAL_DELAY);
-		Serial.flush();
-	}
-	template<typename T>
-	void println(T message) {
-		#if DEBUG == true
-			
-			delay(SERIAL_DELAY);
-			Serial.print(INFO_PREFIX);
-			delay(SERIAL_DELAY);
-			for (int i = 0; i < consoleIndent; i++) {
-				delay(SERIAL_DELAY);
-				Serial.print(" | ");
-                delay(SERIAL_DELAY);
-			}	
-			
-			delay(SERIAL_DELAY);
-			Serial.println(message);
-			delay(SERIAL_DELAY);
-			Serial.print("");
-			delay(SERIAL_DELAY);
 			Serial.flush();
 		#endif
 	}
+	void print(std::string message);
 	template<typename T>
-	void println(T message, T prefix) {
+	void printPrefix(T prefix) {
 		#if DEBUG == true
-			
-			delay(SERIAL_DELAY);
 			Serial.print(prefix);
-			delay(SERIAL_DELAY);
 			for (int i = 0; i < consoleIndent; i++) {
-				delay(SERIAL_DELAY);
 				Serial.print(" | ");
-                delay(SERIAL_DELAY);
-			}
-	
-			delay(SERIAL_DELAY);
-			Serial.println(message);
-			delay(SERIAL_DELAY);
-			Serial.print("");
-			delay(SERIAL_DELAY);
+			}	
+		#endif
+	}
+	template<typename T>
+	inline void println(T message) {
+		#if DEBUG == true
+			printPrefix(INFO_PREFIX);
+			print(message);
+			Serial.println("");
+			Serial.flush();
+		#endif
+	}
+	template<typename T>
+	inline void println(T message, T prefix) {
+		#if DEBUG == true
+			printPrefix(prefix);
+			print(message);
+			Serial.println("");
 			Serial.flush();
 		#endif
 	}
     template<typename T>
-    void section(T name) {
-        println(name,PLUGIN_PREFIX);
-        consoleIndent+=1;
+    inline void section(T name) {
+		#if DEBUG == true
+			println(name,PLUGIN_PREFIX);
+			consoleIndent+=1;
+		#endif
     }
 	template<typename T>
-    void section(T name, T prefix) {
-        println(name,prefix);
-        consoleIndent+=1;
+    inline void section(T name, T prefix) {
+		#if DEBUG == true
+			println(name,prefix);
+			consoleIndent+=1;
+		#endif
     }
     template<typename T>
-    void sectionEnd(T message){
-        consoleIndent-=1;
-        println(message,PLUGIN_PREFIX);
+    inline void sectionEnd(T message){
+		#if DEBUG == true
+			consoleIndent-=1;
+			println(message,PLUGIN_PREFIX);
+		#endif
     }
 	template<typename T>
-    void sectionEnd(T message, T prefix){
-        consoleIndent-=1;
-        println(message,prefix);
+    inline void sectionEnd(T message, T prefix){
+		#if DEBUG == true
+			consoleIndent-=1;
+			println(message,prefix);
+		#endif
     }
     void printByte(int8_t u);
 	template<typename T>
-	void addPlotLabel(T label){
+	void printList(T & list, bool displayZero) {
+		for (auto element : list) {
+
+			if (element != 0) {
+				print(" ");
+				print(element);
+
+			}
+			else {
+				if (displayZero) {
+					print(" ");
+					print(element);
+				}
+				else {
+					print("  ");
+				}
+			}
+
+			print(" ");
+		}
+	}
+	template<typename T>
+	inline void addPlotLabel(T label){
 		#if PLOTTER == true 
 			if (plotActive) {
 				Serial.print(label);
@@ -108,6 +121,6 @@ public:
 
 
 
-extern Console console;
+extern Console * console;
 
 #endif
