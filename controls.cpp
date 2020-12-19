@@ -1,20 +1,22 @@
 #include "controls.h"
-
+#include "stateManager.h"
+#include "multiplexer.h"
+#include "console.h"
 
 controls::controls() {
-    console.section("controls ");
-    hooks.OnLoop.add(this);
+    console->section("controls ");
+    hooks->OnLoop->add(this);
     
     pinMode(CONFIRM_PIN, CONFIRM_PIN_MODE); // sets up confirmation pin
     
 
 
 
-    console.sectionEnd("controls initialised");
+    console->sectionEnd("controls initialised");
 }
 
 void controls::onLoop() {
-    checkPins();
+    //checkPins();
 }
 
 void controls::checkPins() { //  guide on detecting pin states https://www.arduino.cc/en/Tutorial/DigitalInputPullup
@@ -56,7 +58,7 @@ void controls::checkPins() { //  guide on detecting pin states https://www.ardui
 }
 
 // create instance
-//controls Controls;
+controls * Controls = nullptr;
 
 
 

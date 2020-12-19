@@ -1,9 +1,11 @@
 #include "scheduler.h"
-#include "I2Cactuators.h"
+
+#include "console.h"
+//#include "I2Cactuators.h"
 
 scheduleManager::scheduleManager() {
-    console.section("scheduleManager",CORE_PREFIX);
-    hooks.OnLoop.add(this);
+    console->section("scheduleManager",CORE_PREFIX);
+    hooks->OnLoop->add(this);
     /*
     while (true) {
         //digitalWrite(13,HIGH);
@@ -16,7 +18,7 @@ scheduleManager::scheduleManager() {
     */
     
     
-    console.sectionEnd("scheduleManager initialised",CORE_PREFIX);
+    console->sectionEnd("scheduleManager initialised",CORE_PREFIX);
 }
 
 
@@ -56,4 +58,4 @@ void scheduleManager::onLoop() {
     checkSchedule();
 }
 
-scheduleManager scheduler;
+scheduleManager * scheduler = nullptr;

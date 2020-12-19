@@ -4,7 +4,8 @@
 #define EEPROM_MANAGER_H
 
 #include "global_includes.h"
-#include <EEPROM.h>
+
+#include "moduleManager.h"
 
 
 class EEPROM_manager : public moduleTemplate{
@@ -66,6 +67,6 @@ using eepromBlock1D = EEPROM_manager::block1d&;
 using eepromBlock2D = EEPROM_manager::block2d&;
 using eepromBlock3D = EEPROM_manager::block3d&;
 
-extern EEPROM_manager eepromManager;
+extern EEPROM_manager * eepromManager;
 
 #endif

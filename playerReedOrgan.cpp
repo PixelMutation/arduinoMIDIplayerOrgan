@@ -20,8 +20,35 @@
 
 
 void setup() { 
+            
+  Serial.begin(SERIAL_BAUDRATE);
+  delay(10);
+  Serial.println("setup reached");
+  delay(10);
+  Serial.flush();
 
-  console.println("reached setup");
+  
+  console       = new Console        ();
+  
+  hooks         = new Hooks          ();
+  hooks->setup();
+  eepromManager = new EEPROM_manager ();
+  Fx            = new effectManager  ();
+  scheduler     = new scheduleManager();
+  KeyActuators  = new keyActuators   ();
+  StopActuators = new stopActuators  ();
+  sensors       = new Sensors        ();
+  stateManager  = new StateManager   ();
+  MIDI          = new MidiManager    ();  
+  
+            
+  //octaveCoupler = new octave_coupler();        
+  ExampleModule = new exampleModule();            
+  //scaleManager = new scale_manager();            
+  //Controls = new Controls() ;            
+         
+
+  
 
   pinMode(13,OUTPUT);
   digitalWrite(13,HIGH);
@@ -29,12 +56,14 @@ void setup() {
   
   
   // Calls all module functions set to run on startup
-  hooks.OnStart.call();   
+  hooks->OnStart->call();   
+  console->println("completed setup");
+   
 }
 
 void loop() {
   
-  //console.addPlotVar((double)cycleLength);
+  //console->addPlotVar((double)cycleLength);
   
 
   #if PLOT_SPEED == true
@@ -61,20 +90,20 @@ void loop() {
     */
     #if PLOTTER == true
 
-      console.addPlotLabel("cycleFreq(kHz)");console.addPlotVar(cycleFrequency);
+      console->addPlotLabel("cycleFreq(kHz)");console->addPlotVar(cycleFrequency);
     #endif
   #endif
   
   digitalWrite(13,HIGH);
-  //stateManager.keys.requestActuatorState(0,0,0);
+  //stateManager->keys.requestActuatorState(0,0,0);
   //KeyActuators.setState(0,0,0);
   //delay(analogRead(22));
   digitalWrite(13,LOW);
-  //stateManager.keys.requestActuatorState(0,0,1);
+  //stateManager->keys.requestActuatorState(0,0,1);
   //KeyActuators.setState(0,0,1);
   /*
   double Delay=log(analogRead(21))*100;
-  //console.addPlotVar(Delay);
+  //console->addPlotVar(Delay);
   
   if (Delay>0) {
     delayMicroseconds(Delay);
@@ -84,8 +113,8 @@ void loop() {
   
   
   // Calls all module functions set to run each loop
-  hooks.OnLoop.call();
-  console.plot();
+  hooks->OnLoop->call();
+  console->plot();
   //console.plot();
 
   

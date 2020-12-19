@@ -2,14 +2,15 @@
 #define MIDI_MANAGER_H
 
 #include "global_includes.h"
-#include "stateManager.h"
-#include "utility.h"
+
+#include "moduleManager.h"
+
 //#include "octaveCoupler.h"
 
-class midiManager : public moduleTemplate { // handles MIDI I/O
+class MidiManager : public moduleTemplate { // handles MIDI I/O
   int MIDImiddleCpos     = 48;	// leave this alone
 	
-
+  bool sendSystemKeypress = false;
   int outputChannel      = 0;	  // channel on which notes are sent
 
   int minForteLevel      = 64;	// volume level (0-127) at which forte stops activated
@@ -17,7 +18,7 @@ class midiManager : public moduleTemplate { // handles MIDI I/O
   int minModulationLevel = 64;	// level at which vox humana activated
   bool midiStates[KEYS_PER_MANUAL];
 
-  std::vector<std::vector<int8_t>> stopPresetsTable{ // This is just some preset stop positions assigned to MIDI instruments, change these to some presets for your own instrument. Use -1 to indicate that that stop should be ignored (e.g. if it can't be moved, or won't affect anything.)
+  std::vector<std::array<int8_t,NUM_STOPS+1>> stopPresetsTable { // This is just some preset stop positions assigned to MIDI instruments, change these to some presets for your own instrument. Use -1 to indicate that that stop should be ignored (e.g. if it can't be moved, or won't affect anything.)
     //No.  |            Stops state          |      General MIDI instrument   
     // all off                          SFX
     {127,  0, 0, 0,  -1,-1,-1,-1,-1,  0, 0, 0},   //      Gunshot 
@@ -69,7 +70,7 @@ class midiManager : public moduleTemplate { // handles MIDI I/O
   };
 	
 	
-	std::vector<std::vector<int8_t>> stopPresets;// a 2D std::vector table containing all the possible reed stop configurations indexed by their MIDI instrument assignment
+	std::array<std::array<int8_t,NUM_STOPS>,128> stopPresets;// a 2D std::vector table containing all the possible reed stop configurations indexed by their MIDI instrument assignment
 public:
 	std::vector<byte> channels { 0,1,2,3,4 }; // the MIDI channels the system responds to
   int midi_to_key_offset;			             // offset between MIDI key number and real key number
@@ -80,17 +81,20 @@ public:
 	std::vector<int> fortePos = { 4,6 }; // stop number(s) for forte stop(s) (empty if not present)
 	
 	// function declarations
-	midiManager(); // constructor
+	MidiManager(); // constructor
 
-  void onLoop(); // this part is called each time the program loops
+  void onLoop            (PARAM_onLoop            ) override; // this part is called each time the program loops
+  void onUserKeyToggle   (PARAM_onUserKeyToggle   ) override;
+  void onSystemKeyToggle (PARAM_onSystemKeyToggle ) override;
+
   
-	void MIDIreceive(int status , int data1 , int data2 );	// checks for and handles MIDI input
-	void MIDIsendKey(int keyNumber, int state, int velocity = 63, int channel = -1);				// sends the required key state over MIDI
+	void receive(int status , int data1 , int data2 );	// checks for and handles MIDI input
+	void sendKey(int keyNumber, int state, int velocity = 63, int channel = -1);				// sends the required key state over MIDI
 	void stops_to_MIDI();						              // converts current stop positions to a MIDI instrument and sends a MIDI program change message with this
 	void MIDI_to_stop(int instrumentNumber);	    // converts MIDI instrument program change messages to stop positions and moves the stops to those positions
 };
 
-extern midiManager MIDI;
+extern MidiManager * MIDI ;
 
 
 #endif

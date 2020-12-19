@@ -3,10 +3,11 @@
 
 #include "global_includes.h"
 #include "EEPROM_manager.h"
-#include "I2Cactuators.h"
-#include "multiplexer.h"
 #include <elapsedMillis.h>
 #include "effectManager.h"
+#include "moduleManager.h"
+#include "multiplexer.h"
+
 
 // all sensors inherit from this
 
@@ -49,7 +50,7 @@ public:
         int averagingPositions [NUM_MANUALS][KEYS_PER_MANUAL][AVERAGES-1];
         int    effectState     [NUM_MANUALS][KEYS_PER_MANUAL];
         
-        void runEffects(int manual, int key, int state);
+        void onKeypress(int manual, int key, int state);
         
         void scan();
         
@@ -59,7 +60,7 @@ public:
         int    fetchPosition(int manual, int key);
         bool predictKeyRelease = true;
         
-        eepromBlock3D calibratedPositions = eepromManager.newBlock(NUM_MANUALS,3,KEYS_PER_MANUAL);
+        eepromBlock3D calibratedPositions = eepromManager->newBlock(NUM_MANUALS,3,KEYS_PER_MANUAL);
         
         int defaultPositions[3] = {
             220, // pos when sound produced
@@ -116,7 +117,7 @@ public:
 };
 
 
-extern Sensors sensors;
+extern Sensors * sensors;
 
 
 #endif

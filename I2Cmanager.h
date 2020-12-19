@@ -2,6 +2,7 @@
 #define I2C_MANAGER
 
 #include "global_includes.h"
+#include "console.h"
 //#include "Wire.h"
 
 //#include <i2c_t3.h>

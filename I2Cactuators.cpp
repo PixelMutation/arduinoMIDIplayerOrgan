@@ -5,9 +5,9 @@
 /* -------------------------------------------------------------------------- */
 
 keyActuators::keyActuators() {
-    console.section("keyActuators",CORE_PREFIX);
+    console->section("keyActuators",CORE_PREFIX);
     int expandersPerManual = (KEYS_PER_MANUAL + 15)/16; // divides and rounds up to find the number of expanders required per manual
-    //console.println(expandersPerManual);
+    //console->println(expandersPerManual);
     if (expandersPerManual <= 8) {
         ports.push_back(new portExpander(0,expandersPerManual));     // activates first port
         if (NUM_MANUALS * KEYS_PER_MANUAL > 128) {                         // each port supports up to 128 keys
@@ -20,12 +20,12 @@ keyActuators::keyActuators() {
     for (int i=0; i < NUM_MANUALS; i++) { // for every manual
         expanders.push_back({expandersPerManual*i,expandersPerManual*(i+1)-1}); // add the first and last expander for this manual
     }
-    console.sectionEnd("keyActuators initialised",CORE_PREFIX);
+    console->sectionEnd("keyActuators initialised",CORE_PREFIX);
 }
 // sets the state of the actuator for the given manual and key
 void keyActuators::setState(int manual, int key, int state) {
     int manualExpander = key/16;                          // find the expander number within the manual
-    console.println(manualExpander);
+    console->println(manualExpander);
     int expander = expanders[manual][0] + manualExpander; // finds the overall expander number
     if (expander < 8) {                                   // only 8 expanders per port, so selects the correct port
         ports[0]->writeToPin(key-expander*16,state,expander);
@@ -77,15 +77,14 @@ void keyActuators::test(std::string mode="legato") {
 //TODO write stop actuators methods
 
 stopActuators::stopActuators() {
-    console.section("stopActuators",CORE_PREFIX);
+    console->section("stopActuators",CORE_PREFIX);
     
-    console.sectionEnd("stopActuators initialised",CORE_PREFIX);
+    console->sectionEnd("stopActuators initialised",CORE_PREFIX);
 }
 void stopActuators::setState(int division, int stop, int state) {}
 void stopActuators::test() {}
 
 
+keyActuators * KeyActuators  = nullptr;
+stopActuators * StopActuators = nullptr;
 
-
-keyActuators KeyActuators;
-stopActuators StopActuators;

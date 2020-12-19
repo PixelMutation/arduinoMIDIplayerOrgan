@@ -1,11 +1,13 @@
 #include "scales.h"
 
+#include "stateManager.h"
+#include "console.h"
 
 scale_manager::scale_manager() {
-    console.section("scale_manager",CORE_PREFIX);
+    console->section("scale_manager",CORE_PREFIX);
     
     
-    console.sectionEnd("scale_manager initialised",CORE_PREFIX);
+    console->sectionEnd("scale_manager initialised",CORE_PREFIX);
 }
 // called when any parameters (except arpeggio) are changed to update the active patterns
 void scale_manager::updatePatterns() {
@@ -76,14 +78,14 @@ void scale_manager::autoChord(int startNote, int state) {
         for (int i = 0; i < (int)halfStepPattern.size(); i++) { // for each note in the pattern
             //cout << halfStepPattern[i];
             if (delay > 0) { // if there is a delay, play as an arpeggio
-                stateManager.keys.requestActuatorState(0,startNote + halfStepPattern[i], state, delay * i); // request a keypress offset from the current note by the number of half steps for the new note
+                stateManager->keys.requestActuatorState(0,startNote + halfStepPattern[i], state, delay * i); // request a keypress offset from the current note by the number of half steps for the new note
             } else {
-                stateManager.keys.requestActuatorState(0,startNote + halfStepPattern[i], state); // request a keypress offset from the current note by the number of half steps for the new note
+                stateManager->keys.requestActuatorState(0,startNote + halfStepPattern[i], state); // request a keypress offset from the current note by the number of half steps for the new note
             }
         }
     }
 }
 
 
+scale_manager * scaleManager = nullptr;
 
-scale_manager scaleManager;

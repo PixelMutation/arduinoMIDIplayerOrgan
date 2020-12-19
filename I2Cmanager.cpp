@@ -1,48 +1,50 @@
 #include "I2Cmanager.h"
 
+#include "console.h"
+
 I2C_manager::I2C_manager(int _port, int _numDevices, int _baseAddress) {
-    console.section("I2Cmanager",CORE_PREFIX);
+    console->section("I2Cmanager",CORE_PREFIX);
     port        = _port       ;
     numDevices  = _numDevices ;
     baseAddress = _baseAddress;
     switch (port) {
     case 0:
         Wire.begin();
-        console.println("started wire");
+        console->println("started wire");
         wire = &Wire;
         break;
     case 1:
         Wire1.begin();
-        console.println("started wire1");
+        console->println("started wire1");
         wire = &Wire1;
         break;
     case 2:
         Wire2.begin();
-        console.println("started wire2");
+        console->println("started wire2");
         wire = &Wire2;
         break;
     }
     for (int i=0; i< numDevices; i++) {
         devices.push_back((signed)(baseAddress+i));
     }
-    console.sectionEnd("I2Cmanager initialised",CORE_PREFIX);
+    console->sectionEnd("I2Cmanager initialised",CORE_PREFIX);
 }
 
 void I2C_manager::write(std::vector<int> bytes, int device) {
-    console.println("start I2C write");
-    console.println(device);
+    console->println("start I2C write");
+    console->println(device);
     wire->beginTransmission((signed)devices[device]);
     for (int deviceNo : devices) {
-        console.println(deviceNo);
+        console->println(deviceNo);
     }
-    console.println(devices[0]);
+    console->println(devices[0]);
     for (int byte : bytes) {
         wire->write(byte);
-        console.printByte(byte);
+        console->printByte(byte);
         
     }
     wire->endTransmission();
-    console.println("finish I2C write");
+    console->println("finish I2C write");
     
     
   
@@ -56,19 +58,19 @@ int I2C_manager::read(int device) {
 }
 
 portExpander::portExpander(int _port, int _numDevices) : expanders(_port,_numDevices,baseAddress) {
-    console.section("portExpander",CORE_PREFIX);
+    console->section("portExpander",CORE_PREFIX);
     port = _port;
     numDevices = _numDevices;
     for (int i = 0; i < numDevices; i++) {
         expanders.write({0x00,0x00},i); // A register set to output
         expanders.write({0x01,0x00},i); // B register set to output
-        console.println("I2C device configured");
+        console->println("I2C device configured");
         regA.push_back(0); // sets stored pin states to 0
         regB.push_back(0);
-        //console.println("reg modified");
+        //console->println("reg modified");
     }
     //instantiateI2C(); // instantiates the "expanders" object
-    console.sectionEnd("portExpander initialised",CORE_PREFIX);
+    console->sectionEnd("portExpander initialised",CORE_PREFIX);
 }
 /*
 void portExpander::instantiateI2C() 

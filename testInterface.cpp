@@ -1,5 +1,9 @@
 #include "testInterface.h"
-//#include <thread>
+
+#include "midiManager.h"
+#include "stateManager.h"
+#include "console.h"
+
 
 void testInterface() {
     /*
@@ -25,7 +29,7 @@ void testInterface() {
                         Serial.println("Choose state: 0/1: ");
                         cin >> state;
                         Serial.println("");
-                        //stateManager.keys.setSensorState(number, state);
+                        //stateManager->keys.setSensorState(number, state);
                         //printKeyStates("header");
                         //printKeyStates();
                         
@@ -72,7 +76,7 @@ void testInterface() {
                 
                 Serial.println("type key number: ");
                 cin >> key;
-                //stateManager.keys.setSensorState(key, 1);
+                //stateManager->keys.setSensorState(key, 1);
                 //printKeyStates("overall");
                 Serial.println("");
                 

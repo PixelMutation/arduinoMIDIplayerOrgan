@@ -2,7 +2,12 @@
 #define OCTAVE_COUPLER_H
 
 #include "global_includes.h"
-#include "stateManager.h"
+
+#include "moduleManager.h"
+#include "effectManager.h"
+
+
+
 
 class octave_coupler : public moduleTemplate {
 public:
@@ -20,7 +25,7 @@ public:
 };
 
 
-extern octave_coupler octaveCoupler;
+extern octave_coupler *octaveCoupler;
 
 #endif
 

@@ -4,6 +4,7 @@
 #include "global_includes.h"
 #include "I2Cmanager.h"
 
+
 class keyActuators {
     std::vector<portExpander*  > ports    ; // stores expander objects (up to 2)
     std::vector<std::array<int,2>> expanders; // stores the first and last expander for each manual
@@ -30,7 +31,7 @@ public:
 };
 
 
-extern keyActuators KeyActuators;
-extern stopActuators StopActuators;
+extern keyActuators * KeyActuators;
+extern stopActuators * StopActuators;
 
 #endif

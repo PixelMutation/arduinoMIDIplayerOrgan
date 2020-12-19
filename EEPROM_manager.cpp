@@ -1,16 +1,15 @@
 // A class which stores and manages EEPROM data. Mainly used for calibrated sensor positions (e.g. the position at which keys activate)
-
-
-
 #include "EEPROM_manager.h"
 
+#include <EEPROM.h>
+#include "console.h"
 
 EEPROM_manager::EEPROM_manager() {
-    console.section("eepromManager",CORE_PREFIX);
-    hooks.OnStart.add(this); 
+    console->section("eepromManager",CORE_PREFIX);
+    hooks->OnStart->add(this); 
     
     
-    console.sectionEnd("eepromManager initialized",CORE_PREFIX);
+    console->sectionEnd("eepromManager initialized",CORE_PREFIX);
 }
 
 
@@ -90,7 +89,7 @@ EEPROM_manager::block3d& EEPROM_manager::newBlock(int x, int y, int z) { // Crea
 }
 
 void EEPROM_manager::onStart() {
-    console.println("reached eeprom load");
+    console->println("reached eeprom load");
     load();
 }
 
@@ -187,8 +186,8 @@ void EEPROM_manager::write(int address, byte data) { // writes to the EEPROM
     }
 }
 
+EEPROM_manager * eepromManager = nullptr;
 
 
-EEPROM_manager eepromManager;
 
 

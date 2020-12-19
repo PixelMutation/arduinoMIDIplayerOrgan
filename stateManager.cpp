@@ -1,4 +1,10 @@
 #include "stateManager.h"
+
+#include "midiManager.h"
+
+#include "console.h"
+#include "I2Cactuators.h"
+
 /*
 extern "C"{
   __attribute__((weak)) int __exidx_start(){ return -1;}
@@ -22,10 +28,10 @@ void StateManagerTemplate::onSchedule(std::vector<int> params) {
 }
 // request system state function - when something wants a key or stop on or off after a specific delay, it calls this
 void StateManagerTemplate::requestActuatorState(int set, int index, int state, unsigned long delay) {
-    console.section("request actuator state","CORE: ");
-    if (index+1 > sets[set] or index < 1) { console.println("FAILED: item no. out of range!\n"); return; }
+    console->section("request actuator state","CORE: ");
+    if (index+1 > sets[set] or index < 1) { console->println("FAILED: item no. out of range!\n"); return; }
     if (delay != 0) {
-        scheduler.addToSchedule(this, delay, {set,index,state});
+        scheduler->addToSchedule(this, delay, {set,index,state});
     } else {
         if (state == 0) {                           // if request is to turn key off
             if (requestBuffer[set][index] > 0) {         // if it isn't already off
@@ -44,13 +50,13 @@ void StateManagerTemplate::requestActuatorState(int set, int index, int state, u
             }
         }
     }
-    console.sectionEnd("requested actuator state","CORE: ");
+    console->sectionEnd("requested actuator state","CORE: ");
 }
 
 StateManager::StateManager() : keys(),stops(){
-    console.section("StateManager",CORE_PREFIX);
+    console->section("StateManager",CORE_PREFIX);
     
-    console.sectionEnd("StateManager initialised",CORE_PREFIX);
+    console->sectionEnd("StateManager initialised",CORE_PREFIX);
 }
 
 
@@ -61,7 +67,7 @@ StateManager::StateManager() : keys(),stops(){
 /* -------------------------------------------------------------------------- */
 
 StateManager::Keys::Keys() {
-    console.section("StateManager::Keys",CORE_PREFIX);
+    console->section("StateManager::Keys",CORE_PREFIX);
 
     
     for (int i = 0; i < NUM_MANUALS; i++) {
@@ -71,11 +77,11 @@ StateManager::Keys::Keys() {
     
     
     
-    console.sectionEnd("StateManager::Keys initialised",CORE_PREFIX);
+    console->sectionEnd("StateManager::Keys initialised",CORE_PREFIX);
 }
 // when an actuator is activated, this works out if the polyphony is exceeded and deactivates the oldest actuator
 void StateManager::Keys::polyphonyManager(int set, int index, int state) {
-    console.println("checking polyphony","CORE: ");
+    console->println("checking polyphony","CORE: ");
     int dir;
     if (state == 1) { // whether to add or subtract from the polyphony
         dir = 1;
@@ -95,13 +101,13 @@ void StateManager::Keys::polyphonyManager(int set, int index, int state) {
     if (dir == 1) { // if the system activates the item, it becomes the most recently activated. If the system deactivates the item, its state stays at 0
         actuationState[set][index] = 1;
     }
-    console.println("checked polyphony","CORE: ");
+    console->println("checked polyphony","CORE: ");
 }
 // tells the actuator module to actuate the key
 void StateManager::Keys::actuate(int set, int index,int state) {
-    console.println("actuating","CORE: ");
-    KeyActuators.setState(set,index,state);
-    console.println("actuated"),"CORE: ";
+    console->println("actuating",CORE_PREFIX);
+    KeyActuators->setState(set,index,state);
+    console->println("actuated",CORE_PREFIX);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -109,16 +115,16 @@ void StateManager::Keys::actuate(int set, int index,int state) {
 /* -------------------------------------------------------------------------- */
 
 StateManager::Stops::Stops() {
-    console.section("StateManager::Stops",CORE_PREFIX);
+    console->section("StateManager::Stops",CORE_PREFIX);
     sets = DIVISIONS;
     
     
-    console.sectionEnd("StateManager::Stops initialised",CORE_PREFIX);
+    console->sectionEnd("StateManager::Stops initialised",CORE_PREFIX);
 }
 void StateManager::Stops::polyphonyManager(int set, int index,int state){}
 // tells the actuator module to actuate the stop
 void StateManager::Stops::actuate(int set, int index,int state) {
-    StopActuators.setState(set,index,state);
+    StopActuators->setState(set,index,state);
 }
 
 
@@ -285,19 +291,19 @@ int stateManager::getState(int itemNumber, std::string type) { // returns if the
 vector<int> stateManager::getStatesVector(std::string type, bool print, bool displayZero) {
     
     if (type == "user") {
-        if (print) { printVector(userActivatedItems, displayZero); }
+        if (print) { printList(userActivatedItems, displayZero); }
         return userActivatedItems;
     }
     else if (type == "system") {
-        if (print) { printVector(systemActivatedItems, displayZero); }
+        if (print) { printList(systemActivatedItems, displayZero); }
         return systemActivatedItems;
     }
     else if (type == "buffer") {
-        if (print) { printVector(itemBuffer, displayZero); }
+        if (print) { printList(itemBuffer, displayZero); }
         return itemBuffer;
     }
     else {
-        if (print) { printVector(activatedItems, displayZero); }
+        if (print) { printList(activatedItems, displayZero); }
         return activatedItems;
     }
 }
@@ -346,4 +352,4 @@ void printStopStates(std::string option) {
 
 // create instance of class for keys and stops
 
-StateManager stateManager;
+StateManager * stateManager = nullptr;

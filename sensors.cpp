@@ -1,21 +1,24 @@
 #include "sensors.h"
 #include <ADC.h>
-
-
+#include "console.h"
+#include "stateManager.h"
+#include "moduleManager.h"
+ 
 // CONSTRUCTORS
 Sensors::Sensors() : manuals(),stops(),bassPedals(),controlPanels() {
-    console.section("Sensors",CORE_PREFIX);
-    hooks.OnLoop.add(this);
+    console->section("Sensors",CORE_PREFIX);
+    hooks->OnLoop->add(this);
       
-    console.sectionEnd("Sensors initialised",CORE_PREFIX);
+    console->sectionEnd("Sensors initialised",CORE_PREFIX);
 }
 Sensors::Manuals::Manuals() {
-    console.section("Sensors::Manuals",CORE_PREFIX);
+    console->section("Sensors::Manuals",CORE_PREFIX);
     
     pin = KEY_SIG;
     muxPerManual = (KEYS_PER_MANUAL+15)/ 16;
     
     mux = new Multiplexer(true,true,muxPerManual*NUM_MANUALS,KEY_SIG); // creates mux for the manual Sensors
+    //TODO fix this calibration defaults section
     /*
     if ((int)calibratedPositions.data[0][1][0] == 0) { // If keys not calibrated, apply defaults: If it is 0, it likely hasn't been calibrated yet.
         for (int x = 0; x < NUM_MANUALS; x++) { // for each manual
@@ -36,35 +39,35 @@ Sensors::Manuals::Manuals() {
     }
     
     
-    console.sectionEnd("Sensors::Manuals initialised",CORE_PREFIX);
+    console->sectionEnd("Sensors::Manuals initialised",CORE_PREFIX);
 }
 
 Sensors::Stops::Stops() {
-    console.section("Sensors::Stops",CORE_PREFIX);
+    console->section("Sensors::Stops",CORE_PREFIX);
     pin = STOP_SIG;
     numMux = (NUM_STOPS + 15) / 16;
     mux = new Multiplexer(true,false,numMux,STOP_SIG); // creates mux for the manual Sensors
     
     
-    console.sectionEnd("Sensors::Stops initialised",CORE_PREFIX);
+    console->sectionEnd("Sensors::Stops initialised",CORE_PREFIX);
 }
 Sensors::BassPedals::BassPedals() {
-    console.section("Sensors::BassPedals",CORE_PREFIX);
+    console->section("Sensors::BassPedals",CORE_PREFIX);
     pin = PED_SIG;
     numMux = (NUM_BASS_PEDALS +15)/16;
     mux = new Multiplexer(true,false,numMux,PED_SIG); // creates mux for the manual Sensors
 
 
-    console.sectionEnd("Sensors::BassPedals initialised",CORE_PREFIX);
+    console->sectionEnd("Sensors::BassPedals initialised",CORE_PREFIX);
 }
 Sensors::ControlPanels::ControlPanels() {
-    console.section("Sensors::ControlPanels",CORE_PREFIX);
+    console->section("Sensors::ControlPanels",CORE_PREFIX);
     pin = CTRL_SIG;
     numMux = (NUM_BASS_PEDALS +15)/16;
     mux = new Multiplexer(true,false,numMux,CTRL_SIG); // creates mux for the manual Sensors
 
 
-    console.sectionEnd("Sensors::ControlPanels initialised",CORE_PREFIX);
+    console->sectionEnd("Sensors::ControlPanels initialised",CORE_PREFIX);
 }
 
 
@@ -74,24 +77,24 @@ void Sensors::sensorsTemplate::scan() {} // virtual
 //READ VALUES
 
 // reads the raw value from a key
-int Sensors::Manuals::read(int manual, int key) {
-    return SIGNAL_MULTIPLIER*mux->muxRead(manual*key+key,true,KEY_PULLUP,MICROSECOND_DELAY);
+inline int Sensors::Manuals::read(int manual, int key) {
+    return SIGNAL_MULTIPLIER*mux->AnalogReadSingle(manual*key+key);
 }
 // reads the raw value from a stop
-int Sensors::Stops::read(int division, int stop) {
-    return mux->muxRead(division*stop + stop,analog,STOP_PULLUP,MICROSECOND_DELAY);
+inline int Sensors::Stops::read(int division, int stop) {
+    return mux->AnalogReadSingle(division*stop + stop);
 }
 // reads the raw value from a bass pedal
-int Sensors::BassPedals::read(int pedal) {
-    return mux->muxRead(pedal,analog,PED_PULLUP,MICROSECOND_DELAY);
+inline int Sensors::BassPedals::read(int pedal) {
+    return mux->AnalogReadSingle(pedal);
 }
 // reads the analog state of a control panel pin
-int Sensors::ControlPanels::readAnalog(int pin) {
-    return mux->muxRead(pin,true,inputMode[pin],MICROSECOND_DELAY);
+inline int Sensors::ControlPanels::readAnalog(int pin) {
+    return mux->AnalogReadSingle(pin);
 }
 // reads the digital state of a control panel pin
-int Sensors::ControlPanels::readDigital(int pin) {
-    return mux->muxRead(pin,false,inputMode[pin],MICROSECOND_DELAY);
+inline int Sensors::ControlPanels::readDigital(int pin) {
+    return mux->DigitalRead(pin);
 }
 
 // SCAN Sensors
@@ -107,10 +110,10 @@ void Sensors::Manuals::calibrate(std::string mode = "all") {
                 delay(50);
             }
             if (mode == "system" or mode == "all") {
-                KeyActuators.setState(x,y,1);   // presses the key then measures the position
+                stateManager->keys.requestActuatorState(x,y,1);   // presses the key then measures the position
                 delay(calibrationDelay);        // waits for sig stabilisation
                 calibratedPositions.data[x][y][1] = read(x,y); // reads position when system presses key
-                KeyActuators.setState(x,y,0);   // releases key
+                stateManager->keys.requestActuatorState(x,y,0);   // releases key
             } 
             if (mode == "sound" or mode =="all") {
                 awaitConfirmation();
@@ -124,7 +127,7 @@ void Sensors::Manuals::calibrate(std::string mode = "all") {
         } 
     }
 }
-double Sensors::Manuals::findGradient(int value, int manual, int key, double time) {
+inline double Sensors::Manuals::findGradient(int value, int manual, int key, double time) {
     if (value > TOP_THRESHOLD) {
         if (time > 0) {
             cycles=0;
@@ -140,22 +143,26 @@ double Sensors::Manuals::findGradient(int value, int manual, int key, double tim
     return gradient[manual][key];
 }
 // a public fetcher function for the calculated velocity
-double Sensors::Manuals::fetchVelocity(int manual, int key) {
+inline double Sensors::Manuals::fetchVelocity(int manual, int key) {
     return gradient[manual][key];
 }
 // a public fetcher for the calculated key position
-int Sensors::Manuals::fetchPosition(int manual, int key) {
+inline int Sensors::Manuals::fetchPosition(int manual, int key) {
     return currentPosition[manual][key];
 }
 
-void Sensors::Manuals::runEffects(int manual, int key, int state) {
+inline void Sensors::Manuals::onKeypress(int manual, int key, int state) {
     if (effectState[manual][key] != state) {
         int velocity = 0;
         if (state != 0 ) {
             velocity=findGradient(currentPosition[manual][key],manual,key,measurementTime);
         }
-        Fx.runFx(manual,key,abs(velocity));
+        Fx->runFx(manual,key,abs(velocity));
         effectState[manual][key] = state;
+        if (state > 0) {
+            state = 1;
+        }
+        hooks->OnUserKeyToggle->call(manual,key,velocity,state);
     }
     
 }
@@ -176,26 +183,26 @@ void Sensors::Manuals::scan() {
             }
             velocity = gradient[manual][key];
             
-            //console.addPlotVar(topPositions[manual][key]); 
+            //console->addPlotVar(topPositions[manual][key]); 
             if (val > TOP_THRESHOLD) {
                 readState[manual][key] = 200;
-                console.addPlotVar(200);
+                console->addPlotVar(200);
                 thresholdVal = thresholdCheck(val,ACTIVATION_THRESHOLD);
                 if (thresholdVal==1) { 
                     if (predictKeyRelease) {
                         
                         if (thresholdCheck(velocity, -NEG_VELOCITY_THRESHOLD,VELOCITY_DEADZONE) == -1 && thresholdCheck(val,RELEASE_THRESHOLD)==-1) {
-                            runEffects(manual,key,0);
-                            console.addPlotVar(0);
+                            onKeypress(manual,key,0);
+                            console->addPlotVar(0);
 
                             forceOff[manual][key]=true;
                         } else if (forceOff[manual][key] == false){
-                            console.addPlotVar(195);
-                            runEffects(manual,key,195);
+                            console->addPlotVar(195);
+                            onKeypress(manual,key,195);
 
                         } else {
-                            console.addPlotVar(0);
-                            runEffects(manual,key,0);
+                            console->addPlotVar(0);
+                            onKeypress(manual,key,0);
 
                         }
                         if (thresholdCheck(velocity,POS_VELOCITY_THRESHOLD,VELOCITY_DEADZONE == 1)) {
@@ -203,32 +210,32 @@ void Sensors::Manuals::scan() {
                         }
                     } else {
                         
-                        console.addPlotVar(195);
-                        runEffects(manual,key,195);
+                        console->addPlotVar(195);
+                        onKeypress(manual,key,195);
                         
                     }
                 } else if (thresholdVal==-1){
-                    runEffects(manual,key,0);
+                    onKeypress(manual,key,0);
                     //forceOff[manual][key]=false;
-                    console.addPlotVar(0);
+                    console->addPlotVar(0);
 
                 } else {
-                    console.addPlotVar(effectState[manual][key]);
+                    console->addPlotVar(effectState[manual][key]);
                 }
             } else if (val == 0) {
-                runEffects(manual,key,0);
-                console.addPlotVar(0);
-                console.addPlotVar(0);
+                onKeypress(manual,key,0);
+                console->addPlotVar(0);
+                console->addPlotVar(0);
                 readState[manual][key] = 0;
             } else {
-                console.addPlotVar(readState[manual][key]);
-                console.addPlotVar(effectState[manual][key]);
+                console->addPlotVar(readState[manual][key]);
+                console->addPlotVar(effectState[manual][key]);
             }
             
             
-            console.addPlotVar(val);
-            console.addPlotVar(gradient[manual][key]);
-            console.addPlotVar(oldPositions[manual][key]); 
+            console->addPlotVar(val);
+            console->addPlotVar(gradient[manual][key]);
+            console->addPlotVar(oldPositions[manual][key]); 
 
         }
     }
@@ -236,17 +243,17 @@ void Sensors::Manuals::scan() {
         measurementTime = 0;
     }
     
-    //console.addPlotVar(gradient[0][3]);
-    console.addPlotVar(0); 
-    console.addPlotVar(0); 
-    console.addPlotVar(210); 
-    console.addPlotVar(-50); 
+    //console->addPlotVar(gradient[0][3]);
+    console->addPlotVar(0); 
+    console->addPlotVar(0); 
+    console->addPlotVar(210); 
+    console->addPlotVar(-50); 
 
 
     measurementTime = 0;
     
 }
-int Sensors::Manuals::standardize(int value, int manual, int key) {
+inline int Sensors::Manuals::standardize(int value, int manual, int key) {
     #if SENSOR_INVERT == true
     double val = -(value-topPositions[manual][key])-NOISE_LEVEL;
     #else
@@ -274,14 +281,14 @@ int Sensors::Manuals::standardize(int value, int manual, int key) {
     
     //eturn abs(value-topPositions[manual][key]);
 }
-int Sensors::Manuals::standardizedRead(int manual, int key) {
+inline int Sensors::Manuals::standardizedRead(int manual, int key) {
     return standardize(read(manual,key),manual,key);
 }
 void Sensors::Stops::scan() {
     
 }
 void Sensors::BassPedals::scan() {
-
+    
 }
 void Sensors::ControlPanels::scan() {
 
@@ -294,5 +301,6 @@ void Sensors::onLoop() {
     controlPanels.scan();
 }
 
+Sensors * sensors = nullptr;
 
-Sensors sensors;
+

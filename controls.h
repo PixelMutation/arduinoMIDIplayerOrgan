@@ -1,9 +1,9 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
 #include "global_includes.h"
-#include "stateManager.h"
-#include "utility.h"
-#include "multiplexer.h"
+
+#include "moduleManager.h"
+
 
 
 class controls : public moduleTemplate {
@@ -24,5 +24,5 @@ public:
 };
 
 
-//extern controls Controls;
+extern controls* Controls;
 #endif

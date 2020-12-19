@@ -4,9 +4,10 @@
 #define STATEMANAGER_H
 
 #include "global_includes.h"
-#include "midiManager.h"
 #include "scheduler.h"
-#include "I2Cactuators.h"
+//#include "I2Cactuators.h"
+#include "moduleManager.h"
+
 
 class StateManagerTemplate : public schedule {
 protected:
@@ -90,7 +91,7 @@ extern stateManager Stops;
 
 */
 
-extern StateManager stateManager;
+extern StateManager * stateManager;
 
 
 #endif

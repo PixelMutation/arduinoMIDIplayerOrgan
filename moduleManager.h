@@ -3,7 +3,7 @@
 
 #include "global_includes.h"
 
-
+#include "console.h"
 //#include "stateManager.h"
 
 //void keypressHandler(int keyNumber, int state);
@@ -12,7 +12,7 @@
 #define PARAM_onStart           
 #define PARAM_onLoop            
 #define PARAM_onKeyMove          int key   , int    newPos, int oldPos
-#define PARAM_onUserKeyToggle    int manual, int    key   , int velocity, bool state, int pos
+#define PARAM_onUserKeyToggle    int manual, int    key   , int velocity, bool state
 #define PARAM_onSystemKeyToggle  int manual, int    key   , int velocity, bool state
 #define PARAM_onUserStopToggle   int stop  , bool   state
 #define PARAM_onSystemStopToggle int stop  , bool   state
@@ -32,7 +32,7 @@
 #define ARG_onStart           
 #define ARG_onLoop            
 #define ARG_onKeyMove           key   ,  newPos,  oldPos
-#define ARG_onUserKeyToggle     manual,  key   ,  velocity,  state,  pos
+#define ARG_onUserKeyToggle     manual,  key   ,  velocity,  state
 #define ARG_onSystemKeyToggle   manual,  key   ,  velocity,  state
 #define ARG_onUserStopToggle    stop  ,  state
 #define ARG_onSystemStopToggle  stop  ,  state
@@ -77,22 +77,26 @@ public:
 
 
 class Hooks { // This struct contains the vectors of references to objects for each trigger point
+    
+    
+
     class hookTemplate {
     public:
         hookTemplate();
-        int hookNum;
+        int hookNum=0;
         int add(moduleTemplate* module);
         bool activate(moduleTemplate* module, int pos);
         bool deactivate(int pos);
     };
-    bool isSetup=false;
-    void setup();
 
-public:
 
     int numHooks=0; // increments each time a new hook is initialised
     std::vector<std::vector<moduleTemplate*>> hookModules; // stores pointers to the actual modules
 
+public:
+    
+    void setup();
+    
     class onStart            : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onStart           );};
     class onLoop             : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onLoop            );};
     class onKeyMove          : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onKeyMove         );};
@@ -112,28 +116,28 @@ public:
     class onMidiInstrument   : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onMidiInstrument  );};
     class onSerialMessage    : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onSerialMessage   );};
     
-    onStart             OnStart;             
-    onLoop              OnLoop;            
-    onKeyMove           OnKeyMove;         
-    onUserKeyToggle     OnUserKeyToggle;   
-    onSystemKeyToggle   OnSystemKeyToggle; 
-    onUserStopToggle    OnUserStopToggle;  
-    onSystemStopToggle  OnSystemStopToggle;
-    onPedalToggle       OnPedalToggle;     
-    onControlChange     OnControlChange;   
-    onMidiKey           OnMidiKey;         
-    onMidiCC            OnMidiCC;          
-    onMidiCCmod         OnMidiCCmod;       
-    onMidiCCsustain     OnMidiCCsustain;   
-    onMidiCCchorus      OnMidiCCchorus;    
-    onMidiCClegato      OnMidiCClegato;    
-    onMidiCCvolume      OnMidiCCvolume;    
-    onMidiInstrument    OnMidiInstrument;  
-    onSerialMessage     OnSerialMessage;   
-    
+    onStart             * OnStart;             
+    onLoop              * OnLoop;            
+    onKeyMove           * OnKeyMove;         
+    onUserKeyToggle     * OnUserKeyToggle;   
+    onSystemKeyToggle   * OnSystemKeyToggle; 
+    onUserStopToggle    * OnUserStopToggle;  
+    onSystemStopToggle  * OnSystemStopToggle;
+    onPedalToggle       * OnPedalToggle;     
+    onControlChange     * OnControlChange;   
+    onMidiKey           * OnMidiKey;         
+    onMidiCC            * OnMidiCC;          
+    onMidiCCmod         * OnMidiCCmod;       
+    onMidiCCsustain     * OnMidiCCsustain;   
+    onMidiCCchorus      * OnMidiCCchorus;    
+    onMidiCClegato      * OnMidiCClegato;    
+    onMidiCCvolume      * OnMidiCCvolume;    
+    onMidiInstrument    * OnMidiInstrument;  
+    onSerialMessage     * OnSerialMessage;   
+      
     Hooks();
 };
 
-extern Hooks hooks;
+extern Hooks * hooks;
 
 #endif

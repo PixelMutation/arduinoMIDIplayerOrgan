@@ -3,6 +3,8 @@
 
 #include "global_includes.h"
 #include <elapsedMillis.h>
+#include "moduleManager.h"
+
 
 // any module which needs to schedule events inherits this
 class schedule {
@@ -26,6 +28,6 @@ public:
 };
 
 
-extern scheduleManager scheduler;
+extern scheduleManager * scheduler;
 
 #endif
