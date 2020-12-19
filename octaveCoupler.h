@@ -9,7 +9,7 @@
 
 
 
-class octave_coupler : public moduleTemplate {
+class octave_coupler : public modules {
 public:
 	octave_coupler();
 	int number = 3 ;

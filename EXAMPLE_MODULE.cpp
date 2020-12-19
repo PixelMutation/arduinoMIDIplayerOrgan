@@ -7,24 +7,8 @@ exampleModule::exampleModule() { // The constructor must add the object to the s
     
 /* ----------- All hooks needed for this module are activated here ---------- */
 
-    hooks->OnStart               ->add(this);
-    hooks->OnLoop                ->add(this);
-    hooks->OnKeyMove             ->add(this);
-    hooks->OnUserKeyToggle       ->add(this);
-    hooks->OnSystemKeyToggle     ->add(this);
-    hooks->OnUserStopToggle      ->add(this);
-    hooks->OnSystemStopToggle    ->add(this);
-    hooks->OnPedalToggle         ->add(this);
-    hooks->OnControlChange       ->add(this);
-    hooks->OnMidiKey             ->add(this);
-    hooks->OnMidiCC              ->add(this);
-    hooks->OnMidiCCmod           ->add(this);
-    hooks->OnMidiCCsustain       ->add(this);
-    hooks->OnMidiCCchorus        ->add(this);
-    hooks->OnMidiCClegato        ->add(this);
-    hooks->OnMidiCCvolume        ->add(this);
-    hooks->OnMidiInstrument      ->add(this);
-    hooks->OnSerialMessage       ->add(this);
+    hooks->add(this); // since this modules uses hooks, add it to the list
+
 
     // comment out if your plugin isn't an effect
     Fx->addEffect(this,"exampleEffect");

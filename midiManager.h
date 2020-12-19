@@ -7,7 +7,7 @@
 
 //#include "octaveCoupler.h"
 
-class MidiManager : public moduleTemplate { // handles MIDI I/O
+class MidiManager : public modules { // handles MIDI I/O
   int MIDImiddleCpos     = 48;	// leave this alone
 	
   bool sendSystemKeypress = false;

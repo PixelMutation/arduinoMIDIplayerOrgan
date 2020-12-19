@@ -6,7 +6,7 @@
 
 EEPROM_manager::EEPROM_manager() {
     console->section("eepromManager",CORE_PREFIX);
-    hooks->OnStart->add(this); 
+    hooks->add(this); 
     
     
     console->sectionEnd("eepromManager initialized",CORE_PREFIX);

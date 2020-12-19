@@ -13,7 +13,7 @@ public:
 };
 
 // this module checks the schedule each loop
-class scheduleManager : public moduleTemplate{
+class scheduleManager : public modules{
     void checkSchedule();
     std::deque<schedule*> scheduleMethod;           // stores pointers to the methods for each scheduled event
     std::deque<unsigned long> scheduleTime;         // stores the time for each scheduled event

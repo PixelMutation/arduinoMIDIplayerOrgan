@@ -111,7 +111,7 @@ void effectManager::runFx(int manual, int key, int state) {
                 std::get<2>(result[i]),
                 std::get<3>(result[i])
             );
-            hooks->OnSystemKeyToggle->call(
+            hooks->callOnSystemKeyToggle(
                 std::get<0>(result[i]),
                 std::get<1>(result[i]),
                 std::get<2>(result[i]),

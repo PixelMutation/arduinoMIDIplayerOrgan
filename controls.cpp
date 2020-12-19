@@ -5,7 +5,7 @@
 
 controls::controls() {
     console->section("controls ");
-    hooks->OnLoop->add(this);
+    hooks->add(this);
     
     pinMode(CONFIRM_PIN, CONFIRM_PIN_MODE); // sets up confirmation pin
     

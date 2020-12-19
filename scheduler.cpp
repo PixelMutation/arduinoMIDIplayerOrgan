@@ -5,7 +5,7 @@
 
 scheduleManager::scheduleManager() {
     console->section("scheduleManager",CORE_PREFIX);
-    hooks->OnLoop->add(this);
+    hooks->add(this);
     /*
     while (true) {
         //digitalWrite(13,HIGH);

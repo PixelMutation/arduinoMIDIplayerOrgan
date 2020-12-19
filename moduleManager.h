@@ -49,7 +49,7 @@
 #define ARG_onSerialMessage     target,  setting,  data
 
 
-class moduleTemplate { // This base class contains placeholder functions called at various points during runtime
+class modules { // This base class contains placeholder functions called at various points during runtime
 public:
     
 
@@ -77,64 +77,33 @@ public:
 
 
 class Hooks { // This struct contains the vectors of references to objects for each trigger point
-    
-    
-
-    class hookTemplate {
-    public:
-        hookTemplate();
-        int hookNum=0;
-        int add(moduleTemplate* module);
-        bool activate(moduleTemplate* module, int pos);
-        bool deactivate(int pos);
-    };
-
 
     int numHooks=0; // increments each time a new hook is initialised
-    std::vector<std::vector<moduleTemplate*>> hookModules; // stores pointers to the actual modules
+    std::vector<modules*> hookModules; // stores pointers to the actual moduless
 
 public:
+
+    void add(modules* modules);
     
-    void setup();
+    void callOnStart            (PARAM_onStart           );
+    void callOnLoop             (PARAM_onLoop            );
+    void callOnKeyMove          (PARAM_onKeyMove         );
+    void callOnUserKeyToggle    (PARAM_onUserKeyToggle   );
+    void callOnSystemKeyToggle  (PARAM_onSystemKeyToggle );
+    void callOnUserStopToggle   (PARAM_onUserStopToggle  );
+    void callOnSystemStopToggle (PARAM_onSystemStopToggle);
+    void callOnPedalToggle      (PARAM_onPedalToggle     );
+    void callOnControlChange    (PARAM_onControlChange   );
+    void callOnMidiKey          (PARAM_onMidiKey         );
+    void callOnMidiCC           (PARAM_onMidiCC          );
+    void callOnMidiCCmod        (PARAM_onMidiCCmod       );
+    void callOnMidiCCsustain    (PARAM_onMidiCCsustain   );
+    void callOnMidiCCchorus     (PARAM_onMidiCCchorus    );
+    void callOnMidiCClegato     (PARAM_onMidiCClegato    );
+    void callOnMidiCCvolume     (PARAM_onMidiCCvolume    );
+    void callOnMidiInstrument   (PARAM_onMidiInstrument  );
+    void callOnSerialMessage    (PARAM_onSerialMessage   );
     
-    class onStart            : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onStart           );};
-    class onLoop             : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onLoop            );};
-    class onKeyMove          : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onKeyMove         );};
-    class onUserKeyToggle    : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onUserKeyToggle   );};
-    class onSystemKeyToggle  : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onSystemKeyToggle );};
-    class onUserStopToggle   : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onUserStopToggle  );};
-    class onSystemStopToggle : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onSystemStopToggle);};
-    class onPedalToggle      : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onPedalToggle     );};
-    class onControlChange    : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onControlChange   );};
-    class onMidiKey          : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onMidiKey         );};
-    class onMidiCC           : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onMidiCC          );};
-    class onMidiCCmod        : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onMidiCCmod       );};
-    class onMidiCCsustain    : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onMidiCCsustain   );};
-    class onMidiCCchorus     : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onMidiCCchorus    );};
-    class onMidiCClegato     : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onMidiCClegato    );};
-    class onMidiCCvolume     : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onMidiCCvolume    );};
-    class onMidiInstrument   : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onMidiInstrument  );};
-    class onSerialMessage    : public hookTemplate{public: using hookTemplate::hookTemplate; void call (PARAM_onSerialMessage   );};
-    
-    onStart             * OnStart;             
-    onLoop              * OnLoop;            
-    onKeyMove           * OnKeyMove;         
-    onUserKeyToggle     * OnUserKeyToggle;   
-    onSystemKeyToggle   * OnSystemKeyToggle; 
-    onUserStopToggle    * OnUserStopToggle;  
-    onSystemStopToggle  * OnSystemStopToggle;
-    onPedalToggle       * OnPedalToggle;     
-    onControlChange     * OnControlChange;   
-    onMidiKey           * OnMidiKey;         
-    onMidiCC            * OnMidiCC;          
-    onMidiCCmod         * OnMidiCCmod;       
-    onMidiCCsustain     * OnMidiCCsustain;   
-    onMidiCCchorus      * OnMidiCCchorus;    
-    onMidiCClegato      * OnMidiCClegato;    
-    onMidiCCvolume      * OnMidiCCvolume;    
-    onMidiInstrument    * OnMidiInstrument;  
-    onSerialMessage     * OnSerialMessage;   
-      
     Hooks();
 };
 

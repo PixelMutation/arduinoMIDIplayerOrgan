@@ -4,24 +4,24 @@
 /*                     VIRTUAL HOOK CALL TEMPLATE METHODS                     */
 /* -------------------------------------------------------------------------- */
 
-void moduleTemplate::onStart            (PARAM_onStart           ) {}
-void moduleTemplate::onLoop             (PARAM_onLoop            ) {}
-void moduleTemplate::onKeyMove          (PARAM_onKeyMove         ) {}
-void moduleTemplate::onUserKeyToggle    (PARAM_onUserKeyToggle   ) {}
-void moduleTemplate::onSystemKeyToggle  (PARAM_onSystemKeyToggle ) {}
-void moduleTemplate::onUserStopToggle   (PARAM_onUserStopToggle  ) {}
-void moduleTemplate::onSystemStopToggle (PARAM_onSystemStopToggle) {}
-void moduleTemplate::onPedalToggle      (PARAM_onPedalToggle     ) {}
-void moduleTemplate::onControlChange    (PARAM_onControlChange   ) {}
-void moduleTemplate::onMidiKey          (PARAM_onMidiKey         ) {}
-void moduleTemplate::onMidiCC           (PARAM_onMidiCC          ) {}
-void moduleTemplate::onMidiCCmod        (PARAM_onMidiCCmod       ) {}
-void moduleTemplate::onMidiCCsustain    (PARAM_onMidiCCsustain   ) {}
-void moduleTemplate::onMidiCCchorus     (PARAM_onMidiCCchorus    ) {}
-void moduleTemplate::onMidiCClegato     (PARAM_onMidiCClegato    ) {}
-void moduleTemplate::onMidiCCvolume     (PARAM_onMidiCCvolume    ) {}
-void moduleTemplate::onMidiInstrument   (PARAM_onMidiInstrument  ) {}
-void moduleTemplate::onSerialMessage    (PARAM_onSerialMessage   ) {}
+void modules::onStart            (PARAM_onStart           ) {}
+void modules::onLoop             (PARAM_onLoop            ) {}
+void modules::onKeyMove          (PARAM_onKeyMove         ) {}
+void modules::onUserKeyToggle    (PARAM_onUserKeyToggle   ) {}
+void modules::onSystemKeyToggle  (PARAM_onSystemKeyToggle ) {}
+void modules::onUserStopToggle   (PARAM_onUserStopToggle  ) {}
+void modules::onSystemStopToggle (PARAM_onSystemStopToggle) {}
+void modules::onPedalToggle      (PARAM_onPedalToggle     ) {}
+void modules::onControlChange    (PARAM_onControlChange   ) {}
+void modules::onMidiKey          (PARAM_onMidiKey         ) {}
+void modules::onMidiCC           (PARAM_onMidiCC          ) {}
+void modules::onMidiCCmod        (PARAM_onMidiCCmod       ) {}
+void modules::onMidiCCsustain    (PARAM_onMidiCCsustain   ) {}
+void modules::onMidiCCchorus     (PARAM_onMidiCCchorus    ) {}
+void modules::onMidiCClegato     (PARAM_onMidiCClegato    ) {}
+void modules::onMidiCCvolume     (PARAM_onMidiCCvolume    ) {}
+void modules::onMidiInstrument   (PARAM_onMidiInstrument  ) {}
+void modules::onSerialMessage    (PARAM_onSerialMessage   ) {}
 
 
 
@@ -29,154 +29,124 @@ void moduleTemplate::onSerialMessage    (PARAM_onSerialMessage   ) {}
 /*                            HOOK TEMPLATE METHODS                           */
 /* -------------------------------------------------------------------------- */
 
-Hooks::hookTemplate::hookTemplate() {
 
-    console->println("hook template setup");
-    hookNum = hooks->numHooks;
-    console->println("hook templates ");
-    hooks->numHooks+=1;
-    console->println("hook template ");
-    hooks->hookModules.resize(hooks->numHooks);
-    console->println(hookNum);
-}
 
-int Hooks::hookTemplate::add(moduleTemplate* module) { // appends module to hooks list, returning position for use in .remove
-    int pos;
-    if (hooks->hookModules.empty()) {console->println("empty");}
-    if (! hooks->hookModules[hookNum].empty()) {
-         pos = (int)hooks->hookModules[hookNum].size();
-    }  else {pos=0;}
-    console->println(pos);
-    console->println((int)hooks->hookModules[hookNum].size());
-    console->println(hookNum);
-    console->println(hooks->numHooks);
-    hooks->hookModules[hookNum].push_back(module);
-    console->println("added");
-    return pos;
-}
-bool Hooks::hookTemplate::activate(moduleTemplate* module, int pos) { // reinstates the module at a position
-    if (pos >= 0 && pos < (int)hooks->hookModules[hookNum].size()) {
-        hooks->hookModules[hookNum][pos] = module;
-        return true;
-    } else {return false;}
-}
-bool Hooks::hookTemplate::deactivate(int pos) { // sets the value here to nullptr so nothing happens. Reinstated with .activate
-    if (pos >= 0 && pos < (int)hooks->hookModules[hookNum].size()) {
-        hooks->hookModules[hookNum][pos] = nullptr; // replaces it with nullptr to preserve positions of other elements
-        return true;
-    } else {return false;}
+void Hooks::add(modules* module) { // appends module to hooks list, returning position for use in .remove
+    numHooks+=1;
+    hookModules.push_back(module);
+    
 }
 
 /* -------------------------------------------------------------------------- */
 /*                              HOOK CALL METHODS                             */
 /* -------------------------------------------------------------------------- */
 
-void Hooks::onStart::call
+void Hooks::callOnStart
     (PARAM_onStart) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onStart
     (ARG_onStart);
     }}
-void Hooks::onLoop::call
+void Hooks::callOnLoop
     (PARAM_onLoop) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onLoop
     (ARG_onLoop);
     }}
-void Hooks::onKeyMove::call
+void Hooks::callOnKeyMove
     (PARAM_onKeyMove) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onKeyMove
     (ARG_onKeyMove);
     }}
-void Hooks::onUserKeyToggle::call
+void Hooks::callOnUserKeyToggle
     (PARAM_onUserKeyToggle) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onUserKeyToggle
     (ARG_onUserKeyToggle);
     }}
-void Hooks::onSystemKeyToggle::call
+void Hooks::callOnSystemKeyToggle
     (PARAM_onSystemKeyToggle) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onSystemKeyToggle
     (ARG_onSystemKeyToggle);
     }}
-void Hooks::onUserStopToggle::call
+void Hooks::callOnUserStopToggle
     (PARAM_onUserStopToggle) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onUserStopToggle
     (ARG_onUserStopToggle);
     }}
-void Hooks::onSystemStopToggle::call
+void Hooks::callOnSystemStopToggle
     (PARAM_onSystemStopToggle) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onSystemStopToggle
     (ARG_onSystemStopToggle);
     }}
     
-void Hooks::onPedalToggle::call
+void Hooks::callOnPedalToggle
     (PARAM_onPedalToggle) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onPedalToggle
     (ARG_onPedalToggle);
     }}
-void Hooks::onControlChange::call
+void Hooks::callOnControlChange
     (PARAM_onControlChange) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onControlChange
     (ARG_onControlChange);
     }}
-void Hooks::onMidiKey::call
+void Hooks::callOnMidiKey
     (PARAM_onMidiKey) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onMidiKey
     (ARG_onMidiKey);
     }}
-void Hooks::onMidiCC::call
+void Hooks::callOnMidiCC
     (PARAM_onMidiCC) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onMidiCC
     (ARG_onMidiCC);
     }}
-void Hooks::onMidiCCmod::call
+void Hooks::callOnMidiCCmod
     (PARAM_onMidiCCmod) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onMidiCCmod
     (ARG_onMidiCCmod);
     }}
-void Hooks::onMidiCCsustain::call
+void Hooks::callOnMidiCCsustain
     (PARAM_onMidiCCsustain) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onMidiCCsustain
     (ARG_onMidiCCsustain);
     }}
-void Hooks::onMidiCCchorus::call
+void Hooks::callOnMidiCCchorus
     (PARAM_onMidiCCchorus) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onMidiCCchorus
     (ARG_onMidiCCchorus);
     }}
-void Hooks::onMidiCClegato::call
+void Hooks::callOnMidiCClegato
     (PARAM_onMidiCClegato) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onMidiCClegato
     (ARG_onMidiCClegato);
     }}
-void Hooks::onMidiCCvolume::call
+void Hooks::callOnMidiCCvolume
     (PARAM_onMidiCCvolume) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onMidiCCvolume
     (ARG_onMidiCCvolume);
     }}
-void Hooks::onMidiInstrument::call
+void Hooks::callOnMidiInstrument
     (PARAM_onMidiInstrument) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onMidiInstrument
     (ARG_onMidiInstrument);
     }}
-void Hooks::onSerialMessage::call
+void Hooks::callOnSerialMessage
     (PARAM_onSerialMessage) 
-    {for (auto& module : hooks->hookModules[hookNum]) {module->
+    {for (auto& module : hooks->hookModules) {module->
     onSerialMessage
     (ARG_onSerialMessage);
     }}
@@ -189,28 +159,6 @@ Hooks::Hooks()  {
 }
     
 
-void Hooks::setup() {
-    
-    OnStart            = new  onStart            ();
-    OnLoop             = new  onLoop             ();
-    OnKeyMove          = new  onKeyMove          ();
-    OnUserKeyToggle    = new  onUserKeyToggle    ();
-    OnSystemKeyToggle  = new  onSystemKeyToggle  ();
-    OnUserStopToggle   = new  onUserStopToggle   ();
-    OnSystemStopToggle = new  onSystemStopToggle ();
-    OnPedalToggle      = new  onPedalToggle      ();
-    OnControlChange    = new  onControlChange    ();
-    OnMidiKey          = new  onMidiKey          ();
-    OnMidiCC           = new  onMidiCC           ();
-    OnMidiCCmod        = new  onMidiCCmod        ();
-    OnMidiCCsustain    = new  onMidiCCsustain    ();
-    OnMidiCCchorus     = new  onMidiCCchorus     ();
-    OnMidiCClegato     = new  onMidiCClegato     ();
-    OnMidiCCvolume     = new  onMidiCCvolume     ();
-    OnMidiInstrument   = new  onMidiInstrument   ();
-    OnSerialMessage    = new  onSerialMessage    ();       
-    
-}
 
 Hooks * hooks = nullptr;
 

@@ -13,7 +13,7 @@
 
 
 // contains the various sensor objects
-class Sensors : public moduleTemplate{
+class Sensors : public modules{
     class sensorsTemplate {
     public:
         int pin;

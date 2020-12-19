@@ -31,7 +31,6 @@ void setup() {
   console       = new Console        ();
   
   hooks         = new Hooks          ();
-  hooks->setup();
   eepromManager = new EEPROM_manager ();
   Fx            = new effectManager  ();
   scheduler     = new scheduleManager();
@@ -56,7 +55,7 @@ void setup() {
   
   
   // Calls all module functions set to run on startup
-  hooks->OnStart->call();   
+  hooks->callOnStart();   
   console->println("completed setup");
    
 }
@@ -113,7 +112,7 @@ void loop() {
   
   
   // Calls all module functions set to run each loop
-  hooks->OnLoop->call();
+  hooks->callOnLoop();
   console->plot();
   //console.plot();
 

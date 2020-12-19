@@ -8,7 +8,7 @@
 #include "moduleManager.h"
 
 
-class EEPROM_manager : public moduleTemplate{
+class EEPROM_manager : public modules{
     int numBlocks;
     std::vector<std::array<int,2>> blockAddresses; // stores the start and end of the addresses of EEPROM 'blocks'
     std::vector<std::vector<int>> blockDimensions;

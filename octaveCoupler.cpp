@@ -13,7 +13,7 @@ each time with a "delay" within the given range of notes ("min" and "max")
 
 octave_coupler::octave_coupler() {
 	console->section("octaveCoupler");
-	hooks->OnUserKeyToggle->add(this);
+	hooks->add(this);
 	
 	
 	console->sectionEnd("octaveCoupler initialised");

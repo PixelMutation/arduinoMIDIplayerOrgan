@@ -7,7 +7,7 @@
 // CONSTRUCTORS
 Sensors::Sensors() : manuals(),stops(),bassPedals(),controlPanels() {
     console->section("Sensors",CORE_PREFIX);
-    hooks->OnLoop->add(this);
+    hooks->add(this);
       
     console->sectionEnd("Sensors initialised",CORE_PREFIX);
 }
@@ -162,7 +162,7 @@ inline void Sensors::Manuals::onKeypress(int manual, int key, int state) {
         if (state > 0) {
             state = 1;
         }
-        hooks->OnUserKeyToggle->call(manual,key,velocity,state);
+        hooks->callOnUserKeyToggle(manual,key,velocity,state);
     }
     
 }

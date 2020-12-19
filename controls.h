@@ -6,7 +6,7 @@
 
 
 
-class controls : public moduleTemplate {
+class controls : public modules {
 
     int noOfReedSwitches = 1;
     int reedSwitchFirstPin = 3;
